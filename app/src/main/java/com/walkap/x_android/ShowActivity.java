@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import java.io.FileNotFoundException;
 
-public class show extends AppCompatActivity {
+public class ShowActivity extends AppCompatActivity {
     private String fileName = "hours";
 
     @Override
