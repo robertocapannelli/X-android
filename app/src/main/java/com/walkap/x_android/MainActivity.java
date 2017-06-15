@@ -12,12 +12,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String mUsername;
+    private String mPhotoUrl;
+
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
-    private String mUsername;
-    private String mPhotoUrl;
     public static final String ANONYMOUS = "anonymous";
     private GoogleApiClient mGoogleApiClient;
 
