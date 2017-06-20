@@ -2,12 +2,15 @@ package com.walkap.x_android;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -15,6 +18,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private DatabaseReference mFirebaseDatabaseReference;
 
     private static final String TAG = "MainActivity";
     public static final String ANONYMOUS = "anonymous";
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TextView tvUserWelcome;
 
         // Set default username is anonymous.
         mUsername = ANONYMOUS;
@@ -52,6 +59,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             if (mFirebaseUser.getPhotoUrl() != null) {
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
             }
+            //Get the current userr
+            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+            //Get the id text view
+            tvUserWelcome = (TextView) findViewById(R.id.userWelcome);
+            //Concatenate string and current user
+            String text = getResources().getString(R.string.welcome_msg, user.getDisplayName());
+            //Set text in right text view
+            tvUserWelcome.setText(text);
+
         }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
