@@ -4,10 +4,10 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class University {
-    public String id;
-    public String name;
-    public String address;
-    public String city;
+    public String mId;
+    public String mName;
+    public String mAddress;
+    public String mCity;
 
     public Faculty faculty;
 
@@ -17,23 +17,27 @@ public class University {
     }
 
     public University(String name, String address, String city){
-        this.name = name;
-        this.address = address;
-        this.city = city;
+        this.mName = name;
+        this.mAddress = address;
+        this.mCity = city;
     }
 
 
     //Getter and setter
-    public String getName(String name){
-        return name;
+    public String getName(){
+        return mName;
     }
 
-    public String getCity(String city){
-        return city;
+    public void setName(String name){
+        mName = name;
     }
 
-    public String getAddress(String address){
-        return address;
+    public String getCity(){
+        return mCity;
+    }
+
+    public String getAddress(){
+        return mAddress;
     }
 
 }
