@@ -8,4 +8,9 @@
     <string name="sign_up">Sign Up</string>
     <string name="cause_crash">Cause Crash</string>
     <string name="uni_list">Universities</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="sign_in_sign_up_email">Sign In or Sign Up</string>
+    <string name="email_or_google">or use your Google Account</string>
+
 </resources>
