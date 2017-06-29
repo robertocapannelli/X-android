@@ -34,14 +34,16 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:hint="@string/hint_email"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:id="@+id/eT_email"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:hint="@string/password_hint"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:id="@+id/eT_password"/>
 
         </LinearLayout>
 
