@@ -21,10 +21,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.models.University;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
+    private String universityName = "TorVergata";
+    private String facultyName = "Ingegneria";
 
     private static final String TAG = "MainActivity";
     public static final String ANONYMOUS = "anonymous";
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mDatabase =  FirebaseDatabase.getInstance().getReference();
         universityEndPoint = mDatabase.child("university");
 
+        showScheduler(mDatabase);
 
         final List<University> mUniversity = new ArrayList<>();
         universityEndPoint.addValueEventListener(new ValueEventListener() {
@@ -148,6 +153,34 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         Intent myIntent = new Intent(MainActivity.this, ChoiceSchoolSubject.class);
         MainActivity.this.startActivity(myIntent);
+    }
+
+    public void showScheduler(DatabaseReference mDatabase){
+        mDatabase.child("scheduler").child(universityName).child(facultyName)
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    Scheduler scheduler = noteDataSnapshot.getValue(Scheduler.class);
+
+                    Calendar calendar = Calendar.getInstance();
+                    int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+                    if ((day - 2) == scheduler.getTime().getDay()) {
+                        Log.d("hey", "***************************");
+                        Log.d("hey", "la lezione di " + scheduler.getSchoolSubject() + " nell' aula " + scheduler.getClassroom()
+                                + " inizia alle " + scheduler.getTime().getHour() + ":" + scheduler.getTime().getMinute() + " e dura "
+                                + scheduler.getTime().getDuration() + " minuti.");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+
     }
 
 }

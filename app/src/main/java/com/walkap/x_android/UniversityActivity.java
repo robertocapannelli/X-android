@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+
 public class UniversityActivity extends AppCompatActivity {
 
     private FragmentPagerAdapter mPagerAdapter;
@@ -18,7 +20,6 @@ public class UniversityActivity extends AppCompatActivity {
         setContentView(R.layout.activity_university);
 
         RecyclerView universities = (RecyclerView) findViewById(R.id.university_list);
-
 
     }
 }
