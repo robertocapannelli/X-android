@@ -1,10 +1,16 @@
 package com.walkap.x_android;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.ActionMode;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -80,14 +86,18 @@ public class add_scheduler_activity extends AppCompatActivity {
 
     }
 
-
-    /*@Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        gridView.getChildAt(0).setBackgroundColor(Color.CYAN);
-        Log.d("hey", "sono chiamata");
-    }*/
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        for(int i = 0; i < gridView.getNumColumns(); i++) {
+            if(positionGridView[i] == 0) {
+                gridView.getChildAt(i).setBackgroundColor(Color.WHITE);
+            }
+            else {
+                gridView.getChildAt(i).setBackgroundColor(Color.CYAN);
+            }
+        };
+    }
 
     private void writeNewScheduler(int id, String classroom,
                                    String schoolSubject, TimeSchoolSubject time) {        //errore: trovare id univoco!
