@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,6 +15,9 @@ import android.widget.ListView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Random;
 
 public class add_scheduler_activity extends AppCompatActivity {
@@ -25,11 +29,13 @@ public class add_scheduler_activity extends AppCompatActivity {
 
     static private int startHour = 8;
 
+    static private String FILENAME = "data";
+
     private String classroom;
     private String schoolSubject;
 
-    private String universityName = "TorVergata";
-    private String facultyName = "Ingegneria";
+    private String universityName;
+    private String facultyName;
 
     private int[] positionGridView = new int[] {1, 0, 0, 0, 0, 0};
 
@@ -77,6 +83,8 @@ public class add_scheduler_activity extends AppCompatActivity {
             classroom =(String) bundle.get("classroom");
             schoolSubject = (String) bundle.get("schoolSubject");
         }
+
+        readDataFile();
 
     }
 
@@ -219,4 +227,22 @@ public class add_scheduler_activity extends AppCompatActivity {
         }
 
     };
+
+    private void readDataFile(){
+        try {
+            byte[] buffer = new byte[256];
+            FileInputStream fis = openFileInput(FILENAME);
+            fis.read(buffer);
+            fis.close();
+            String fileString = new String(buffer);
+            int endString = fileString.indexOf(';');
+            int midString = fileString.indexOf('-');
+            universityName = fileString.substring(0, midString);
+            facultyName = fileString.substring(midString + 1, endString);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

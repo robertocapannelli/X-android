@@ -20,7 +20,8 @@
         <activity android:name=".SignInActivity" />
         <activity android:name=".UniversityActivity" />
         <activity android:name=".add_scheduler_activity" />
-        <activity android:name=".ChoiceSchoolSubject"></activity>
+        <activity android:name=".ChoiceSchoolSubject" />
+        <activity android:name=".Options"></activity>
     </application>
 
 </manifest>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.walkap.x_android.ChoiceSchoolSubject">
+    tools:context="com.walkap.x_android.Options">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,32 +21,29 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
+
             <TextView
-                android:id="@+id/classroomTextView"
+                android:id="@+id/universityTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter the class" />
+                android:text="enter the university" />
 
             <EditText
-                android:id="@+id/classroomEditText"
+                android:id="@+id/universityEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-
             <TextView
-                android:id="@+id/textViewSchoolSubjectTextView"
+                android:id="@+id/facultyTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter school subject" />
+                android:text="enter the faculty" />
 
             <EditText
-                android:id="@+id/schoolSubjectEditText"
+                android:id="@+id/facultyEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -57,8 +54,8 @@
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Choose the time"
-                android:onClick="addScheduler"/>
+                android:text="confirm"
+                android:onClick="saveData"/>
 
         </LinearLayout>
 

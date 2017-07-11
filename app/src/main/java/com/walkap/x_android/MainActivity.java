@@ -22,13 +22,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.models.University;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-
-
 
     private String mUsername;
     private String mPhotoUrl;
@@ -37,8 +38,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
-    private String universityName = "TorVergata";
-    private String facultyName = "Ingegneria";
+    private String FILENAME = "data";
+
+    private String universityName;
+    private String facultyName;
 
     private static final String TAG = "MainActivity";
     public static final String ANONYMOUS = "anonymous";
@@ -152,7 +155,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         MainActivity.this.startActivity(myIntent);
     }
 
+    public void addOptions(View view) {
+
+        Intent myIntent = new Intent(MainActivity.this, Options.class);
+        MainActivity.this.startActivity(myIntent);
+    }
+
     public void showScheduler(DatabaseReference mDatabase){
+
+        readDataFile();
+
         mDatabase.child("scheduler").child(universityName).child(facultyName)
                 .addValueEventListener(new ValueEventListener() {
             @Override
@@ -178,6 +190,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
+    }
+
+    private void readDataFile(){
+        try {
+            byte[] buffer = new byte[256];
+            FileInputStream fis = openFileInput(FILENAME);
+            fis.read(buffer);
+            fis.close();
+            String fileString = new String(buffer);
+            int endString = fileString.indexOf(';');
+            int midString = fileString.indexOf('-');
+            universityName = fileString.substring(0, midString);
+            facultyName = fileString.substring(midString + 1, endString);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

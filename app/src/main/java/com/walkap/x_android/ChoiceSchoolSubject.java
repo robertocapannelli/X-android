@@ -15,8 +15,8 @@ public class ChoiceSchoolSubject extends AppCompatActivity {
     }
 
     public void addScheduler(View view) {
-        EditText classroomEditText = (EditText) findViewById(R.id.classroom);
-        EditText schoolSubjectEditText = (EditText) findViewById(R.id.schoolSubject);
+        EditText classroomEditText = (EditText) findViewById(R.id.classroomEditText);
+        EditText schoolSubjectEditText = (EditText) findViewById(R.id.schoolSubjectEditText);
 
         String classroomString = classroomEditText.getText().toString();
         String schoolSubjectString = schoolSubjectEditText.getText().toString();

@@ -49,6 +49,13 @@
                 android:text="add scheduler"
                 android:onClick="addScheduler"/>
 
+            <Button
+                android:id="@+id/optionButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="change options"
+                android:onClick="addOptions"/>
+
         </LinearLayout>
 
 
