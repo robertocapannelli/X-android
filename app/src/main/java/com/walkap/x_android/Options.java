@@ -1,6 +1,10 @@
 package com.walkap.x_android;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +30,8 @@ public class Options extends AppCompatActivity {
     static private String FILENAME = "data";
 
     private static final String TAG = "Options";
+
+    final Context context = this;
 
     DatabaseReference mDatabase;
 
@@ -57,25 +63,11 @@ public class Options extends AppCompatActivity {
 
             fos.write(fileString.getBytes());
             fos.close();
-            //Log.d("hey", "ho scritto il file");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        /*try {
-            FileInputStream fis = openFileInput(FILENAME);
-            fis.read(buffer);
-            fis.close();
-            //fileString = new String(buffer);
-            //int endString = fileString.indexOf(';');
-            //Log.d("hey", fileString.substring(0, endString));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
     }
 
@@ -95,8 +87,23 @@ public class Options extends AppCompatActivity {
                             }
                         }
                         if(!find){
-                            Log.d("hey", "***************************");
-                            Log.d("hey", "universita' non trovata vuoi aggiungerla?");
+                            AlertDialog.Builder builder;
+                            builder = new AlertDialog.Builder(context);
+
+                            builder.setTitle("university not find")
+                                    .setMessage("University not found, do you want to add it?")
+                                    .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue with add university
+                                        }
+                                    })
+                                    .setNegativeButton("select another university", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // back to options
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
                         }
                     }
 
@@ -124,8 +131,23 @@ public class Options extends AppCompatActivity {
                             }
                         }
                         if(!find){
-                            Log.d("hey", "***************************");
-                            Log.d("hey", "facolta' non trovata nella tua universita' vuoi aggiungerla?");
+                            AlertDialog.Builder builder;
+                            builder = new AlertDialog.Builder(context);
+
+                            builder.setTitle("faculty not find")
+                                    .setMessage("faculty not found, do you want to add it?")
+                                    .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue with add faculty
+                                        }
+                                    })
+                                    .setNegativeButton("select another faculty", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // back to options
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
                         }
                     }
 
