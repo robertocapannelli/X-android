@@ -1,6 +1,8 @@
 package com.walkap.x_android;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,6 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
@@ -29,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static android.R.id.list;
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private String mUsername;
@@ -38,7 +47,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
+    ListView listView;
+
+    Context content = this;
+
     private String FILENAME = "data";
+
+    private int[] positionGridView = new int[] {1, 0, 0, 0, 0, 0};
+    GridView gridView;
 
     private String universityName;
     private String facultyName;
@@ -115,6 +131,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
+        gridView = (GridView) this.findViewById(R.id.mainActivityGridView);
+        String[] mainGrid = new String[]{
+                "L",   "M",  "M",    "G",  "V",  "S"
+        };
+
+        ListAdapter adapterGrid = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, mainGrid);
+
+        gridView.setAdapter(adapterGrid);
+        gridView.setOnItemClickListener(GridClickListener);
+
+        listView = (ListView) findViewById(R.id.mainActivityListView);
+
     }
 
 
@@ -169,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Scheduler> list = new ArrayList<Scheduler>();
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     Scheduler scheduler = noteDataSnapshot.getValue(Scheduler.class);
 
@@ -176,12 +206,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     int day = calendar.get(Calendar.DAY_OF_WEEK);
 
                     if ((day - 2) == scheduler.getTime().getDay()) {
+                        list.add(scheduler);
                         Log.d("hey", "***************************");
                         Log.d("hey", "la lezione di " + scheduler.getSchoolSubject() + " nell' aula " + scheduler.getClassroom()
                                 + " inizia alle " + scheduler.getTime().getHour() + ":" + scheduler.getTime().getMinute() + " e dura "
                                 + scheduler.getTime().getDuration() + " minuti.");
                     }
                 }
+
+                CustomAdapter adapter = new CustomAdapter(content, R.layout.row, list);
+                listView.setAdapter(adapter);
+
+
             }
 
             @Override
@@ -208,6 +244,40 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    AdapterView.OnItemClickListener GridClickListener = new AdapterView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> adapter, View view,
+                                int position, long id) {
+
+            if(positionGridView[position] == 0) {
+                positionGridView = setAllLessOne(position);
+                //repaintListView(position);
+            }
+
+            colorGridView();
+
+        }
+
+    };
+
+    private void colorGridView() {
+        for(int i = 0; i < gridView.getNumColumns(); i++) {
+            if(positionGridView[i] == 0) {
+                gridView.getChildAt(i).setBackgroundColor(Color.WHITE);
+            }
+            else {
+                gridView.getChildAt(i).setBackgroundColor(Color.CYAN);
+            }
+        }
+    }
+
+    public int[] setAllLessOne(int one) {
+        int[] positionGridView = new int[]{0, 0, 0, 0, 0, 0};
+        positionGridView[one] = 1;
+        return  positionGridView;
     }
 
 }

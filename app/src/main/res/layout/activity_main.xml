@@ -56,6 +56,24 @@
                 android:text="change options"
                 android:onClick="addOptions"/>
 
+            <GridView
+                android:id="@+id/mainActivityGridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="6" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <ListView
+                android:id="@+id/mainActivityListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="8dp" />
+
         </LinearLayout>
 
 

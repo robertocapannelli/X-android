@@ -1,12 +1,11 @@
 package com.walkap.x_android;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v4.app.DialogFragment;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -21,19 +20,22 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
 
-import static android.system.Os.read;
-
-public class Options extends AppCompatActivity {
+public class Options extends AppCompatActivity{
 
     static private String FILENAME = "data";
 
+    private String universityName;
+    private String facultyName;
+
+    private EditText university;
+    private EditText faculty;
+
     private static final String TAG = "Options";
 
-    final Context context = this;
+    private final Context context = this;
 
-    DatabaseReference mDatabase;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +43,23 @@ public class Options extends AppCompatActivity {
         setContentView(R.layout.activity_options);
 
         mDatabase =  FirebaseDatabase.getInstance().getReference();
+
+        readDataFile();
+
+        university = (EditText) findViewById(R.id.universityEditText);
+        faculty = (EditText) findViewById(R.id.facultyEditText);
+
+        university.setText(universityName);
+        faculty.setText(facultyName);
     }
 
-    public void saveData(View view){
-
-        //byte[] buffer = new byte[256];
-
-        EditText university = (EditText) findViewById(R.id.universityEditText);
-        EditText faculty = (EditText) findViewById(R.id.facultyEditText);
+    public void saveData(View view) throws InterruptedException {
 
         String universityString = university.getText().toString();
         String facultyString = faculty.getText().toString();
 
-        findUniversity(mDatabase, universityString);
-        findFaculty(mDatabase, universityString, facultyString);
+        findUniversity(universityString);
+        findFaculty(universityString, facultyString);
 
         String fileString = universityString + "-" + facultyString + ";";
 
@@ -71,18 +76,15 @@ public class Options extends AppCompatActivity {
 
     }
 
-    public void findUniversity(DatabaseReference mDatabase, final String universityString){
+    public void findUniversity(final String universityString){
 
-        mDatabase.child("scheduler")
-                .addValueEventListener(new ValueEventListener() {
+        mDatabase.child("scheduler").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean find = false;
                         for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                             String universityName = noteDataSnapshot.getKey();
-
-
-                            if (universityName == universityString) {
+                            if (universityName.equals(universityString)) {
                                 find = true;
                             }
                         }
@@ -94,12 +96,12 @@ public class Options extends AppCompatActivity {
                                     .setMessage("University not found, do you want to add it?")
                                     .setPositiveButton("add", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            // continue with add university
+                                            mDatabase.child("scheduler").child(universityString).setValue(-1 + "");
                                         }
                                     })
                                     .setNegativeButton("select another university", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            // back to options
+                                            university.setText("");
                                         }
                                     })
                                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -115,10 +117,10 @@ public class Options extends AppCompatActivity {
 
     }
 
-    public void findFaculty(DatabaseReference mDatabase, final String universityString, final String facultyString){
+    public void findFaculty(final String universityString, final String facultyString){
 
         mDatabase.child("scheduler").child(universityString)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean find = false;
@@ -126,7 +128,7 @@ public class Options extends AppCompatActivity {
                             String facultyName = noteDataSnapshot.getKey();
 
 
-                            if (facultyName == facultyString) {
+                            if (facultyName.equals(facultyString)) {
                                 find = true;
                             }
                         }
@@ -138,12 +140,12 @@ public class Options extends AppCompatActivity {
                                     .setMessage("faculty not found, do you want to add it?")
                                     .setPositiveButton("add", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            // continue with add faculty
+                                            mDatabase.child("scheduler").child(universityString).child(facultyString).setValue(-1 + "");
                                         }
                                     })
                                     .setNegativeButton("select another faculty", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            // back to options
+                                            faculty.setText("");
                                         }
                                     })
                                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -157,6 +159,24 @@ public class Options extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void readDataFile(){
+        try {
+            byte[] buffer = new byte[256];
+            FileInputStream fis = openFileInput(FILENAME);
+            fis.read(buffer);
+            fis.close();
+            String fileString = new String(buffer);
+            int endString = fileString.indexOf(';');
+            int midString = fileString.indexOf('-');
+            universityName = fileString.substring(0, midString);
+            facultyName = fileString.substring(midString + 1, endString);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
