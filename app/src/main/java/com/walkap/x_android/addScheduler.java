@@ -1,10 +1,10 @@
 package com.walkap.x_android;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
 
-public class add_scheduler_activity extends AppCompatActivity {
+public class addScheduler extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
 
@@ -33,9 +33,10 @@ public class add_scheduler_activity extends AppCompatActivity {
 
     private String classroom;
     private String schoolSubject;
-
     private String universityName;
     private String facultyName;
+
+    private String MY_PREFS_NAME = "preferences";
 
     private int[] positionGridView = new int[] {1, 0, 0, 0, 0, 0};
 
@@ -187,8 +188,8 @@ public class add_scheduler_activity extends AppCompatActivity {
 
         }
 
-        Intent myIntent = new Intent(add_scheduler_activity.this, MainActivity.class);
-        add_scheduler_activity.this.startActivity(myIntent);
+        Intent myIntent = new Intent(addScheduler.this, MainActivity.class);
+        addScheduler.this.startActivity(myIntent);
 
     }
 
@@ -229,20 +230,8 @@ public class add_scheduler_activity extends AppCompatActivity {
     };
 
     private void readDataFile(){
-        try {
-            byte[] buffer = new byte[256];
-            FileInputStream fis = openFileInput(FILENAME);
-            fis.read(buffer);
-            fis.close();
-            String fileString = new String(buffer);
-            int endString = fileString.indexOf(';');
-            int midString = fileString.indexOf('-');
-            universityName = fileString.substring(0, midString);
-            facultyName = fileString.substring(midString + 1, endString);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        universityName = prefs.getString("university", "");
+        facultyName = prefs.getString("faculty", "");
     }
 }
