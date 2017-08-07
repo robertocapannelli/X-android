@@ -3,6 +3,7 @@ package com.walkap.x_android;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,8 @@ public class Options extends AppCompatActivity{
 
     private String universityName;
     private String facultyName;
+
+    private String MY_PREFS_NAME = "preferences";
 
     private EditText university;
     private EditText faculty;
@@ -58,22 +61,43 @@ public class Options extends AppCompatActivity{
         String universityString = university.getText().toString();
         String facultyString = faculty.getText().toString();
 
-        findUniversity(universityString);
-        findFaculty(universityString, facultyString);
+        if(universityString.isEmpty()){
 
-        String fileString = universityString + "-" + facultyString + ";";
+            AlertDialog.Builder builder;
+            builder = new AlertDialog.Builder(context);
 
-        try {
-            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-
-            fos.write(fileString.getBytes());
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            builder.setTitle("university error")
+                    .setMessage("university is empty")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
+        else{
+            if(facultyString.isEmpty()){
 
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(context);
+
+                builder.setTitle("faculty error")
+                        .setMessage("faculty is empty")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+            }
+            else{
+
+                findUniversity(universityString);
+                findFaculty(universityString, facultyString);
+
+                SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putString("university", universityString);
+                editor.putString("faculty", facultyString);
+                editor.apply();
+
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+
+            }
+        }
     }
 
     public void findUniversity(final String universityString){
@@ -162,21 +186,9 @@ public class Options extends AppCompatActivity{
     }
 
     private void readDataFile(){
-        try {
-            byte[] buffer = new byte[256];
-            FileInputStream fis = openFileInput(FILENAME);
-            fis.read(buffer);
-            fis.close();
-            String fileString = new String(buffer);
-            int endString = fileString.indexOf(';');
-            int midString = fileString.indexOf('-');
-            universityName = fileString.substring(0, midString);
-            facultyName = fileString.substring(midString + 1, endString);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        universityName = prefs.getString("university", "");
+        facultyName = prefs.getString("faculty", "");
     }
 
 }

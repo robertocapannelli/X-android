@@ -2,6 +2,7 @@ package com.walkap.x_android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     Context content = this;
 
     private String FILENAME = "data";
+    private String MY_PREFS_NAME = "preferences";
 
     private int[] positionGridView = new int[] {1, 0, 0, 0, 0, 0};
     GridView gridView;
@@ -194,37 +196,47 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         readDataFile();
 
-        mDatabase.child("scheduler").child(universityName).child(facultyName)
-                .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Scheduler> list = new ArrayList<Scheduler>();
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Scheduler scheduler = noteDataSnapshot.getValue(Scheduler.class);
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        universityName = prefs.getString("university", "");
+        facultyName = prefs.getString("faculty", "");
 
-                    Calendar calendar = Calendar.getInstance();
-                    int day = calendar.get(Calendar.DAY_OF_WEEK);
+        if(universityName.isEmpty()|| facultyName.isEmpty()){
+            Intent myIntent = new Intent(MainActivity.this, Options.class);
+            MainActivity.this.startActivity(myIntent);
+        }
+        else {
+            mDatabase.child("scheduler").child(universityName).child(facultyName)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            List<Scheduler> list = new ArrayList<Scheduler>();
+                            for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                                Scheduler scheduler = noteDataSnapshot.getValue(Scheduler.class);
 
-                    if ((day - 2) == scheduler.getTime().getDay()) {
-                        list.add(scheduler);
-                        Log.d("hey", "***************************");
-                        Log.d("hey", "la lezione di " + scheduler.getSchoolSubject() + " nell' aula " + scheduler.getClassroom()
-                                + " inizia alle " + scheduler.getTime().getHour() + ":" + scheduler.getTime().getMinute() + " e dura "
-                                + scheduler.getTime().getDuration() + " minuti.");
-                    }
-                }
+                                Calendar calendar = Calendar.getInstance();
+                                int day = calendar.get(Calendar.DAY_OF_WEEK);
 
-                CustomAdapter adapter = new CustomAdapter(content, R.layout.row, list);
-                listView.setAdapter(adapter);
+                                if ((day - 2) == scheduler.getTime().getDay()) {
+                                    list.add(scheduler);
+                                    Log.d("hey", "***************************");
+                                    Log.d("hey", "la lezione di " + scheduler.getSchoolSubject() + " nell' aula " + scheduler.getClassroom()
+                                            + " inizia alle " + scheduler.getTime().getHour() + ":" + scheduler.getTime().getMinute() + " e dura "
+                                            + scheduler.getTime().getDuration() + " minuti.");
+                                }
+                            }
+
+                            CustomAdapter adapter = new CustomAdapter(content, R.layout.row, list);
+                            listView.setAdapter(adapter);
 
 
-            }
+                        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "onCancelled", databaseError.toException());
-            }
-        });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e(TAG, "onCancelled", databaseError.toException());
+                        }
+                    });
+        }
 
     }
 
