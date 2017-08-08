@@ -21,7 +21,7 @@ public class ChoiceSchoolSubject extends AppCompatActivity {
         String classroomString = classroomEditText.getText().toString();
         String schoolSubjectString = schoolSubjectEditText.getText().toString();
 
-        Intent myIntent = new Intent(ChoiceSchoolSubject.this, addScheduler.class);
+        Intent myIntent = new Intent(ChoiceSchoolSubject.this, addScheduleActivity.class);
         myIntent.putExtra("classroom", classroomString); //Optional parameters
         myIntent.putExtra("schoolSubject", schoolSubjectString);
         ChoiceSchoolSubject.this.startActivity(myIntent);

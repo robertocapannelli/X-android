@@ -37,8 +37,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static android.R.id.list;
-
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private String mUsername;
@@ -188,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     public void addOptions(View view) {
 
-        Intent myIntent = new Intent(MainActivity.this, Options.class);
+        Intent myIntent = new Intent(MainActivity.this, OptionsActivity.class);
         MainActivity.this.startActivity(myIntent);
     }
 
@@ -201,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         facultyName = prefs.getString("faculty", "");
 
         if(universityName.isEmpty()|| facultyName.isEmpty()){
-            Intent myIntent = new Intent(MainActivity.this, Options.class);
+            Intent myIntent = new Intent(MainActivity.this, OptionsActivity.class);
             MainActivity.this.startActivity(myIntent);
         }
         else {
