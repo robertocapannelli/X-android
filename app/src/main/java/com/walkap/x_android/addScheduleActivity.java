@@ -15,12 +15,9 @@ import android.widget.ListView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Random;
 
-public class addScheduler extends AppCompatActivity {
+public class addScheduleActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
 
@@ -188,8 +185,8 @@ public class addScheduler extends AppCompatActivity {
 
         }
 
-        Intent myIntent = new Intent(addScheduler.this, MainActivity.class);
-        addScheduler.this.startActivity(myIntent);
+        Intent myIntent = new Intent(addScheduleActivity.this, MainActivity.class);
+        addScheduleActivity.this.startActivity(myIntent);
 
     }
 

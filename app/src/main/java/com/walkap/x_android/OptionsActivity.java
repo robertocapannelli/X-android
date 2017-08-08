@@ -32,7 +32,7 @@ import java.io.IOException;
 
 import static com.walkap.x_android.MainActivity.ANONYMOUS;
 
-public class Options extends AppCompatActivity{
+public class OptionsActivity extends AppCompatActivity{
 
     static private String FILENAME = "data";
 
@@ -44,7 +44,7 @@ public class Options extends AppCompatActivity{
     private EditText university;
     private EditText faculty;
 
-    private static final String TAG = "Options";
+    private static final String TAG = "OptionsActivity";
 
     private final Context context = this;
 
