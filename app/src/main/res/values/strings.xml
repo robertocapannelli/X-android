@@ -12,5 +12,14 @@
     <string name="hint_password">Password</string>
     <string name="sign_in_sign_up_email">Sign In or Sign Up</string>
     <string name="email_or_google">or use your Google Account</string>
+    <string name="save_schedule">Save schedule</string>
+    <string name="enter_class">Enter the class</string>
+    <string name="school_subject">Enter the school subject</string>
+    <string name="choose_time">Choose the time</string>
+    <string name="add_schedule">Add schedule</string>
+    <string name="change_options">Change options</string>
+    <string name="enter_university">Enter the university</string>
+    <string name="enter_faculty">Enter the faculty</string>
+    <string name="confirm">Confirm</string>
 
 </resources>

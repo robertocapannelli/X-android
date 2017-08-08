@@ -25,7 +25,7 @@
                 android:id="@+id/classroomTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter the class" />
+                android:text="@string/enter_class" />
 
             <EditText
                 android:id="@+id/classroomEditText"
@@ -43,7 +43,7 @@
                 android:id="@+id/textViewSchoolSubjectTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter school subject" />
+                android:text="@string/school_subject" />
 
             <EditText
                 android:id="@+id/schoolSubjectEditText"
@@ -57,7 +57,7 @@
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Choose the time"
+                android:text="@string/choose_time"
                 android:onClick="addScheduler"/>
 
         </LinearLayout>

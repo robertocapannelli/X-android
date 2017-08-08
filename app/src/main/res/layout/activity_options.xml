@@ -26,7 +26,7 @@
                 android:id="@+id/universityTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="enter the university" />
+                android:text="@string/enter_university" />
 
             <EditText
                 android:id="@+id/universityEditText"
@@ -40,7 +40,7 @@
                 android:id="@+id/facultyTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="enter the faculty" />
+                android:text="@string/enter_faculty" />
 
             <EditText
                 android:id="@+id/facultyEditText"
@@ -54,7 +54,7 @@
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="confirm"
+                android:text="@string/confirm"
                 android:onClick="saveData"/>
 
         </LinearLayout>
