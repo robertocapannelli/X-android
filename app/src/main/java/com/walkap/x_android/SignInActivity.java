@@ -135,7 +135,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                                     Toast.LENGTH_SHORT).show();
                         } else {
 
-                            String personId = acct.getId();
+                            String personId = mAuth.getCurrentUser().getUid();
                             String personEmail = acct.getEmail();
                             String personGivenName = acct.getGivenName();
 
