@@ -5,7 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,13 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,17 +35,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-
-    private String mUsername;
-    private String mPhotoUrl;
-
-    //Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
+public class MainActivity extends BaseActivity  {
 
     ListView listView;
-
     Context content = this;
 
     private String FILENAME = "data";
@@ -60,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private String facultyName;
 
     private static final String TAG = "MainActivity";
-    public static final String ANONYMOUS = "anonymous";
-    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,47 +81,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-
-        // Set default username is anonymous.
-        mUsername = ANONYMOUS;
-
-        // Initialize Firebase Auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
-        //Views declarations
-        TextView tvUserWelcome;
-
-        if (mFirebaseUser == null) {
-            // Not signed in, launch the Sign In activity
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
-            return;
-        } else {
-            mUsername = mFirebaseUser.getDisplayName();
-            if (mFirebaseUser.getPhotoUrl() != null) {
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-            }
-
-            //Get the current user
-            FirebaseUser user = mFirebaseAuth.getCurrentUser();
-            //Get id text view
-            tvUserWelcome = (TextView) findViewById(R.id.userWelcome);
-            //Concatenate string and current user
-            String text = getResources().getString(R.string.welcome_msg, user.getDisplayName());
-            //Set text in right text view
-            tvUserWelcome.setText(text);
-
-        }
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API)
-                .build();
-
         gridView = (GridView) this.findViewById(R.id.mainActivityGridView);
         String[] mainGrid = new String[]{
-                "L",   "M",  "M",    "G",  "V",  "S"
+                "L",   "M",  "M",   "G",  "V",  "S"
         };
 
         ListAdapter adapterGrid = new ArrayAdapter<String>(this,
@@ -144,50 +94,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         listView = (ListView) findViewById(R.id.mainActivityListView);
 
+
+        //It has to be applied here to make the drawer works we need to
+        // find another solution for not repeating code
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //It has to be applied here to make the drawer works we need to
+        // find another solution for not repeating code
+
     }
 
-
-    public void universityList(View view){
-        Intent intent = new Intent(this, UniversityActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sign_out_menu:
-                mFirebaseAuth.signOut();
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                mUsername = ANONYMOUS;
-                startActivity(new Intent(this, SignInActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.main, menu);
         return true;
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-    }
-
-    public void addScheduler(View view) {
-
-        Intent myIntent = new Intent(MainActivity.this, ChoiceSchoolSubject.class);
-        MainActivity.this.startActivity(myIntent);
-    }
-
-    public void addOptions(View view) {
-
-        Intent myIntent = new Intent(MainActivity.this, OptionsActivity.class);
-        MainActivity.this.startActivity(myIntent);
     }
 
     public void showScheduler(DatabaseReference mDatabase){
