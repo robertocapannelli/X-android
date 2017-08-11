@@ -43,10 +43,15 @@ public class addScheduleActivity extends BaseActivity {
 
     private int[] positionGridView = new int[] {1, 0, 0, 0, 0, 0};
 
-    private int[][] positionListView = new int[][] {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    private int[][] positionListView = new int[][] {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0}};
 
     private GridView gridView;
     private ListView listView;
@@ -60,7 +65,7 @@ public class addScheduleActivity extends BaseActivity {
 
         gridView = (GridView) this.findViewById(R.id.schedulerGridView);
         String[] schedulerGrid = new String[]{
-                "L",   "M",  "M",    "G",  "V",  "S"
+                "Mo",  "Tu",  "We",  "Th",  "Fr",  "Sa"
         };
 
         ListAdapter adapterGrid = new ArrayAdapter<String>(this,
@@ -72,7 +77,9 @@ public class addScheduleActivity extends BaseActivity {
         String[] schedulerList = new String[]{
                 "8:00",  "8:15",  "8:30",  "8:45",  "9:00",  "9:15",  "9:30",  "9:45",
                 "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45",
-                "12:00", "12:15", "12:30", "12:45"};
+                "12:00", "12:15", "12:30", "12:45", "13:00", "14:00", "14:15", "14:30",
+                "14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15",
+                "16:30", "16:45", "17:00", "17:15", "17:30", "17:45", "18:00"};
 
         ListAdapter adapterList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, schedulerList);
