@@ -18,8 +18,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,6 +35,8 @@ import com.walkap.x_android.fragment.ChoiceSchoolSubjectFragment;
 import com.walkap.x_android.fragment.HomeFragment;
 import com.walkap.x_android.fragment.OptionsFragment;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         NavigationView.OnNavigationItemSelectedListener,
@@ -41,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private String mUsername;
 
+
     private static final String TAG = "MainActivity";
     public static final String ANONYMOUS = "anonymous";
-
 
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -58,12 +63,20 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar;
+        DrawerLayout drawer;
+        NavigationView navigationView;
+        View header;
+        TextView tvUserName;
+        TextView tvEmail;
+        ImageView ivUserProfile;
+
         //Set a toolbar to replace action bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //Find our drawer view
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         //Enable hamburger toggle button
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -72,11 +85,11 @@ public class MainActivity extends AppCompatActivity implements
         toggle.syncState();
 
         //Find navigation drawer
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         //Navigation listener
         navigationView.setNavigationItemSelectedListener(this);
         //Header View (aat the top of drawer layout)
-        View header = navigationView.getHeaderView(0);
+        header = navigationView.getHeaderView(0);
 
         // Set default username is anonymous.
         mUsername = ANONYMOUS;
@@ -86,8 +99,9 @@ public class MainActivity extends AppCompatActivity implements
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        TextView tvUserName = (TextView) header.findViewById(R.id.tvUserName);
-        TextView tvEmail = (TextView) header.findViewById(R.id.tvEmail);
+        tvUserName = (TextView) header.findViewById(R.id.tvUserName);
+        tvEmail = (TextView) header.findViewById(R.id.tvEmail);
+        ivUserProfile = (ImageView) header.findViewById(R.id.imageView);
 
         //Check if the user is logged in
         if (mFirebaseUser == null) {
@@ -110,6 +124,16 @@ public class MainActivity extends AppCompatActivity implements
             String uid = mFirebaseUser.getUid();
             tvUserName.setText(name);
             tvEmail.setText(email);
+            if(photoUrl != null){
+                Glide.with(this).load(photoUrl)
+                        .thumbnail(0.5f)
+                        .transition(withCrossFade())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(ivUserProfile);
+            }else{
+                ivUserProfile.setImageResource(R.drawable.ic_account_circle_white_48px);
+            }
+
         }
 
         //Google sign connection
@@ -118,9 +142,7 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-
         Handler mHandler = new Handler();
-
         if(savedInstanceState == null){
             Runnable mPendingRunnable = new Runnable() {
                 @Override
@@ -152,12 +174,6 @@ public class MainActivity extends AppCompatActivity implements
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-    public void saveData(View view ){
-        Log.d(TAG, "clicked the save button in main activity");
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
