@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.walkap.x_android.addScheduleActivity"
+    tools:context="com.walkap.x_android.activity.addScheduleActivity"
     tools:showIn="@layout/app_bar_add_scheduler">
 
     <LinearLayout
