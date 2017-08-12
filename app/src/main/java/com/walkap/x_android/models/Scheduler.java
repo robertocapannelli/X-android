@@ -1,4 +1,4 @@
-package com.walkap.x_android;
+package com.walkap.x_android.models;
 
 public class Scheduler {
 

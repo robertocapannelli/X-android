@@ -1,9 +1,9 @@
-package com.walkap.x_android;
+package com.walkap.x_android.models;
 
-class TimeSchoolSubject {
+public class TimeSchoolSubject {
 
-    private int day;
-    private int hour;
+    public int day;
+    public int hour;
     private int minute;
     private int duration;
 

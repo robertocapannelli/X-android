@@ -1,4 +1,4 @@
-package com.walkap.x_android;
+package com.walkap.x_android.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.walkap.x_android.R;
+import com.walkap.x_android.models.Scheduler;
 
 import java.util.List;
 
