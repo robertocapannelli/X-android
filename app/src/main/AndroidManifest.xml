@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,19 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".addScheduleActivity"
+        <activity android:name=".activity.SignInActivity" />
+        <activity android:name=".activity.addScheduleActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ChoiceSchoolSubject" />
-        <activity
-            android:name=".OptionsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Wizard_university" />
-        <activity android:name=".DegreeCourse" />
-        <activity
-            android:name=".BaseActivity"
-            android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
