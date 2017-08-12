@@ -44,9 +44,6 @@ public class MainActivity extends AppCompatActivity implements
         OptionsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener{
 
-    private String mUsername;
-
-
     private static final String TAG = "MainActivity";
     public static final String ANONYMOUS = "anonymous";
 
@@ -91,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements
         //Header View (aat the top of drawer layout)
         header = navigationView.getHeaderView(0);
 
-        // Set default username is anonymous.
-        mUsername = ANONYMOUS;
         //Playing with Firebase realtime database
         mDatabase =  FirebaseDatabase.getInstance().getReference();
         //universityEndPoint = mDatabase.child("university");
@@ -203,6 +198,9 @@ public class MainActivity extends AppCompatActivity implements
         Fragment fragment = null;
         Class fragmentClass;
         switch(item.getItemId()) {
+            case R.id.go_home:
+                fragmentClass= HomeFragment.class;
+                break;
             case R.id.add_schedule:
                 fragmentClass = ChoiceSchoolSubjectFragment.class;
                 break;
