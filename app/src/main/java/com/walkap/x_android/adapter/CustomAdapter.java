@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.walkap.x_android.R;
-import com.walkap.x_android.models.Scheduler;
+import com.walkap.x_android.model.Scheduler;
 
 import java.util.List;
 
