@@ -1,4 +1,4 @@
-package com.walkap.x_android;
+package com.walkap.x_android.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -28,9 +28,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.walkap.x_android.R;
 import com.walkap.x_android.models.User;
 
-public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
+public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
