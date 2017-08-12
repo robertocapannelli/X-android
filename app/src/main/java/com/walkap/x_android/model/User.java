@@ -1,4 +1,4 @@
-package com.walkap.x_android.models;
+package com.walkap.x_android.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
