@@ -28,7 +28,12 @@
                     android:id="@+id/classroomTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/enter_class" />
+                    android:text="@string/enter_class"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="16sp"
+                    android:textStyle="bold|italic" />
 
                 <EditText
                     android:id="@+id/classroomEditText"
@@ -46,7 +51,12 @@
                     android:id="@+id/textViewSchoolSubjectTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/school_subject" />
+                    android:text="@string/school_subject"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="16sp"
+                    android:textStyle="bold|italic" />
 
                 <EditText
                     android:id="@+id/schoolSubjectEditText"
@@ -60,8 +70,20 @@
                     android:id="@+id/saveButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="addScheduler"
                     android:text="@string/choose_time"
-                    android:onClick="addScheduler"/>
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/orario" />
 
             </LinearLayout>
 
@@ -77,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_done_white_24px" />
 
 </FrameLayout>

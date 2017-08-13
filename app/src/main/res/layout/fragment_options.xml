@@ -14,7 +14,8 @@
             android:layout_height="495dp"
             android:orientation="horizontal"
             tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp">
+            tools:layout_editor_absoluteX="8dp"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -27,7 +28,12 @@
                     android:id="@+id/universityTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/enter_university" />
+                    android:text="@string/enter_university"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textStyle="bold|italic" />
 
                 <EditText
                     android:id="@+id/universityEditText"
@@ -41,7 +47,11 @@
                     android:id="@+id/facultyTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/enter_faculty" />
+                    android:text="@string/enter_faculty"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textStyle="bold|italic" />
 
                 <EditText
                     android:id="@+id/facultyEditText"
@@ -50,6 +60,14 @@
                     android:ems="10"
                     android:inputType="textPersonName"
                     android:text="" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:contentDescription="@string/image"
+                    app:srcCompat="@drawable/pontificia_universita_gregoriana_aula_anfiteatro" />
 
             </LinearLayout>
 
@@ -63,8 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_done_white_24px"
         android:onClick="saveData"
-        />
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_done_white_24px" />
 
 </FrameLayout>

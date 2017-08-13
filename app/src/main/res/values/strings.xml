@@ -36,5 +36,6 @@
     <string name="change_options">Change options</string>
     <string name="enter_university">Enter the university</string>
     <string name="enter_faculty">Enter the faculty</string>
+    <string name="image">image</string>
 
 </resources>
