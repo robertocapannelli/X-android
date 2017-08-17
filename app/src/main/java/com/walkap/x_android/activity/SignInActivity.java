@@ -30,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.walkap.x_android.R;
 import com.walkap.x_android.model.User;
 
+import java.util.Date;
+
 public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
 
     private static final String TAG = "SignInActivity";
@@ -135,12 +137,14 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                                     Toast.LENGTH_SHORT).show();
                         } else {
 
-                            String personId = mAuth.getCurrentUser().getUid();
-                            String personEmail = acct.getEmail();
-                            String personGivenName = acct.getGivenName();
+                            String userId = getUid();
+                            String email = acct.getEmail();
+                            String username = usernameFromEmail(email);
+                            String name = acct.getGivenName();
+                            String surname = acct.getFamilyName();
 
                             // Write new user
-                            writeNewUser(personId, personGivenName, personEmail);
+                            writeNewUser(userId, username, email, name, surname, "", "", "");
 
                             //go to main activity
                             startActivity(new Intent(SignInActivity.this, MainActivity.class));
@@ -212,7 +216,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         String username = usernameFromEmail(user.getEmail());
 
         // Write new user
-        writeNewUser(user.getUid(), username, user.getEmail());
+        writeNewUser(user.getUid(), username, user.getEmail(), "", "", "", "", "");
 
         // Go to MainActivity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
@@ -247,36 +251,12 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
     }
     //end email and password scripts
 
-
     // [START basic_write]
-    private void writeNewUser(String userId, String name, String email) {
-        User user = new User(name, email);
-
+    private void writeNewUser(String userId, String username, String email, String name, String surname, String university, String faculty, String courseDegree) {
+        User user = new User(username, email, name, surname, university, faculty, courseDegree);
         mDatabase.child("users").child(userId).setValue(user);
     }
     // [END basic_write]
-
-    private ProgressDialog mProgressDialog;
-
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setMessage("Loading...");
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
-
-    public String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
-    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
