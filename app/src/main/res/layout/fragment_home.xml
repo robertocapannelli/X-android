@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.walkap.x_android.fragment.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -25,11 +26,37 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <Button
+                    android:id="@+id/addSchedulerButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_schedule"
+                    android:onClick="addScheduler"/>
+
+                <Button
+                    android:id="@+id/schoolSubjectButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="add schoolSubject"
+                    android:onClick="addSchoolSubject"/>
+
+
+                <Button
+                    android:id="@+id/optionButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_options"
+                    android:onClick="addOptions"/>
+
                 <GridView
                     android:id="@+id/mainActivityGridView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:numColumns="6" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
 
                 <ListView
                     android:id="@+id/mainActivityListView"
