@@ -70,8 +70,7 @@
                     android:id="@+id/saveButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/confirm"
-                    android:onClick="saveData"/>
+                    android:text="@string/confirm" />
 
             </LinearLayout>
 
@@ -84,8 +83,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_done_white_24px"
-        android:onClick="saveData"
-        />
+        app:srcCompat="@drawable/ic_done_white_24px" />
 
 </FrameLayout>
