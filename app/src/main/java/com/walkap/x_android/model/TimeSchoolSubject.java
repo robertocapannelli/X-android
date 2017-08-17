@@ -1,9 +1,12 @@
 package com.walkap.x_android.model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class TimeSchoolSubject {
 
-    public int day;
-    public int hour;
+    private int day;
+    private int hour;
     private int minute;
     private int duration;
 

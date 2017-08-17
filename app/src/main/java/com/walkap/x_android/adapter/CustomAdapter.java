@@ -1,7 +1,6 @@
 package com.walkap.x_android.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,11 +39,15 @@ public class CustomAdapter extends ArrayAdapter<Scheduler> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Scheduler scheduler = getItem(position);
-        Log.d("hey", scheduler.getClassroom());
-        viewHolder.classroom.setText(scheduler.getClassroom());
-        viewHolder.schoolSubject.setText(scheduler.getSchoolSubject());
-        viewHolder.hourBeginning.setText(scheduler.getTime().getHour() + ":" + scheduler.getTime().getMinute());
-        viewHolder.duration.setText(scheduler.getTime().getDuration() + "");
+        viewHolder.classroom.setText("class room " + scheduler.getClassroom());
+        viewHolder.schoolSubject.setText("school Subject " + scheduler.getSchoolSubject());
+        if(scheduler.getTime().getMinute() == 0){
+            viewHolder.hourBeginning.setText("to the hour " + scheduler.getTime().getHour() + ":0" + scheduler.getTime().getMinute());
+        }
+        else {
+            viewHolder.hourBeginning.setText("to the hour " + scheduler.getTime().getHour() + ":" + scheduler.getTime().getMinute());
+        }
+        viewHolder.duration.setText("for " + scheduler.getTime().getDuration() + " minutes");
         return convertView;
     }
 
@@ -53,6 +56,8 @@ public class CustomAdapter extends ArrayAdapter<Scheduler> {
         public TextView schoolSubject;
         public TextView hourBeginning;
         public TextView duration;
+
+        private String schedulerId;
     }
 
 

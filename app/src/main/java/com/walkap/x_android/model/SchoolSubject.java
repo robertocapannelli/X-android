@@ -3,13 +3,19 @@ package com.walkap.x_android.model;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class Faculty {
+public class SchoolSubject {
+
     private String mName;
 
-    public Faculty(){
+    public SchoolSubject(){
+
     }
 
-    public Faculty(String name){
+    public SchoolSubject(String name){
+        mName = name;
+    }
+
+    public void setName(String name){
         mName = name;
     }
 
@@ -17,8 +23,5 @@ public class Faculty {
         return mName;
     }
 
-    public void setName(String name){
-        mName = name;
-    }
 
 }
