@@ -36,8 +36,8 @@
     <string name="change_options">Change options</string>
     <string name="enter_university">Enter the university</string>
     <string name="enter_faculty">Enter the faculty</string>
-    <string name="cancel">Annulla</string>
-    <string name="saveIT">Salva</string>
+    <string name="annulla">Annulla</string>
+    <string name="salva">Salva</string>
 
     <!-- Days -->
     <string name="monday">M</string>
