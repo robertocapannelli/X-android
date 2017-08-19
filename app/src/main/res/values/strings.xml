@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android X</string>
+    <string name="app_name">Timetable</string>
     <string name="welcome_msg">Welcome! %1s</string>
 
     <!-- SignIn Activity -->
@@ -20,6 +20,16 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="home">Home</string>
 
+    <!-- Activity Options -->
+    <string name="enter_university">Enter the university</string>
+    <string name="enter_faculty">Enter the faculty</string>
+    <string name="enter_degree_course">Enter the degree course</string>
+
+    <!-- Activity Choice school subject -->
+    <string name="enter_class">Enter the class</string>
+    <string name="school_subject">Enter the school subject</string>
+
+
     <!-- General -->
     <string name="cause_crash">Cause Crash</string>
     <string name="confirm">Confirm</string>
@@ -29,13 +39,9 @@
     <string name="invitation_cta">Call to action</string>
     <string name="uni_list">Universities</string>
     <string name="save_schedule">Save schedule</string>
-    <string name="enter_class">Enter the class</string>
-    <string name="school_subject">Enter the school subject</string>
     <string name="choose_time">Choose the time</string>
     <string name="add_schedule">Add schedule</string>
     <string name="change_options">Change options</string>
-    <string name="enter_university">Enter the university</string>
-    <string name="enter_faculty">Enter the faculty</string>
     <string name="cancel">Annulla</string>
     <string name="saveIT">Salva</string>
 
