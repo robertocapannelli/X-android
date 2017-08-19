@@ -3,22 +3,15 @@ package com.walkap.x_android.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ToggleButton;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,8 +25,6 @@ import com.walkap.x_android.model.Scheduler;
 import com.walkap.x_android.model.SchoolSubject;
 import com.walkap.x_android.model.TimeSchoolSubject;
 import com.walkap.x_android.model.University;
-
-import java.util.Vector;
 
 public class addScheduleActivity extends AppCompatActivity {
 
@@ -70,57 +61,10 @@ public class addScheduleActivity extends AppCompatActivity {
     private GridView gridView;
     private ListView listView;
 
-    //TglButton animation
-
-    public void initialization() {
-
-        // Loading 'checkedAnimation' animation...
-        final Animation checkedAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.enable_toggle_anim);
-
-        // Loading 'unCheckedAnimation' animation...
-        final Animation unCheckedAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.disable_toggle_anim);
-
-        // Initialize all "ToggleButton" object...
-        Vector<ToggleButton> myToggleButtons = new Vector<>();
-
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_M));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_T));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_W));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_Th));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_F));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_S));
-
-        // Add event and animation...
-        for(ToggleButton myToggleButton : myToggleButtons)
-        {
-            myToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-
-                    if (isChecked) {
-                        compoundButton.setTextColor(getResources().getColor(R.color.datapicker, null));
-                        compoundButton.setTypeface(Typeface.DEFAULT_BOLD);
-                        compoundButton.startAnimation(checkedAnimation);
-
-                    } else {
-                        compoundButton.setTextColor(getResources().getColor(R.color.grey, null));
-                        compoundButton.setTypeface(Typeface.DEFAULT);
-                        compoundButton.startAnimation(unCheckedAnimation);
-                    }
-                }
-
-            });
-        }
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_schedule);
-
-        initialization();
+        setContentView(R.layout.activity_add_schedule);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
