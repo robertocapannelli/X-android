@@ -75,20 +75,20 @@ public class addScheduleActivity extends AppCompatActivity {
     public void initialization() {
 
         // Loading 'checkedAnimation' animation...
-        final Animation checkedAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.enable_toggle_anim);
+        final Animation checkedAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.enable_toggle_button_anim);
 
         // Loading 'unCheckedAnimation' animation...
-        final Animation unCheckedAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.disable_toggle_anim);
+        final Animation unCheckedAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.disable_toggle_button_anim);
 
         // Initialize all "ToggleButton" object...
         Vector<ToggleButton> myToggleButtons = new Vector<>();
 
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_M));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_T));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_W));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_Th));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_F));
-        myToggleButtons.add((ToggleButton) findViewById(R.id.tglbtn_S));
+        myToggleButtons.add((ToggleButton) findViewById(R.id.tglBtn_M));
+        myToggleButtons.add((ToggleButton) findViewById(R.id.tglBtn_T));
+        myToggleButtons.add((ToggleButton) findViewById(R.id.tglBtn_W));
+        myToggleButtons.add((ToggleButton) findViewById(R.id.tglBtn_Th));
+        myToggleButtons.add((ToggleButton) findViewById(R.id.tglBtn_F));
+        myToggleButtons.add((ToggleButton) findViewById(R.id.tglBtn_S));
 
         // Add event and animation...
         for(ToggleButton myToggleButton : myToggleButtons)
@@ -99,12 +99,12 @@ public class addScheduleActivity extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
                     if (isChecked) {
-                        compoundButton.setTextColor(getResources().getColor(R.color.datapicker, null));
+                        compoundButton.setTextColor(getResources().getColor(R.color.green20, null));
                         compoundButton.setTypeface(Typeface.DEFAULT_BOLD);
                         compoundButton.startAnimation(checkedAnimation);
 
                     } else {
-                        compoundButton.setTextColor(getResources().getColor(R.color.grey, null));
+                        compoundButton.setTextColor(getResources().getColor(R.color.primary_text, null));
                         compoundButton.setTypeface(Typeface.DEFAULT);
                         compoundButton.startAnimation(unCheckedAnimation);
                     }
@@ -121,6 +121,7 @@ public class addScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.add_schedule);
 
         initialization();
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
