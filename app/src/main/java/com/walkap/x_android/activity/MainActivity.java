@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.walkap.x_android.R;
+import com.walkap.x_android.fragment.AddScheduleFragment;
 import com.walkap.x_android.fragment.ChoiceSchoolSubjectFragment;
 import com.walkap.x_android.fragment.HomeFragment;
 import com.walkap.x_android.fragment.OptionsFragment;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         ChoiceSchoolSubjectFragment.OnFragmentInteractionListener,
         OptionsFragment.OnFragmentInteractionListener,
-        HomeFragment.OnFragmentInteractionListener{
+        HomeFragment.OnFragmentInteractionListener,
+        AddScheduleFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "MainActivity";
     public static final String ANONYMOUS = "anonymous";

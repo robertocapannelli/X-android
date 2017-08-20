@@ -4,9 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.walkap.x_android.R;
 
@@ -18,55 +22,51 @@ import com.walkap.x_android.R;
  * Use the {@link ChoiceSchoolSubjectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChoiceSchoolSubjectFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class ChoiceSchoolSubjectFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG = "ChoiceSchoolSubjectFragment";
 
     private OnFragmentInteractionListener mListener;
+
+    private EditText classroomEditText;
+    private EditText schoolSubjectEditText;
 
     public ChoiceSchoolSubjectFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChoiceSchoolSubjectFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ChoiceSchoolSubjectFragment newInstance(String param1, String param2) {
-        ChoiceSchoolSubjectFragment fragment = new ChoiceSchoolSubjectFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        final View rootView = inflater.inflate(R.layout.fragment_choice_school_subject, container, false);
+
+        classroomEditText = (EditText) rootView.findViewById(R.id.classroomEditText);
+        schoolSubjectEditText = (EditText) rootView.findViewById(R.id.schoolSubjectEditText);
+
+        //Button listener
+        Button btn = (Button) rootView.findViewById(R.id.saveButton);
+        btn.setOnClickListener(this);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choice_school_subject, container, false);
+        return rootView;
     }
+
+    @Override
+    public void onClick(View view) {
+        if (!validateForm()) {
+            return;
+        }else{
+            addScheduler();
+        }
+
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -106,4 +106,42 @@ public class ChoiceSchoolSubjectFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void addScheduler() {
+
+        //Create new Bundle instance
+        Bundle bundle = new Bundle();
+        //Get values from user input
+        bundle.putString("classRoom", classroomEditText.getText().toString());
+        bundle.putString("schoolSubject", schoolSubjectEditText.getText().toString());
+        //Create new fragment instance
+        Fragment fragment = new AddScheduleFragment();
+        //Pass values to new fragment
+        fragment.setArguments(bundle);
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(TAG).commit();
+
+    }
+
+    private boolean validateForm() {
+        boolean result = true;
+        if (TextUtils.isEmpty(classroomEditText.getText().toString())) {
+            classroomEditText.setError("Required");
+            result = false;
+        } else {
+            classroomEditText.setError(null);
+        }
+
+        if (TextUtils.isEmpty(schoolSubjectEditText.getText().toString())) {
+            schoolSubjectEditText.setError("Required");
+            result = false;
+        } else {
+            schoolSubjectEditText.setError(null);
+        }
+
+        return result;
+    }
+
 }
