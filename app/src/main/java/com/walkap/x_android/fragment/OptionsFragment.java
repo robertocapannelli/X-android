@@ -42,37 +42,26 @@ import java.util.List;
  * Use the {@link OptionsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OptionsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class OptionsFragment extends Fragment implements View.OnClickListener{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG = "OptionsFragment";
 
+    private String MY_PREFS_NAME = "preferences";
 
     private String universityName;
     private String facultyName;
     private String degreeCourseName;
 
-    private String MY_PREFS_NAME = "preferences";
+    private String universityOldKey;
+    private String facultyOldKey;
+    private String degreeCourseOldKey;
 
     private AutoCompleteTextView university;
     private AutoCompleteTextView faculty;
     private AutoCompleteTextView degreeCourse;
 
-    private String universityOldKey;
-    private String facultyOldKey;
-    private String degreeCourseOldKey;
-
-    private static final String TAG = "OptionsFragment";
-
     private DatabaseReference mDatabase;
-
     private FirebaseAuth mFirebaseAuth;
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,31 +69,10 @@ public class OptionsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OptionsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static OptionsFragment newInstance(String param1, String param2) {
-        OptionsFragment fragment = new OptionsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         mDatabase =  FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -120,40 +88,34 @@ public class OptionsFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_options, container, false);
 
-        university = (AutoCompleteTextView) getActivity().findViewById(R.id.universityAutoCompleteTextView);
-        faculty = (AutoCompleteTextView) getActivity().findViewById(R.id.facultyAutoCompleteTextView);
-        degreeCourse = (AutoCompleteTextView) getActivity().findViewById(R.id.degreeCourseAutoCompleteTextView);
-
-
-        //Button listener
-        Button btn = (Button) rootView.findViewById(R.id.saveButton);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "button clicked");
-                saveData();
-            }
-        });
+        university = (AutoCompleteTextView) rootView.findViewById(R.id.universityAutoCompleteTextView);
+        faculty = (AutoCompleteTextView) rootView.findViewById(R.id.facultyAutoCompleteTextView);
+        degreeCourse = (AutoCompleteTextView) rootView.findViewById(R.id.degreeCourseAutoCompleteTextView);
 
         addListAutocomplete(university, "university");
         addListAutocomplete(faculty, "faculty");
         addListAutocomplete(degreeCourse, "degreeCourse");
 
-        if(university != null){
-            university.setText(universityName);
-        }
+        university.setText(universityName);
 
-        if(faculty != null){
-            faculty.setText(facultyName);
-        }
+        faculty.setText(facultyName);
 
-        if(degreeCourse != null){
-            degreeCourse.setText(degreeCourseName);
-        }
+        degreeCourse.setText(degreeCourseName);
+
+        //Button listener
+        Button btn = (Button) rootView.findViewById(R.id.saveButton);
+        btn.setOnClickListener(this);
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_options, container, false);
+        return rootView;
     }
+
+
+    @Override
+    public void onClick(View view) {
+        saveData();
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -494,19 +456,20 @@ public class OptionsFragment extends Fragment {
         mDatabase.child(child).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 List<String> list = new ArrayList<String>();
 
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+
                     SchoolSubject schoolSubject = noteDataSnapshot.getValue(SchoolSubject.class);
 
                     list.add(schoolSubject.getName());
+
                 }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
+                autoComplete.setAdapter(adapter);
 
-                if(autoComplete != null){
-                    autoComplete.setAdapter(adapter);
-                }
             }
 
             @Override
