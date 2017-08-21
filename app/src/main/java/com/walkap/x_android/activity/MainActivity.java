@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements
         AddScheduleFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
-    public static final String ANONYMOUS = "anonymous";
 
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -57,22 +56,49 @@ public class MainActivity extends AppCompatActivity implements
     //Google Api Sign in
     private GoogleApiClient mGoogleApiClient;
 
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private View header;
+    private TextView tvUserName,tvEmail;
+    private ImageView ivUserProfile;
+
+    // index to identify current nav menu item
+    public static int navItemIndex = 0;
+
+    // tags used to attach the fragments
+    private static final String TAG_HOME = "home";
+    private static final String TAG_SCHEDULE = "schedule";
+    private static final String TAG_SETTINGS = "options";
+    public static String CURRENT_TAG = TAG_HOME;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar;
-        DrawerLayout drawer;
-        NavigationView navigationView;
-        View header;
-        TextView tvUserName;
-        TextView tvEmail;
-        ImageView ivUserProfile;
-
         //Set a toolbar to replace action bar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Playing with Firebase realtime database
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
+        //Check if the user is logged in
+        if (mFirebaseUser == null) {
+            // Not signed in, launch the Sign In activity
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+            return;
+        }
+
+        //Google sign connection
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
 
         //Find our drawer view
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -87,75 +113,91 @@ public class MainActivity extends AppCompatActivity implements
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         //Navigation listener
         navigationView.setNavigationItemSelectedListener(this);
-        //Header View (aat the top of drawer layout)
+
+        //Header View (at the top of drawer layout)
         header = navigationView.getHeaderView(0);
-
-        //Playing with Firebase realtime database
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        //universityEndPoint = mDatabase.child("university");
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
         tvUserName = (TextView) header.findViewById(R.id.tvUserName);
         tvEmail = (TextView) header.findViewById(R.id.tvEmail);
         ivUserProfile = (ImageView) header.findViewById(R.id.imageView);
 
-        //Check if the user is logged in
-        if (mFirebaseUser == null) {
-            // Not signed in, launch the Sign In activity
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
-            return;
+        // Name, email address, and profile photo Url
+        String name = mFirebaseUser.getDisplayName();
+        String email = mFirebaseUser.getEmail();
+        Uri photoUrl = mFirebaseUser.getPhotoUrl();
+
+        setHeaderNav(name, email, photoUrl);
+
+    }
+
+    public void setHeaderNav(String name, String email, Uri photoUrl){
+        tvUserName.setText(name);
+        tvEmail.setText(email);
+        if (photoUrl != null) {
+            Glide.with(this).load(photoUrl)
+                    .thumbnail(0.5f)
+                    .transition(withCrossFade())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(ivUserProfile);
         } else {
-            // Name, email address, and profile photo Url
-            String name = mFirebaseUser.getDisplayName();
-            String email = mFirebaseUser.getEmail();
-            Uri photoUrl = mFirebaseUser.getPhotoUrl();
+            ivUserProfile.setImageResource(R.drawable.ic_account_circle_white_48px);
+        }
+    }
 
-            // Check if user's email is verified
-            boolean emailVerified = mFirebaseUser.isEmailVerified();
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getToken() instead.
-            String uid = mFirebaseUser.getUid();
-            tvUserName.setText(name);
-            tvEmail.setText(email);
-            if (photoUrl != null) {
-                Glide.with(this).load(photoUrl)
-                        .thumbnail(0.5f)
-                        .transition(withCrossFade())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(ivUserProfile);
-            } else {
-                ivUserProfile.setImageResource(R.drawable.ic_account_circle_white_48px);
-            }
+    @SuppressWarnings("StatementWithEmptyBody")
+    public boolean onNavigationItemSelected(MenuItem item) {
 
+        Fragment fragment = null;
+        Class fragmentClass;
+        switch (item.getItemId()) {
+            case R.id.go_home:
+                navItemIndex = 0;
+                CURRENT_TAG = TAG_HOME;
+                fragmentClass = HomeFragment.class;
+                break;
+            case R.id.add_schedule:
+                navItemIndex = 1;
+                CURRENT_TAG = TAG_SCHEDULE;
+                fragmentClass = ChoiceSchoolSubjectFragment.class;
+                break;
+            case R.id.options:
+                navItemIndex = 2;
+                CURRENT_TAG = TAG_SETTINGS;
+                fragmentClass = OptionsFragment.class;
+                break;
+            default:
+                navItemIndex = 0;
+                fragmentClass = HomeFragment.class;
+                break;
         }
 
-        //Google sign connection
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API)
-                .build();
-
-        Handler mHandler = new Handler();
-        if (savedInstanceState == null) {
-            Runnable mPendingRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    Fragment fragment = new HomeFragment();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.flContent, fragment);
-                    fragmentTransaction.commitAllowingStateLoss();
-                }
-            };
-            // If mPendingRunnable is not null, then add to the message queue
-            if (mPendingRunnable != null) {
-                mHandler.post(mPendingRunnable);
-            }
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(TAG).commit();
+
+        // Highlight the selected item has been done by NavigationView
+        item.setChecked(true);
+        // Set action bar title
+        setTitle(item.getTitle());
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     //make the sign out button works
@@ -180,58 +222,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    public boolean onNavigationItemSelected(MenuItem item) {
-
-        Fragment fragment = null;
-        Class fragmentClass;
-        switch (item.getItemId()) {
-            case R.id.go_home:
-                fragmentClass = HomeFragment.class;
-                break;
-            case R.id.add_schedule:
-                fragmentClass = ChoiceSchoolSubjectFragment.class;
-                break;
-            case R.id.options:
-                fragmentClass = OptionsFragment.class;
-                break;
-            default:
-                fragmentClass = HomeFragment.class;
-                break;
-        }
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(TAG).commit();
-
-        // Highlight the selected item has been done by NavigationView
-        item.setChecked(true);
-        // Set action bar title
-        setTitle(item.getTitle());
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
