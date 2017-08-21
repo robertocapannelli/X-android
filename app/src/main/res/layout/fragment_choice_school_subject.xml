@@ -19,6 +19,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="16dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 tools:layout_editor_absoluteX="8dp"
@@ -56,20 +57,26 @@
                     android:inputType="textPersonName"
                     android:text="" />
 
-                <Button
-                    android:id="@+id/saveButton"
-                    style="@style/FirebaseUI.Button"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="addScheduler"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="@string/choose_time" />
+                    android:layout_gravity="right"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/saveButton"
+                        style="@style/FirebaseUI.Button"
+                        android:layout_weight="1"
+                        android:onClick="addScheduler"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="@string/choose_time" />
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
-
-
 
 
     </android.support.constraint.ConstraintLayout>
