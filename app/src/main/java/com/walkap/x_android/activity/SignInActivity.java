@@ -1,6 +1,5 @@
 package com.walkap.x_android.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -30,8 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.walkap.x_android.R;
 import com.walkap.x_android.model.User;
 
-import java.util.Date;
-
 public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
 
     private static final String TAG = "SignInActivity";
@@ -47,6 +45,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
     private Button mSignInButton;
     private Button mSignUpButton;
     private SignInButton mSignInButtonGoogle;
+    private TextView mForgotPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +60,16 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         mPasswordField = (EditText) findViewById(R.id.eT_password);
         mSignInButton = (Button) findViewById(R.id.sign_in_button_email);
         mSignUpButton = (Button) findViewById(R.id.sign_up_button_email);
+        mForgotPassword = (TextView) findViewById(R.id.forgot_password);
 
         // Click listeners
         mSignInButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
-
+        mForgotPassword.setOnClickListener(this);
 
         //Google Sign in
         mSignInButtonGoogle = (SignInButton) findViewById(R.id.sign_in_button);
-
         mSignInButtonGoogle.setOnClickListener(this);
-
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -210,6 +208,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                         }
                     }
                 });
+
     }
 
     private void onAuthSuccess(FirebaseUser user) {
@@ -217,7 +216,6 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail(), "", "", "", "", "");
-
         // Go to MainActivity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();
@@ -249,6 +247,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
         return result;
     }
+
     //end email and password scripts
 
     // [START basic_write]
@@ -278,6 +277,8 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
             case R.id.sign_in_button:
                 signInGoogle();
                 break;
+            case R.id.forgot_password:
+                startActivity(new Intent(SignInActivity.this, ForgotPasswordActivity.class));
         }
     }
 }

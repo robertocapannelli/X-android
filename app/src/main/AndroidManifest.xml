@@ -19,8 +19,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SignInActivity" />
-        <activity android:name=".activity.addScheduleActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activity.addScheduleActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.ForgotPasswordActivity"></activity>
     </application>
 
 </manifest>

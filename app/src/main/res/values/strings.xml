@@ -11,6 +11,11 @@
     <string name="hint_password">Password</string>
     <string name="email_or_google">or use your Google Account</string>
     <string name="contacts_permission_rationale">Access to account information is required to sign in.</string>
+    <string name="forgot_password">Forgot password?</string>
+
+    <!-- Forgot password Activity -->
+    <string name="your_email">Type your email</string>
+    <string name="reset_password">Reset Password</string>
 
     <!-- Navigation Drawer menu lables -->
     <string name="communicate">Communicate</string>
