@@ -3,6 +3,7 @@ package com.walkap.x_android.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -48,6 +49,7 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Email sent.");
                             Toast.makeText(ForgotPasswordActivity.this, "An email was sent to your address.", Toast.LENGTH_SHORT).show();
@@ -63,6 +65,10 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onClick(View view){
+        if (TextUtils.isEmpty(emailAddress)) {
+            Toast.makeText(ForgotPasswordActivity.this, "Write your email", Toast.LENGTH_SHORT).show();
+            return;
+        }
         resetPassword();
     }
 
