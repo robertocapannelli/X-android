@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements
         ChoiceSchoolSubjectFragment.OnFragmentInteractionListener,
         OptionsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
-        AddScheduleFragment.OnFragmentInteractionListener{
+        AddScheduleFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
     public static final String ANONYMOUS = "anonymous";
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements
         header = navigationView.getHeaderView(0);
 
         //Playing with Firebase realtime database
-        mDatabase =  FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         //universityEndPoint = mDatabase.child("university");
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(new Intent(this, SignInActivity.class));
             finish();
             return;
-        }else{
+        } else {
             // Name, email address, and profile photo Url
             String name = mFirebaseUser.getDisplayName();
             String email = mFirebaseUser.getEmail();
@@ -121,13 +121,13 @@ public class MainActivity extends AppCompatActivity implements
             String uid = mFirebaseUser.getUid();
             tvUserName.setText(name);
             tvEmail.setText(email);
-            if(photoUrl != null){
+            if (photoUrl != null) {
                 Glide.with(this).load(photoUrl)
                         .thumbnail(0.5f)
                         .transition(withCrossFade())
                         .apply(RequestOptions.circleCropTransform())
                         .into(ivUserProfile);
-            }else{
+            } else {
                 ivUserProfile.setImageResource(R.drawable.ic_account_circle_white_48px);
             }
 
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
 
         Handler mHandler = new Handler();
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             Runnable mPendingRunnable = new Runnable() {
                 @Override
                 public void run() {
@@ -199,9 +199,9 @@ public class MainActivity extends AppCompatActivity implements
 
         Fragment fragment = null;
         Class fragmentClass;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.go_home:
-                fragmentClass= HomeFragment.class;
+                fragmentClass = HomeFragment.class;
                 break;
             case R.id.add_schedule:
                 fragmentClass = ChoiceSchoolSubjectFragment.class;
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri){
+    public void onFragmentInteraction(Uri uri) {
         //Need this to make the fragment work
     }
 }

@@ -30,7 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.walkap.x_android.R;
 import com.walkap.x_android.model.User;
 
-public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
+public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -94,7 +94,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     //Start google scripts
 
-    private void signInGoogle(){
+    private void signInGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -267,7 +267,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.sign_in_button_email:
                 signIn();
                 break;

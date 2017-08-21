@@ -39,37 +39,49 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
 
     }
 
-    public void resetPassword(){
+    private boolean validateForm() {
+        boolean result = true;
+        if (TextUtils.isEmpty(mYourEmail.getText().toString())) {
+            mYourEmail.setError("Required");
+            result = false;
+        } else {
+            mYourEmail.setError(null);
+        }
+        return result;
+    }
+
+    public void resetPassword() {
+
+        if (!validateForm()) {
+            return;
+        }
         //Init firebase auth
         auth = FirebaseAuth.getInstance();
         //Get string from edit text
         emailAddress = mYourEmail.getText().toString();
 
-        auth.sendPasswordResetEmail(emailAddress)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+        auth.sendPasswordResetEmail(emailAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
 
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Email sent.");
-                            Toast.makeText(ForgotPasswordActivity.this, "An email was sent to your address.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(ForgotPasswordActivity.this, MainActivity.class));
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "Email sent.");
+                    Toast.makeText(ForgotPasswordActivity.this, "An email was sent to your address.", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(ForgotPasswordActivity.this, MainActivity.class));
 
-                        }else{
-                            Log.d(TAG, "Email error.");
-                            Toast.makeText(ForgotPasswordActivity.this, "Email not sent", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                } else {
+                    Log.d(TAG, "Email error.");
+                    Toast.makeText(ForgotPasswordActivity.this, "Email not sent", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
-    public void onClick(View view){
-        if (TextUtils.isEmpty(emailAddress)) {
-            Toast.makeText(ForgotPasswordActivity.this, "Write your email", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    public void onClick(View view) {
+
         resetPassword();
     }
-
 }
+
+
