@@ -27,7 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
 
             <EditText
                 android:id="@+id/eT_email"
@@ -35,7 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/hint_email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/eT_password"
@@ -43,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/password_hint"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -74,12 +78,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/forgot_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:textColor="@color/primary_text"
                 android:text="@string/forgot_password"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -91,9 +100,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
                 android:text="@string/email_or_google"
                 android:textAlignment="center"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textStyle="normal" />
 
         </LinearLayout>

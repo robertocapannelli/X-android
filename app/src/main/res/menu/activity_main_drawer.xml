@@ -14,7 +14,7 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/action_settings" />
     </group>
-
+<!--
     <item android:title="@string/communicate">
         <menu>
             <item
@@ -27,5 +27,5 @@
                 android:title="@string/send" />
         </menu>
     </item>
-
+-->
 </menu>
