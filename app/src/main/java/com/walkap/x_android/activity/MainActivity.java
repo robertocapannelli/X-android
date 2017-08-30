@@ -60,17 +60,6 @@ public class MainActivity extends AppCompatActivity implements
     // index to identify current nav menu item
     public static int navItemIndex = 0;
 
-    // tags used to attach the fragments
-    private static final String TAG_HOME = "home";
-    private static final String TAG_OPTIONS = "options";
-    private static final String TAG_SCHOOL_SUBJECT = "schoolSubject";
-    public static String CURRENT_TAG = TAG_HOME;
-
-    // flag to load home fragment when user presses back key
-    private boolean shouldLoadHomeFragOnBackPress = true;
-    private Handler mHandler;
-
-
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -148,7 +137,12 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-
+        //Default fragment to display
+        if (savedInstanceState == null) {
+            navItemIndex = 0;
+            Class fragmentClass = HomeFragment.class;
+            loadFragment(fragmentClass);
+        }
     }
 
     private void loadNavHeader() {
@@ -196,16 +190,20 @@ public class MainActivity extends AppCompatActivity implements
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-
-            super.onBackPressed();
         }
+
+        if (navItemIndex != 0) {
+            navItemIndex = 0;
+            Class fragmentClass = HomeFragment.class;
+            loadFragment(fragmentClass);
+            return;
+        }
+        super.onBackPressed();
     }
 
-    public void loadFragment(Class fragmentClass){
 
+    public void loadFragment(Class fragmentClass) {
         Fragment newFragment = null;
-
         try {
             newFragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -217,27 +215,23 @@ public class MainActivity extends AppCompatActivity implements
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                 android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.flContent, newFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
 
     public boolean onNavigationItemSelected(MenuItem item) {
-
         Class fragmentClass;
         switch (item.getItemId()) {
             case R.id.go_home:
                 navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
                 fragmentClass = HomeFragment.class;
                 break;
             case R.id.add_schedule:
                 navItemIndex = 1;
-                CURRENT_TAG = TAG_SCHOOL_SUBJECT;
                 fragmentClass = ChoiceSchoolSubjectFragment.class;
                 break;
             case R.id.options:
                 navItemIndex = 2;
-                CURRENT_TAG = TAG_OPTIONS;
                 fragmentClass = OptionsFragment.class;
                 break;
             default:
