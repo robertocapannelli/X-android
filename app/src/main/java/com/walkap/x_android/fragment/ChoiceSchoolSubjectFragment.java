@@ -121,7 +121,7 @@ public class ChoiceSchoolSubjectFragment extends Fragment implements View.OnClic
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
     }
 
