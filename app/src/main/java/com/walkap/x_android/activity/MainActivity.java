@@ -143,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements
         if (savedInstanceState == null) {
             navItemIndex = 0;
             Class fragmentClass = HomeFragment.class;
-
             loadFragment(fragmentClass);
         }
     }
@@ -163,6 +162,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void loadFragment(Class fragmentClass) {
+
+        setToolbarTitle();
+
         Fragment newFragment = null;
         try {
             newFragment = (Fragment) fragmentClass.newInstance();
@@ -215,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements
             navItemIndex = 0;
             Class fragmentClass = HomeFragment.class;
             loadFragment(fragmentClass);
-            setToolbarTitle();
             return;
         }
         super.onBackPressed();
