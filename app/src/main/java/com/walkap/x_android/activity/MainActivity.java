@@ -3,7 +3,6 @@ package com.walkap.x_android.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -66,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements
     private View header;
     private TextView tvUserName, tvEmail;
     private ImageView ivUserProfile;
+    private String[] arrayNavigation;
 
     private String name, email, uid;
     private Uri photoUrl;
@@ -96,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
         //Header View (aat the top of drawer layout)
         header = navigationView.getHeaderView(0);
+
+        arrayNavigation = getResources().getStringArray(R.array.navigation_array);
 
         //Playing with Firebase realtime database
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements
         if (savedInstanceState == null) {
             navItemIndex = 0;
             Class fragmentClass = HomeFragment.class;
+
             loadFragment(fragmentClass);
         }
     }
@@ -196,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements
             navItemIndex = 0;
             Class fragmentClass = HomeFragment.class;
             loadFragment(fragmentClass);
+            setToolbarTitle();
             return;
         }
         super.onBackPressed();
@@ -217,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements
         fragmentTransaction.replace(R.id.flContent, newFragment);
         fragmentTransaction.commitAllowingStateLoss();
     }
-
 
     public boolean onNavigationItemSelected(MenuItem item) {
         Class fragmentClass;
@@ -252,6 +255,10 @@ public class MainActivity extends AppCompatActivity implements
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setToolbarTitle() {
+        getSupportActionBar().setTitle(arrayNavigation[navItemIndex]);
     }
 
     @Override
