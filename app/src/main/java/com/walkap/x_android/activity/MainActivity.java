@@ -162,6 +162,22 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    public void loadFragment(Class fragmentClass) {
+        Fragment newFragment = null;
+        try {
+            newFragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.flContent, newFragment);
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
     //make the sign out button works
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -203,23 +219,6 @@ public class MainActivity extends AppCompatActivity implements
             return;
         }
         super.onBackPressed();
-    }
-
-
-    public void loadFragment(Class fragmentClass) {
-        Fragment newFragment = null;
-        try {
-            newFragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.flContent, newFragment);
-        fragmentTransaction.commitAllowingStateLoss();
     }
 
     public boolean onNavigationItemSelected(MenuItem item) {
