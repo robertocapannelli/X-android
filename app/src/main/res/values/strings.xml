@@ -26,6 +26,7 @@
     <string name="home">Home</string>
     <string name="account">Account</string>
     <string name="options">Options</string>
+    <string name="profile_image">Profile image</string>
 
     <!-- General -->
     <string name="cause_crash">Cause Crash</string>
