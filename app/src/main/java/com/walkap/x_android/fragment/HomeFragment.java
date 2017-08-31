@@ -197,15 +197,7 @@ public class HomeFragment extends Fragment {
                         .show();
             }
         });
-
     }
-
-    /*@Override
-    public void onStop(){
-        super.onStop();
-
-        gridView.dispatchSystemUiVisibilityChanged(0);
-    }*/
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -267,7 +259,9 @@ public class HomeFragment extends Fragment {
 
             colorGridView();
 
-            showScheduler();
+            if(schoolSubjectList != null) {
+                showScheduler();
+            }
 
         }
 

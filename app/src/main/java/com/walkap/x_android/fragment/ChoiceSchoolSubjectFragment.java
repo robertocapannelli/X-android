@@ -1,16 +1,17 @@
 package com.walkap.x_android.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import com.walkap.x_android.activity.addScheduleActivity;
 
 import com.walkap.x_android.R;
 
@@ -109,19 +110,15 @@ public class ChoiceSchoolSubjectFragment extends Fragment implements View.OnClic
 
     public void addScheduler() {
 
-        //Create new Bundle instance
-        Bundle bundle = new Bundle();
-        //Get values from user input
-        bundle.putString("classRoom", classroomEditText.getText().toString());
-        bundle.putString("schoolSubject", schoolSubjectEditText.getText().toString());
-        //Create new fragment instance
-        Fragment fragment = new AddScheduleFragment();
-        //Pass values to new fragment
-        fragment.setArguments(bundle);
+        String classroomString = classroomEditText.getText().toString();
+        String schoolSubjectString = schoolSubjectEditText.getText().toString();
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        Intent myIntent = new Intent(getActivity(), addScheduleActivity.class);
+        myIntent.putExtra("classroom", classroomString); //Optional parameters
+        myIntent.putExtra("schoolSubject", schoolSubjectString);
+        getActivity().startActivity(myIntent);
+
+
 
     }
 
