@@ -117,9 +117,6 @@ public class ChoiceSchoolSubjectFragment extends Fragment implements View.OnClic
         myIntent.putExtra("classroom", classroomString); //Optional parameters
         myIntent.putExtra("schoolSubject", schoolSubjectString);
         getActivity().startActivity(myIntent);
-
-
-
     }
 
     private boolean validateForm() {
