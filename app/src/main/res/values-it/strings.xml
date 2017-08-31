@@ -3,7 +3,7 @@
     <string name="app_name">Android X</string>
     <string name="action_settings">Impostazioni</string>
     <string name="add_schedule">Aggiungi orario</string>
-    <string name="cause_crash"></string>
+    <string name="cause_crash">Causa del crash</string>
     <string name="change_options">Cambia opzioni</string>
     <string name="choose_time">Scegli</string>
     <string name="communicate"></string>
@@ -54,4 +54,10 @@
         <item>V</item>
         <item>S</item>
     </string-array>
+    <string name="delete">Cancella</string>
+    <string name="do_not_want_to_follow_anymore">Non vuoi più seguire %1s ?</string>
+    <string name="required">Richiesto</string>
+    <string name="school_subject_empty">Il corso è vuoto</string>
+    <string name="school_subject_error">Errore del corso</string>
+    <string name="yes">Si</string>
 </resources>
