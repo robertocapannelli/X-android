@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +40,10 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link AddSchoolSubjectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddSchoolSubjectFragment extends Fragment {
+public class AddSchoolSubjectFragment extends Fragment implements View.OnClickListener {
+
+    private static final String TAG = "AddSchoolSubjectFrag";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String CLASSROOM = "classRoom";
@@ -49,8 +53,6 @@ public class AddSchoolSubjectFragment extends Fragment {
     private String classRoom;
     private String schoolSubject;
 
-    private static final String TAG = "AddSchoolSubjectFrag";
-
     private OnFragmentInteractionListener mListener;
 
     private AutoCompleteTextView schoolSubjectAuto;
@@ -59,8 +61,6 @@ public class AddSchoolSubjectFragment extends Fragment {
     private List<String> list;
 
     private DatabaseReference mDatabase;
-
-    private Context context;
 
     private String MY_PREFS_NAME = "preferences";
     private Set<String> schoolSubjectList;
@@ -102,45 +102,7 @@ public class AddSchoolSubjectFragment extends Fragment {
         SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);
 
-        if(schoolSubjectList != null) {
-            list = new ArrayList<String>(schoolSubjectList);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,  list);
-            schoolSubjects.setAdapter(adapter);
-        }
 
-        addListAutocomplete();
-
-        schoolSubjects.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
-
-                AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(context);
-
-                builder.setTitle(R.string.delete)
-                        .setMessage(getResources().getString(R.string.do_not_want_to_follow_anymore, parent.getItemAtPosition(position).toString()))
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                                schoolSubjectList.remove(parent.getItemAtPosition(position).toString());
-
-                                editor.putStringSet(SCHOOLSUBJECT, schoolSubjectList);
-                                editor.apply();
-
-                                List<String> list = new ArrayList<String>(schoolSubjectList);
-                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,  list);
-                                schoolSubjects.setAdapter(adapter);
-                            }
-                        })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
-        });
     }
 
     @Override
@@ -153,8 +115,58 @@ public class AddSchoolSubjectFragment extends Fragment {
         schoolSubjectAuto = (AutoCompleteTextView) rootView.findViewById(R.id.schoolSubjectAutoCompleteTextView);
         schoolSubjects = (ListView) rootView.findViewById(R.id.schoolSubjectListView);
 
+        Button btn = (Button) rootView.findViewById(R.id.addSchoolSubject);
+        btn.setOnClickListener(this);
+
+        if(schoolSubjectList != null) {
+            list = new ArrayList<String>(schoolSubjectList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  list);
+            schoolSubjects.setAdapter(adapter);
+        }
+
+        addListAutocomplete();
+
+        schoolSubjects.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(getActivity());
+
+                builder.setTitle(R.string.delete)
+                        .setMessage(getResources().getString(R.string.do_not_want_to_follow_anymore, parent.getItemAtPosition(position).toString()))
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                                schoolSubjectList.remove(parent.getItemAtPosition(position).toString());
+
+                                editor.putStringSet(SCHOOLSUBJECT, schoolSubjectList);
+                                editor.apply();
+
+                                List<String> list = new ArrayList<String>(schoolSubjectList);
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  list);
+                                schoolSubjects.setAdapter(adapter);
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
+
+
         return rootView;
     }
+
+    @Override
+    public void onClick(View view) {
+        addSchoolSubject();
+    }
+
 
     @Override
     public void onStart(){
@@ -216,7 +228,7 @@ public class AddSchoolSubjectFragment extends Fragment {
                     list.add(schoolSubject.getName());
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, list);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
                 schoolSubjectAuto.setAdapter(adapter);
 
             }
@@ -233,7 +245,7 @@ public class AddSchoolSubjectFragment extends Fragment {
 
         if(schoolSubjectAuto.getText().toString().isEmpty()) {
             AlertDialog.Builder builder;
-            builder = new AlertDialog.Builder(context);
+            builder = new AlertDialog.Builder(getActivity());
 
             builder.setTitle(R.string.school_subject_error)
                     .setMessage(R.string.school_subject_empty)
