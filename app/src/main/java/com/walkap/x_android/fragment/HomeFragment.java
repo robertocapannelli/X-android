@@ -86,6 +86,8 @@ public class HomeFragment extends Fragment {
     private final String FACULTY = "faculty";
     private final String DEGREE_COURSE = "degreeCourse";
 
+    private final String TAG = "HomeFragment";
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -330,7 +332,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("*** main activity ***", "onCancelled", databaseError.toException());
+                Log.e(TAG, "onCancelled", databaseError.toException());
             }
         });
     }
