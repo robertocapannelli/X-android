@@ -323,7 +323,6 @@ public class HomeFragment extends Fragment {
                 CustomAdapter adapter = new CustomAdapter(content, R.layout.row, list);
 
                 listView.setAdapter(adapter);
-
             }
 
             @Override
