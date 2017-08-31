@@ -3,7 +3,6 @@ package com.walkap.x_android.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements
         AddScheduleFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
-    public static final String ANONYMOUS = "anonymous";
 
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -57,18 +55,27 @@ public class MainActivity extends AppCompatActivity implements
     //Google Api Sign in
     private GoogleApiClient mGoogleApiClient;
 
+
+    // index to identify current nav menu item
+    public static int navItemIndex = 0;
+
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private View header;
+    private TextView tvUserName, tvEmail;
+    private ImageView ivUserProfile;
+    private String[] arrayNavigation;
+
+    private String name, email, uid;
+    private Uri photoUrl;
+    private boolean emailVerified;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar;
-        DrawerLayout drawer;
-        NavigationView navigationView;
-        View header;
-        TextView tvUserName;
-        TextView tvEmail;
-        ImageView ivUserProfile;
 
         //Set a toolbar to replace action bar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -90,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements
         //Header View (aat the top of drawer layout)
         header = navigationView.getHeaderView(0);
 
+        arrayNavigation = getResources().getStringArray(R.array.navigation_array);
+
         //Playing with Firebase realtime database
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //universityEndPoint = mDatabase.child("university");
@@ -108,28 +117,19 @@ public class MainActivity extends AppCompatActivity implements
             return;
         } else {
             // Name, email address, and profile photo Url
-            String name = mFirebaseUser.getDisplayName();
-            String email = mFirebaseUser.getEmail();
-            Uri photoUrl = mFirebaseUser.getPhotoUrl();
+            name = mFirebaseUser.getDisplayName();
+            email = mFirebaseUser.getEmail();
+            photoUrl = mFirebaseUser.getPhotoUrl();
 
             // Check if user's email is verified
-            boolean emailVerified = mFirebaseUser.isEmailVerified();
+            emailVerified = mFirebaseUser.isEmailVerified();
 
             // The user's ID, unique to the Firebase project. Do NOT use this value to
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getToken() instead.
-            String uid = mFirebaseUser.getUid();
-            tvUserName.setText(name);
-            tvEmail.setText(email);
-            if (photoUrl != null) {
-                Glide.with(this).load(photoUrl)
-                        .thumbnail(0.5f)
-                        .transition(withCrossFade())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(ivUserProfile);
-            } else {
-                ivUserProfile.setImageResource(R.drawable.ic_account_circle_white_48px);
-            }
+            uid = mFirebaseUser.getUid();
+
+            loadNavHeader();
 
         }
 
@@ -139,23 +139,45 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-        Handler mHandler = new Handler();
+        //Default fragment to display
         if (savedInstanceState == null) {
-            Runnable mPendingRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    Fragment fragment = new HomeFragment();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.flContent, fragment);
-                    fragmentTransaction.commitAllowingStateLoss();
-                }
-            };
-            // If mPendingRunnable is not null, then add to the message queue
-            if (mPendingRunnable != null) {
-                mHandler.post(mPendingRunnable);
-            }
+            navItemIndex = 0;
+            Class fragmentClass = HomeFragment.class;
+            loadFragment(fragmentClass);
+        }
+    }
+
+    private void loadNavHeader() {
+        tvUserName.setText(name);
+        tvEmail.setText(email);
+        if (photoUrl != null) {
+            Glide.with(this).load(photoUrl)
+                    .thumbnail(1f)
+                    .transition(withCrossFade())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(ivUserProfile);
+        } else {
+            ivUserProfile.setImageResource(R.drawable.ic_account_circle_white_48px);
+        }
+    }
+
+    public void loadFragment(Class fragmentClass) {
+
+        setToolbarTitle();
+
+        Fragment newFragment = null;
+        try {
+            newFragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.flContent, newFragment);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     //make the sign out button works
@@ -173,6 +195,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
@@ -184,45 +211,41 @@ public class MainActivity extends AppCompatActivity implements
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
+
+        if (navItemIndex != 0) {
+            navItemIndex = 0;
+            Class fragmentClass = HomeFragment.class;
+            loadFragment(fragmentClass);
+            return;
+        }
+        super.onBackPressed();
     }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
-
-        Fragment fragment = null;
         Class fragmentClass;
         switch (item.getItemId()) {
             case R.id.go_home:
+                navItemIndex = 0;
                 fragmentClass = HomeFragment.class;
                 break;
             case R.id.add_schedule:
+                navItemIndex = 1;
                 fragmentClass = ChoiceSchoolSubjectFragment.class;
                 break;
             case R.id.options:
+                navItemIndex = 2;
                 fragmentClass = OptionsFragment.class;
                 break;
             default:
+                navItemIndex = 0;
                 fragmentClass = HomeFragment.class;
                 break;
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Log.d(TAG, "onNavigationItemSelected() The index is: " + navItemIndex);
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(TAG).commit();
+        loadFragment(fragmentClass);
 
         // Highlight the selected item has been done by NavigationView
         item.setChecked(true);
@@ -232,6 +255,10 @@ public class MainActivity extends AppCompatActivity implements
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setToolbarTitle() {
+        getSupportActionBar().setTitle(arrayNavigation[navItemIndex]);
     }
 
     @Override
