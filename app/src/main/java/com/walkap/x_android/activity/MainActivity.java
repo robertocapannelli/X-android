@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(MenuItem item) {
         Class fragmentClass;
         switch (item.getItemId()) {
-            case R.id.go_home:
+            case R.id.home:
                 navItemIndex = 0;
                 fragmentClass = HomeFragment.class;
                 break;
@@ -233,8 +233,12 @@ public class MainActivity extends AppCompatActivity implements
                 navItemIndex = 1;
                 fragmentClass = ChoiceSchoolSubjectFragment.class;
                 break;
-            case R.id.options:
+            case R.id.add_school_subject:
                 navItemIndex = 2;
+                fragmentClass = AddSchoolSubjectFragment.class;
+                break;
+            case R.id.options:
+                navItemIndex = 3;
                 fragmentClass = OptionsFragment.class;
                 break;
             default:
