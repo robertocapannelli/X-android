@@ -51,6 +51,15 @@
     <string name="enter_university">Enter the university</string>
     <string name="enter_faculty">Enter the faculty</string>
     <string name="add">Add</string>
+    <string name="required">Required</string>
+    <string-array name="daysArray">
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+    </string-array>
 
     <!-- Options Fragment -->
 

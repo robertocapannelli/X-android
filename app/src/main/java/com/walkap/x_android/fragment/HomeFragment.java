@@ -80,6 +80,13 @@ public class HomeFragment extends Fragment {
     private String degreeCourseName;
     private Set<String> schoolSubjectList;
 
+    private String[] daysArray;
+
+    private final String UNIVERSITY = "university";
+    private final String FACULTY = "faculty";
+    private final String DEGREE_COURSE = "degreeCourse";
+
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -111,6 +118,8 @@ public class HomeFragment extends Fragment {
         }
 
         mDatabase =  FirebaseDatabase.getInstance().getReference();
+
+        daysArray = getResources().getStringArray(R.array.daysArray);
 
         readDataFile();
 
@@ -146,7 +155,7 @@ public class HomeFragment extends Fragment {
 
         gridView = (GridView) getView().findViewById(R.id.mainActivityGridView);
         String[] mainGrid = new String[]{
-                "L",   "M",  "M",    "G",  "V",  "S"
+                daysArray[0],   daysArray[1],  daysArray[2],  daysArray[3],  daysArray[4],  daysArray[5]
         };
 
         Calendar calendar = Calendar.getInstance();
@@ -240,9 +249,9 @@ public class HomeFragment extends Fragment {
 
     private void readDataFile(){
         SharedPreferences prefs = this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        universityName = prefs.getString("university", "");
-        facultyName = prefs.getString("faculty", "");
-        degreeCourseName = prefs.getString("degreeCourse", "");
+        universityName = prefs.getString(UNIVERSITY, "");
+        facultyName = prefs.getString(FACULTY, "");
+        degreeCourseName = prefs.getString(DEGREE_COURSE, "");
         schoolSubjectList = prefs.getStringSet("schoolSubject", null);
 
     }
@@ -307,8 +316,8 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     Scheduler scheduler = noteDataSnapshot.getValue(Scheduler.class);
 
-                    if (day == scheduler.getTime().getDay() && noteDataSnapshot.child("university").getValue().toString().equals(universityKey)
-                            && noteDataSnapshot.child("faculty").getValue().toString().equals(facultyKey) && noteDataSnapshot.child("degreeCourse").getValue().toString().equals(degreeCourseKey)
+                    if (day == scheduler.getTime().getDay() && noteDataSnapshot.child(UNIVERSITY).getValue().toString().equals(universityKey)
+                            && noteDataSnapshot.child(FACULTY).getValue().toString().equals(facultyKey) && noteDataSnapshot.child(DEGREE_COURSE).getValue().toString().equals(degreeCourseKey)
                             && schoolSubjectList.contains(scheduler.getSchoolSubject())) {
                         scheduler.setSchedulerId(noteDataSnapshot.getKey());
                         list.add(scheduler);
@@ -328,7 +337,7 @@ public class HomeFragment extends Fragment {
 
     private void findUniversityKey(final String universityString){
 
-        mDatabase.child("university").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(UNIVERSITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
@@ -349,7 +358,7 @@ public class HomeFragment extends Fragment {
 
     private void findFacultyKey(final String facultyString){
 
-        mDatabase.child("faculty").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(FACULTY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
@@ -369,7 +378,7 @@ public class HomeFragment extends Fragment {
 
     private void findDegreeCourseKey(final String degreeCourseString){
 
-        mDatabase.child("degreeCourse").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(DEGREE_COURSE).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {

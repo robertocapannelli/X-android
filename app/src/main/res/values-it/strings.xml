@@ -46,4 +46,12 @@
     <string name="university_not_found">Università non trovata</string>
     <string name="university_not_found_add">Università non trovata, vuoi aggiungerla?</string>
     <string name="university_select_another">Seleziona un\'altra università</string>
+    <string-array name="daysArray">
+        <item>L</item>
+        <item>M</item>
+        <item>M</item>
+        <item>G</item>
+        <item>V</item>
+        <item>S</item>
+    </string-array>
 </resources>
