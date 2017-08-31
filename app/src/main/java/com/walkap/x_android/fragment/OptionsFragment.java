@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -431,8 +432,11 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             .show();
                 }
                 else{
-                    Intent myIntent = new Intent(getActivity(), MainActivity.class);
-                    getActivity().startActivity(myIntent);
+                    Fragment fragment = new HomeFragment();
+
+                    FragmentManager fragmentManager = getFragmentManager();
+
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 }
 
             }
@@ -467,7 +471,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, list);
                 autoComplete.setAdapter(adapter);
 
             }
