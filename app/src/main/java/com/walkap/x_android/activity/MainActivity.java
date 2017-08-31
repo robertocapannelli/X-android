@@ -238,4 +238,5 @@ public class MainActivity extends AppCompatActivity implements
     public void onFragmentInteraction(Uri uri) {
         //Need this to make the fragment work
     }
+
 }

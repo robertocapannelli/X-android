@@ -1,6 +1,7 @@
 package com.walkap.x_android.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,14 +41,18 @@ public class CustomAdapter extends ArrayAdapter<Scheduler> {
         }
         Scheduler scheduler = getItem(position);
         viewHolder.classroom.setText("class room " + scheduler.getClassroom());
+        viewHolder.classroom.setTextColor(Color.BLACK);
         viewHolder.schoolSubject.setText("school Subject " + scheduler.getSchoolSubject());
+        viewHolder.schoolSubject.setTextColor(Color.BLACK);
         if(scheduler.getTime().getMinute() == 0){
             viewHolder.hourBeginning.setText("to the hour " + scheduler.getTime().getHour() + ":0" + scheduler.getTime().getMinute());
         }
         else {
             viewHolder.hourBeginning.setText("to the hour " + scheduler.getTime().getHour() + ":" + scheduler.getTime().getMinute());
         }
+        viewHolder.hourBeginning.setTextColor(Color.BLACK);
         viewHolder.duration.setText("for " + scheduler.getTime().getDuration() + " minutes");
+        viewHolder.duration.setTextColor(Color.BLACK);
         return convertView;
     }
 
