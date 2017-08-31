@@ -60,4 +60,12 @@
     <string name="school_subject_empty">Il corso è vuoto</string>
     <string name="school_subject_error">Errore del corso</string>
     <string name="yes">Si</string>
+
+    <string-array name="navigation_array">
+        <item>Home</item>
+        <item>Aggiungi orario</item>
+        <item>Aggiungi corso</item>
+        <item>Opzioni</item>
+    </string-array>
+    <string name="add_course">Aggiungi Corso</string>
 </resources>

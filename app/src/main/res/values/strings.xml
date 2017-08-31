@@ -26,9 +26,11 @@
     <string name="account" translatable="false">Account</string>
     <string name="options">Options</string>
     <string name="profile_image">Profile image</string>
+    <string name="add_course">Add Course</string>
     <string-array name="navigation_array">
         <item>Home</item>
         <item>Add Schedule</item>
+        <item>Add School Subject</item>
         <item>Options</item>
     </string-array>
 
