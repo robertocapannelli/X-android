@@ -66,6 +66,9 @@
         <item>S</item>
     </string-array>
 
+    <!-- Home Fragment -->
+    <string name="do_you_want_delete_this_schedule">Do you want to delete %1s schedule?</string>
+
     <!-- Options Fragment -->
 
     <!-- University -->

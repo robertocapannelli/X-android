@@ -68,4 +68,5 @@
         <item>Opzioni</item>
     </string-array>
     <string name="add_course">Aggiungi Corso</string>
+    <string name="do_you_want_delete_this_schedule">Vuoi eliminare l\'orario di %1s?</string>
 </resources>

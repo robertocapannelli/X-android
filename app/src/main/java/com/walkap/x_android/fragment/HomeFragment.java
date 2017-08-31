@@ -189,8 +189,8 @@ public class HomeFragment extends Fragment {
 
                 final Scheduler scheduler = (Scheduler) parent.getItemAtPosition(position);
 
-                builder.setTitle("delete")
-                        .setMessage("do u want delete this " + scheduler.getSchoolSubject() + " scheduler? ")
+                builder.setTitle(R.string.delete)
+                        .setMessage(getResources().getString(R.string.do_you_want_delete_this_schedule, scheduler.getSchoolSubject()))
                         .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
