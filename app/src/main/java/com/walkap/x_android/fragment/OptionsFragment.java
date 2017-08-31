@@ -18,6 +18,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,6 +72,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     private OnFragmentInteractionListener mListener;
 
@@ -85,6 +87,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
         mDatabase =  FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
         readDataFile();
 
@@ -224,6 +227,10 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     editor.putString(FACULTY, facultyString);
                     editor.putString(DEGREE_COURSE, degreeCourseString);
                     editor.apply();
+
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityString);
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyString);
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseString);
 
                 }
             }
