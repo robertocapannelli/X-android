@@ -49,7 +49,7 @@ public class AddSchoolSubjectFragment extends Fragment {
     private String classRoom;
     private String schoolSubject;
 
-    private static final String TAG = "AddScheduleFragment";
+    private static final String TAG = "AddSchoolSubjectFrag";
 
     private OnFragmentInteractionListener mListener;
 
@@ -100,7 +100,7 @@ public class AddSchoolSubjectFragment extends Fragment {
         mDatabase =  FirebaseDatabase.getInstance().getReference();
 
         SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        schoolSubjectList = prefs.getStringSet("schoolSubject", null);
+        schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);
 
         if(schoolSubjectList != null) {
             list = new ArrayList<String>(schoolSubjectList);
@@ -117,14 +117,14 @@ public class AddSchoolSubjectFragment extends Fragment {
                 AlertDialog.Builder builder;
                 builder = new AlertDialog.Builder(context);
 
-                builder.setTitle("delete")
-                        .setMessage("do not want to follow " + parent.getItemAtPosition(position).toString() + " anymore?")
-                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                builder.setTitle(R.string.delete)
+                        .setMessage(getResources().getString(R.string.do_not_want_to_follow_anymore, parent.getItemAtPosition(position).toString()))
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
                                 schoolSubjectList.remove(parent.getItemAtPosition(position).toString());
 
-                                editor.putStringSet("schoolSubject", schoolSubjectList);
+                                editor.putStringSet(SCHOOLSUBJECT, schoolSubjectList);
                                 editor.apply();
 
                                 List<String> list = new ArrayList<String>(schoolSubjectList);
@@ -132,7 +132,7 @@ public class AddSchoolSubjectFragment extends Fragment {
                                 schoolSubjects.setAdapter(adapter);
                             }
                         })
-                        .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
                             }
@@ -205,7 +205,7 @@ public class AddSchoolSubjectFragment extends Fragment {
 
     public void addListAutocomplete() {
 
-        mDatabase.child("schoolSubject").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(SCHOOLSUBJECT).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> list = new ArrayList<String>();
@@ -223,7 +223,7 @@ public class AddSchoolSubjectFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("*** main activity ***", "onCancelled", databaseError.toException());
+                Log.e(TAG, "onCancelled", databaseError.toException());
             }
         });
     }
@@ -235,29 +235,29 @@ public class AddSchoolSubjectFragment extends Fragment {
             AlertDialog.Builder builder;
             builder = new AlertDialog.Builder(context);
 
-            builder.setTitle("school subject error")
-                    .setMessage("school subject is empty")
+            builder.setTitle(R.string.school_subject_error)
+                    .setMessage(R.string.school_subject_empty)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
         else{
             if(schoolSubjectList == null){
-                Log.d("*** addSchool null***", schoolSubjectAuto.getText().toString());
+                Log.d(TAG, schoolSubjectAuto.getText().toString());
 
                 Set<String> set = new HashSet<String>();
                 set.add(schoolSubjectAuto.getText().toString());
-                editor.putStringSet("schoolSubject", set);
+                editor.putStringSet(SCHOOLSUBJECT, set);
                 editor.commit();
 
             }
             else {
                 if (!schoolSubjectList.contains(schoolSubjectAuto.getText().toString())) {
-                    Log.d("*** addSchool ***", schoolSubjectAuto.getText().toString());
+                    Log.d(TAG, schoolSubjectAuto.getText().toString());
 
                     Set<String> set = new HashSet<String>();
                     list.add(schoolSubjectAuto.getText().toString());
                     set.addAll(list);
-                    editor.putStringSet("schoolSubject", set);
+                    editor.putStringSet(SCHOOLSUBJECT, set);
                     editor.apply();
                 }
             }
