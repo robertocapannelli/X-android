@@ -152,7 +152,6 @@ public class HomeFragment extends Fragment {
             default:                                break;
         }
 
-
         return rootView;
     }
 
