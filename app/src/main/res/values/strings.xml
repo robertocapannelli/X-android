@@ -7,23 +7,32 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in_sign_up_email">Sign In or Sign Up</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_email" translatable="false">Email</string>
+    <string name="hint_password" translatable="false">Password</string>
     <string name="email_or_google">or use your Google Account</string>
     <string name="contacts_permission_rationale">Access to account information is required to sign in.</string>
     <string name="forgot_password">Forgot password?</string>
 
     <!-- Forgot password Activity -->
     <string name="your_email">Type your email</string>
-    <string name="reset_password">Reset Password</string>
+    <string name="reset_password" translatable="false">Reset Password</string>
 
     <!-- Navigation Drawer menu lables -->
-    <string name="communicate">Communicate</string>
     <string name="share">Share</string>
     <string name="send">Send</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="home">Home</string>
+    <string name="home" translatable="false">Home</string>
+    <string name="account" translatable="false">Account</string>
+    <string name="options">Options</string>
+    <string name="profile_image">Profile image</string>
+    <string name="add_course">Add Course</string>
+    <string-array name="navigation_array">
+        <item>Home</item>
+        <item>Add Schedule</item>
+        <item>Add School Subject</item>
+        <item>Options</item>
+    </string-array>
 
     <!-- General -->
     <string name="cause_crash">Cause Crash</string>
@@ -31,8 +40,8 @@
     <string name="save">Save</string>
     <string name="action_settings">Settings</string>
     <string name="enter_the_degree_course">Enter the degree course</string>
-
-    <string name="invitation_cta">Call to action</string>
+    <string name="delete">Delete</string>
+    <string name="invitation_cta" translatable="false">Call to action</string>
     <string name="uni_list">Universities</string>
     <string name="save_schedule">Save schedule</string>
     <string name="enter_class">Enter the class</string>
@@ -42,5 +51,49 @@
     <string name="change_options">Change options</string>
     <string name="enter_university">Enter the university</string>
     <string name="enter_faculty">Enter the faculty</string>
+    <string name="add">Add</string>
+    <string name="required">Required</string>
+
+    <string name="no" translatable="false">No</string>
+    <string name="yes">Yes</string>
+
+    <string-array name="daysArray">
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+    </string-array>
+
+    <!-- Home Fragment -->
+    <string name="do_you_want_delete_this_schedule">Do you want to delete %1s schedule?</string>
+
+    <!-- Options Fragment -->
+
+    <!-- University -->
+    <string name="university_error">University error</string>
+    <string name="university_empty">University is empty</string>
+    <string name="university_not_found">University not found</string>
+    <string name="university_not_found_add">University not found, do you want to add it?</string>
+    <string name="university_select_another">Select another university</string>
+    <!-- Faculty -->
+    <string name="faculty_error">Faculty error</string>
+    <string name="faculty_empty">Faculty is empty</string>
+    <string name="faculty_not_found">Faculty not found</string>
+    <string name="faculty_not_found_add">Faculty not found, do you want to add it?</string>
+    <string name="faculty_select_another">Select another faculty</string>
+
+    <!-- Degree cource -->
+    <string name="degree_course_error">Degree course error</string>
+    <string name="degree_course_empty">Degree course is empty</string>
+    <string name="degree_course_not_found">Degree course not found</string>
+    <string name="degree_course_not_found_add">Degree course not found, do you want to add it?</string>
+    <string name="degree_course_select_another">Select another degree course</string>
+
+    <!-- Add school subject fragment -->
+    <string name="do_not_want_to_follow_anymore">Do not want to follow %1s anymore?</string>
+    <string name="school_subject_error">School subject error</string>
+    <string name="school_subject_empty">School subject is empty</string>
 
 </resources>

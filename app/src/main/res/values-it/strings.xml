@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Android X</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="add_schedule">Aggiungi orario</string>
+    <string name="cause_crash">Causa del crash</string>
+    <string name="change_options">Cambia opzioni</string>
+    <string name="choose_time">Scegli</string>
+    <string name="communicate"></string>
+    <string name="confirm">Conferma</string>
+    <string name="contacts_permission_rationale">Per accedere è necessario accedere alle informazioni dell\'account</string>
+    <string name="email_or_google">o usa il tuo account Google</string>
+    <string name="enter_class">Inserisci la classe</string>
+    <string name="enter_faculty">Inserisci la facoltà</string>
+    <string name="enter_the_degree_course">Inserisci il corso di laurea</string>
+    <string name="enter_university">Inserisci l\'università</string>
+    <string name="forgot_password">Password dimenticata?</string>
+    <string name="hint_email"></string>
+    <string name="options">Opzioni</string>
+    <string name="save">Salva</string>
+    <string name="save_schedule">Salva orario</string>
+    <string name="school_subject">Inserisci il corso</string>
+    <string name="send">Invia</string>
+    <string name="share">Condividi</string>
+    <string name="sign_in">Accedi</string>
+    <string name="sign_in_sign_up_email">Accedi o registrati</string>
+    <string name="sign_out">Esci</string>
+    <string name="sign_up">Registrati</string>
+    <string name="uni_list">Università</string>
+    <string name="welcome_msg">Welcome! %1s</string>
+    <string name="your_email">Inserisci la tua email</string>
+    <string name="add">Aggiungi</string>
+    <string name="degree_course_empty">\"Corso di laurea vuoto\"</string>
+    <string name="degree_course_error">Errore corso di laurea</string>
+    <string name="degree_course_not_found">Corso di laurea non trovato</string>
+    <string name="degree_course_not_found_add">Corso di laurea non trovato, vuoi aggiungerlo?</string>
+    <string name="degree_course_select_another">Seleziona un altro corso di laurea</string>
+    <string name="faculty_empty">Facoltà vuota</string>
+    <string name="faculty_error">Errore facoltà</string>
+    <string name="faculty_not_found">Facoltà non trovata</string>
+    <string name="faculty_not_found_add">Facoltà non trovata, vuoi aggiungerla?</string>
+    <string name="faculty_select_another">Seleziona un\'altra facoltà</string>
+    <string name="profile_image">Immagine profilo</string>
+    <string name="university_empty">Università vuota</string>
+    <string name="university_error">Errore università</string>
+    <string name="university_not_found">Università non trovata</string>
+    <string name="university_not_found_add">Università non trovata, vuoi aggiungerla?</string>
+    <string name="university_select_another">Seleziona un\'altra università</string>
+    <string-array name="daysArray">
+        <item>L</item>
+        <item>M</item>
+        <item>M</item>
+        <item>G</item>
+        <item>V</item>
+        <item>S</item>
+    </string-array>
+    <string name="delete">Cancella</string>
+    <string name="do_not_want_to_follow_anymore">Non vuoi più seguire %1s ?</string>
+    <string name="required">Richiesto</string>
+    <string name="school_subject_empty">Il corso è vuoto</string>
+    <string name="school_subject_error">Errore del corso</string>
+    <string name="yes">Si</string>
+
+    <string-array name="navigation_array">
+        <item>Home</item>
+        <item>Aggiungi orario</item>
+        <item>Aggiungi corso</item>
+        <item>Opzioni</item>
+    </string-array>
+    <string name="add_course">Aggiungi Corso</string>
+    <string name="do_you_want_delete_this_schedule">Vuoi eliminare l\'orario di %1s?</string>
+</resources>

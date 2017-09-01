@@ -6,16 +6,11 @@
     tools:context="com.walkap.x_android.fragment.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Home" />
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -26,27 +21,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/addSchedulerButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_schedule"
-                    android:onClick="addScheduler"/>
-
-                <Button
-                    android:id="@+id/schoolSubjectButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="add schoolSubject"
-                    android:onClick="addSchoolSubject"/>
-
-
-                <Button
-                    android:id="@+id/optionButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/change_options"
-                    android:onClick="addOptions"/>
 
                 <GridView
                     android:id="@+id/mainActivityGridView"
@@ -54,21 +28,18 @@
                     android:layout_height="wrap_content"
                     android:numColumns="6" />
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp" />
-
                 <ListView
                     android:id="@+id/mainActivityListView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:paddingTop="32dp"
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="8dp" />
 
             </LinearLayout>
 
-        </RelativeLayout>
+        </FrameLayout>
 
     </android.support.constraint.ConstraintLayout>
 

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +50,14 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
     private String MY_PREFS_NAME = "preferences";
 
+    private final String UNIVERSITY = "university";
+    private final String UNIVERSITIES = "universities";
+
+    private final String FACULTY = "faculty";
+    private final String FACULTIES = "faculties";
+
+    private final String DEGREE_COURSE = "degreeCourse";
+
     private String universityName;
     private String facultyName;
     private String degreeCourseName;
@@ -62,6 +72,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     private OnFragmentInteractionListener mListener;
 
@@ -76,6 +87,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
         mDatabase =  FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
         readDataFile();
 
@@ -92,9 +104,9 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
         faculty = (AutoCompleteTextView) rootView.findViewById(R.id.facultyAutoCompleteTextView);
         degreeCourse = (AutoCompleteTextView) rootView.findViewById(R.id.degreeCourseAutoCompleteTextView);
 
-        addListAutocomplete(university, "university");
-        addListAutocomplete(faculty, "faculty");
-        addListAutocomplete(degreeCourse, "degreeCourse");
+        addListAutocomplete(university, UNIVERSITY);
+        addListAutocomplete(faculty, FACULTY);
+        addListAutocomplete(degreeCourse, DEGREE_COURSE);
 
         university.setText(universityName);
 
@@ -170,8 +182,8 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
             AlertDialog.Builder builder;
             builder = new AlertDialog.Builder(getActivity());
 
-            builder.setTitle("university error")
-                    .setMessage("university is empty")
+            builder.setTitle(R.string.university_error)
+                    .setMessage(R.string.university_empty)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
@@ -183,8 +195,8 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                 AlertDialog.Builder builder;
                 builder = new AlertDialog.Builder(getActivity());
 
-                builder.setTitle("faculty error")
-                        .setMessage("faculty is empty")
+                builder.setTitle(R.string.faculty_error)
+                        .setMessage(R.string.faculty_empty)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
 
@@ -197,24 +209,28 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(getActivity());
 
-                    builder.setTitle("degree course error")
-                            .setMessage("degree course is empty")
+                    builder.setTitle(R.string.degree_course_error)
+                            .setMessage(R.string.degree_course_empty)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
 
                 }else {
 
-                    String universityKey = mDatabase.child("university").push().getKey();
-                    String facultyKey = mDatabase.child("faculty").push().getKey();
-                    String degreeCourseKey = mDatabase.child("degreeCourse").push().getKey();
+                    String universityKey = mDatabase.child(UNIVERSITY).push().getKey();
+                    String facultyKey = mDatabase.child(FACULTY).push().getKey();
+                    String degreeCourseKey = mDatabase.child(DEGREE_COURSE).push().getKey();
 
                     findUniversity(universityString, universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
 
                     SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                    editor.putString("university", universityString);
-                    editor.putString("faculty", facultyString);
-                    editor.putString("degreeCourse", degreeCourseString);
+                    editor.putString(UNIVERSITY, universityString);
+                    editor.putString(FACULTY, facultyString);
+                    editor.putString(DEGREE_COURSE, degreeCourseString);
                     editor.apply();
+
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityString);
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyString);
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseString);
 
                 }
             }
@@ -225,7 +241,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                                final String facultyString, final String facultyKey,
                                final String degreeCourseString, final String degreeCourseKey){
 
-        mDatabase.child("university").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(UNIVERSITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean find = false;
@@ -241,18 +257,18 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(getActivity());
 
-                    builder.setTitle("university not find")
-                            .setMessage("university not found, do you want to add it?")
-                            .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.university_not_found)
+                            .setMessage(R.string.university_not_found_add)
+                            .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
                                     University university = new University(universityString, "", "");
-                                    mDatabase.child("university").child(universityKey).setValue(university);
+                                    mDatabase.child(UNIVERSITY).child(universityKey).setValue(university);
                                     findFaculty(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
 
                                 }
                             })
-                            .setNegativeButton("select another university", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.university_select_another, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     university.setText("");
                                 }
@@ -277,7 +293,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             final String facultyString, final String facultyKey,
                             final String degreeCourseString, final String degreeCourseKey){
 
-        mDatabase.child("faculty").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(FACULTY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean find = false;
@@ -286,7 +302,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     Faculty faculty = noteDataSnapshot.getValue(Faculty.class);
                     if (faculty.getName().equals(facultyString) ) {
                         facultyOldKey = noteDataSnapshot.getKey();
-                        if(noteDataSnapshot.child("universities").child(universityOldKey).exists() && !universityOldKey.isEmpty()){
+                        if(noteDataSnapshot.child(UNIVERSITIES).child(universityOldKey).exists() && !universityOldKey.isEmpty()){
                             find = true;
                         }
 
@@ -296,15 +312,15 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(getActivity());
 
-                    builder.setTitle("faculty not find")
-                            .setMessage("faculty not found, do you want to add it?")
-                            .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.faculty_not_found)
+                            .setMessage(R.string.faculty_not_found_add)
+                            .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     findDegreeCourse(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
 
                                 }
                             })
-                            .setNegativeButton("select another faculty", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.faculty_select_another, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     faculty.setText("");
                                 }
@@ -329,7 +345,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                                  final String facultyString, final String facultyKey,
                                  final String degreeCourseString, final String degreeCourseKey){
 
-        mDatabase.child("degreeCourse").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(DEGREE_COURSE).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean find = false;
@@ -339,7 +355,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     Log.d("*** findDegree ***", degreeCourse.getName() + " = " + degreeCourseString + "?");
                     if (degreeCourse.getName().toString().equals(degreeCourseString) ) {
                         degreeCourseOldKey = noteDataSnapshot.getKey();
-                        if(noteDataSnapshot.child("university").child(universityOldKey).child("faculty").child(facultyOldKey).exists()
+                        if(noteDataSnapshot.child(UNIVERSITY).child(universityOldKey).child(FACULTY).child(facultyOldKey).exists()
                                 && !facultyOldKey.isEmpty() && !universityOldKey.isEmpty()){
                             find = true;
                         }
@@ -350,69 +366,69 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(getActivity());
 
-                    builder.setTitle("degree course not find")
-                            .setMessage("degree course not found, do you want to add it?")
-                            .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.degree_course_not_found)
+                            .setMessage(R.string.degree_course_not_found_add)
+                            .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
                                     if(degreeCourseOldKey.isEmpty()){
                                         DegreeCourse degreeCourse = new DegreeCourse(degreeCourseString);
-                                        mDatabase.child("degreeCourse").child(degreeCourseKey).setValue(degreeCourse);
+                                        mDatabase.child(DEGREE_COURSE).child(degreeCourseKey).setValue(degreeCourse);
 
                                         if(facultyOldKey.isEmpty()){
                                             Faculty faculty = new Faculty(facultyString);
-                                            mDatabase.child("faculty").child(facultyKey).setValue(faculty);
+                                            mDatabase.child(FACULTY).child(facultyKey).setValue(faculty);
 
                                             if(universityOldKey.isEmpty()) {
-                                                mDatabase.child("faculty").child(facultyKey).child("universities").child(universityKey).setValue(true);
-                                                mDatabase.child("university").child(universityKey).child("faculties").child(facultyKey).setValue(true);
-                                                mDatabase.child("degreeCourse").child(degreeCourseKey).child("university").child(universityKey).child("faculty").child(facultyKey).setValue(true);
+                                                mDatabase.child(FACULTY).child(facultyKey).child(UNIVERSITIES).child(universityKey).setValue(true);
+                                                mDatabase.child(UNIVERSITY).child(universityKey).child(FACULTIES).child(facultyKey).setValue(true);
+                                                mDatabase.child(DEGREE_COURSE).child(degreeCourseKey).child(UNIVERSITY).child(universityKey).child(FACULTY).child(facultyKey).setValue(true);
                                             }
                                             else{
-                                                mDatabase.child("faculty").child(facultyKey).child("universities").child(universityOldKey).setValue(true);
-                                                mDatabase.child("university").child(universityOldKey).child("faculties").child(facultyKey).setValue(true);
-                                                mDatabase.child("degreeCourse").child(degreeCourseKey).child("university").child(universityOldKey).child("faculty").child(facultyKey).setValue(true);
+                                                mDatabase.child(FACULTY).child(facultyKey).child(UNIVERSITIES).child(universityOldKey).setValue(true);
+                                                mDatabase.child(UNIVERSITY).child(universityOldKey).child(FACULTIES).child(facultyKey).setValue(true);
+                                                mDatabase.child(DEGREE_COURSE).child(degreeCourseKey).child(UNIVERSITY).child(universityOldKey).child(FACULTY).child(facultyKey).setValue(true);
                                             }
                                         }
                                         else{
                                             if(universityOldKey.isEmpty()) {
-                                                mDatabase.child("faculty").child(facultyOldKey).child("universities").child(universityKey).setValue(true);
-                                                mDatabase.child("university").child(universityKey).child("faculties").child(facultyOldKey).setValue(true);
-                                                mDatabase.child("degreeCourse").child(degreeCourseKey).child("university").child(universityKey).child("faculty").child(facultyOldKey).setValue(true);
+                                                mDatabase.child(FACULTY).child(facultyOldKey).child(UNIVERSITIES).child(universityKey).setValue(true);
+                                                mDatabase.child(UNIVERSITY).child(universityKey).child(FACULTIES).child(facultyOldKey).setValue(true);
+                                                mDatabase.child(DEGREE_COURSE).child(degreeCourseKey).child(UNIVERSITY).child(universityKey).child(FACULTY).child(facultyOldKey).setValue(true);
                                             }
                                             else{
-                                                mDatabase.child("faculty").child(facultyOldKey).child("universities").child(universityOldKey).setValue(true);
-                                                mDatabase.child("university").child(universityOldKey).child("faculties").child(facultyOldKey).setValue(true);
-                                                mDatabase.child("degreeCourse").child(degreeCourseKey).child("university").child(universityOldKey).child("faculty").child(facultyOldKey).setValue(true);
+                                                mDatabase.child(FACULTY).child(facultyOldKey).child(UNIVERSITIES).child(universityOldKey).setValue(true);
+                                                mDatabase.child(UNIVERSITY).child(universityOldKey).child(FACULTIES).child(facultyOldKey).setValue(true);
+                                                mDatabase.child(DEGREE_COURSE).child(degreeCourseKey).child(UNIVERSITY).child(universityOldKey).child(FACULTY).child(facultyOldKey).setValue(true);
                                             }
                                         }
                                     }
                                     else{
                                         if(facultyOldKey.isEmpty()){
                                             Faculty faculty = new Faculty(facultyString);
-                                            mDatabase.child("faculty").child(facultyKey).setValue(faculty);
+                                            mDatabase.child(FACULTY).child(facultyKey).setValue(faculty);
 
                                             if(universityOldKey.isEmpty()) {
-                                                mDatabase.child("faculty").child(facultyKey).child("universities").child(universityKey).setValue(true);
-                                                mDatabase.child("university").child(universityKey).child("faculties").child(facultyKey).setValue(true);
-                                                mDatabase.child("degreeCourse").child(degreeCourseOldKey).child("university").child(universityKey).child("faculty").child(facultyKey).setValue(true);
+                                                mDatabase.child(FACULTY).child(facultyKey).child(UNIVERSITIES).child(universityKey).setValue(true);
+                                                mDatabase.child(UNIVERSITY).child(universityKey).child(FACULTIES).child(facultyKey).setValue(true);
+                                                mDatabase.child(DEGREE_COURSE).child(degreeCourseOldKey).child(UNIVERSITY).child(universityKey).child(FACULTY).child(facultyKey).setValue(true);
                                             }
                                             else{
-                                                mDatabase.child("faculty").child(facultyKey).child("universities").child(universityOldKey).setValue(true);
-                                                mDatabase.child("university").child(universityOldKey).child("faculties").child(facultyKey).setValue(true);
-                                                mDatabase.child("degreeCourse").child(degreeCourseOldKey).child("university").child(universityOldKey).child("faculty").child(facultyKey).setValue(true);
+                                                mDatabase.child(FACULTY).child(facultyKey).child(UNIVERSITIES).child(universityOldKey).setValue(true);
+                                                mDatabase.child(UNIVERSITY).child(universityOldKey).child(FACULTIES).child(facultyKey).setValue(true);
+                                                mDatabase.child(DEGREE_COURSE).child(degreeCourseOldKey).child(UNIVERSITY).child(universityOldKey).child(FACULTY).child(facultyKey).setValue(true);
                                             }
                                         }
                                         else{
                                             if(universityOldKey.isEmpty()) {
-                                                mDatabase.child("faculty").child(facultyOldKey).child("universities").child(universityKey).setValue(true);
-                                                mDatabase.child("university").child(universityKey).child("faculties").child(facultyOldKey).setValue(true);
-                                                mDatabase.child("degreeCourse").child(degreeCourseOldKey).child("university").child(universityKey).child("faculty").child(facultyOldKey).setValue(true);
+                                                mDatabase.child(FACULTY).child(facultyOldKey).child(UNIVERSITIES).child(universityKey).setValue(true);
+                                                mDatabase.child(UNIVERSITY).child(universityKey).child(FACULTIES).child(facultyOldKey).setValue(true);
+                                                mDatabase.child(DEGREE_COURSE).child(degreeCourseOldKey).child(UNIVERSITY).child(universityKey).child(FACULTY).child(facultyOldKey).setValue(true);
                                             }
                                             else{
-                                                mDatabase.child("faculty").child(facultyOldKey).child("universities").child(universityOldKey).setValue(true);
-                                                mDatabase.child("university").child(universityOldKey).child("faculties").child(facultyOldKey).setValue(true);
-                                                mDatabase.child("degreeCourse").child(degreeCourseOldKey).child("university").child(universityOldKey).child("faculty").child(facultyOldKey).setValue(true);
+                                                mDatabase.child(FACULTY).child(facultyOldKey).child(UNIVERSITIES).child(universityOldKey).setValue(true);
+                                                mDatabase.child(UNIVERSITY).child(universityOldKey).child(FACULTIES).child(facultyOldKey).setValue(true);
+                                                mDatabase.child(DEGREE_COURSE).child(degreeCourseOldKey).child(UNIVERSITY).child(universityOldKey).child(FACULTY).child(facultyOldKey).setValue(true);
                                             }
                                         }
                                     }
@@ -422,7 +438,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
                                 }
                             })
-                            .setNegativeButton("select another degree course", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.degree_course_select_another, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     degreeCourse.setText("");
                                 }
@@ -431,8 +447,11 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             .show();
                 }
                 else{
-                    Intent myIntent = new Intent(getActivity(), MainActivity.class);
-                    getActivity().startActivity(myIntent);
+                    Fragment fragment = new HomeFragment();
+
+                    FragmentManager fragmentManager = getFragmentManager();
+
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 }
 
             }
@@ -446,9 +465,9 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
     private void readDataFile(){
         SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        universityName = prefs.getString("university", "");
-        facultyName = prefs.getString("faculty", "");
-        degreeCourseName = prefs.getString("degreeCourse", "");
+        universityName = prefs.getString(UNIVERSITY, "");
+        facultyName = prefs.getString(FACULTY, "");
+        degreeCourseName = prefs.getString(DEGREE_COURSE, "");
     }
 
     public void addListAutocomplete(final AutoCompleteTextView autoComplete, final String child) {
@@ -467,7 +486,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, list);
                 autoComplete.setAdapter(adapter);
 
             }

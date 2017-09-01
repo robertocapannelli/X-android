@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/go_home"
+        <item android:id="@+id/home"
             android:icon="@drawable/ic_home_black_24px"
             android:title="@string/home" />
         <item
@@ -10,11 +10,15 @@
             android:icon="@drawable/ic_date_range_black_24px"
             android:title="@string/add_schedule" />
         <item
+            android:id="@+id/add_school_subject"
+            android:icon="@drawable/ic_library_books_black_24px"
+            android:title="@string/add_course"/>
+        <item
             android:id="@+id/options"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/action_settings" />
     </group>
-
+<!--
     <item android:title="@string/communicate">
         <menu>
             <item
@@ -27,5 +31,5 @@
                 android:title="@string/send" />
         </menu>
     </item>
-
+-->
 </menu>
