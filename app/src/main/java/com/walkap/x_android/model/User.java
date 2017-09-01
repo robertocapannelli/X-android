@@ -10,21 +10,21 @@ public class User {
     private String surname;
     private String university;
     private String faculty;
-    private String courseDegree;
+    private String degreeCourse;
 
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public User(String username, String email, String name, String surname, String university, String faculty, String courseDegree) {
+    public User(String username, String email, String name, String surname, String university, String faculty, String degreeCourse) {
         this.username = username;
         this.email = email;
         this.name = name;
         this.surname = surname;
         this.university = university;
         this.faculty = faculty;
-        this.courseDegree = courseDegree;
+        this.degreeCourse = degreeCourse;
     }
 
     public String getUsername(){
@@ -76,11 +76,11 @@ public class User {
     //Course Degree
 
     public String getCourseDegree(){
-        return courseDegree;
+        return degreeCourse;
     }
 
     public void setCourseDegree(String courseDegree){
-        this.courseDegree = courseDegree;
+        this.degreeCourse = degreeCourse;
     }
 
 

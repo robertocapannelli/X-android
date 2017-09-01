@@ -251,8 +251,8 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
     //end email and password scripts
 
     // [START basic_write]
-    private void writeNewUser(String userId, String username, String email, String name, String surname, String university, String faculty, String courseDegree) {
-        User user = new User(username, email, name, surname, university, faculty, courseDegree);
+    private void writeNewUser(String userId, String username, String email, String name, String surname, String university, String faculty, String degreeCourse) {
+        User user = new User(username, email, name, surname, university, faculty, degreeCourse);
         mDatabase.child("users").child(userId).setValue(user);
     }
     // [END basic_write]
