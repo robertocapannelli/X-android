@@ -69,11 +69,11 @@ public class User {
 
     //Course Degree
 
-    public String getCourseDegree(){
+    public String getDegreeCourse(){
         return degreeCourse;
     }
 
-    public void setCourseDegree(String courseDegree){
+    public void setDegreeCourse(String degreeCourse){
         this.degreeCourse = degreeCourse;
     }
 }
