@@ -154,8 +154,6 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                                             found = true;
                                             Log.d(TAG, "the user is here, go to main");
                                             break;
-                                        }else{
-                                            Log.d(TAG, "the user is not him");
                                         }
                                     }
                                     Log.d(TAG, "User found: " + found);
