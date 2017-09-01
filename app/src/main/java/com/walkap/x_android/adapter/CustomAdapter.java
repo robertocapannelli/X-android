@@ -15,6 +15,8 @@ import java.util.List;
 
 public class CustomAdapter extends ArrayAdapter<Scheduler> {
 
+    private final String TAG = "CustomAdapter";
+
     public CustomAdapter(Context context, int textViewResourceId, List<Scheduler> objects) {
         super(context, textViewResourceId, objects);
     }
@@ -40,15 +42,17 @@ public class CustomAdapter extends ArrayAdapter<Scheduler> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Scheduler scheduler = getItem(position);
-        viewHolder.classroom.setText("class room " + scheduler.getClassroom());
+        viewHolder.classroom.setText(scheduler.getClassroom());
         viewHolder.classroom.setTextColor(Color.BLACK);
-        viewHolder.schoolSubject.setText("school Subject " + scheduler.getSchoolSubject());
+        viewHolder.schoolSubject.setText(scheduler.getSchoolSubject());
         viewHolder.schoolSubject.setTextColor(Color.BLACK);
+        int hour = scheduler.getTime().getHour();
+        int minute = scheduler.getTime().getMinute();
         if(scheduler.getTime().getMinute() == 0){
-            viewHolder.hourBeginning.setText("to the hour " + scheduler.getTime().getHour() + ":0" + scheduler.getTime().getMinute());
+            viewHolder.hourBeginning.setText("to the hour " + hour + ":0" + minute);
         }
         else {
-            viewHolder.hourBeginning.setText("to the hour " + scheduler.getTime().getHour() + ":" + scheduler.getTime().getMinute());
+            viewHolder.hourBeginning.setText("to the hour " + hour + ":" + minute);
         }
         viewHolder.hourBeginning.setTextColor(Color.BLACK);
         viewHolder.duration.setText("for " + scheduler.getTime().getDuration() + " minutes");
