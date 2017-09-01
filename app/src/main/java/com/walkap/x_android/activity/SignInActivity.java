@@ -137,7 +137,6 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
                             String userId = getUid();
                             String email = acct.getEmail();
-                            String username = usernameFromEmail(email);
                             String name = acct.getGivenName();
                             String surname = acct.getFamilyName();
 
@@ -212,21 +211,11 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
     }
 
     private void onAuthSuccess(FirebaseUser user) {
-        String username = usernameFromEmail(user.getEmail());
-
         // Write new user
         writeNewUser(user.getUid(), user.getEmail(), "", "", "", "", "");
         // Go to MainActivity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();
-    }
-
-    private String usernameFromEmail(String email) {
-        if (email.contains("@")) {
-            return email.split("@")[0];
-        } else {
-            return email;
-        }
     }
 
     private boolean validateForm() {
