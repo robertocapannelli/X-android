@@ -78,6 +78,8 @@ public class HomeFragment extends Fragment {
     private final String FACULTY = "faculty";
     private final String DEGREE_COURSE = "degreeCourse";
 
+    private final String SCHOOL_SUBJECT = "schoolSubject";
+
     private final String TAG = "HomeFragment";
 
     private ToggleButton toggleButton1;
@@ -194,7 +196,7 @@ public class HomeFragment extends Fragment {
 
                 builder.setTitle(R.string.delete)
                         .setMessage(getResources().getString(R.string.do_you_want_delete_this_schedule, scheduler.getSchoolSubject()))
-                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 mDatabase.child("scheduler").child(scheduler.getSchedulerId()).removeValue();
@@ -202,7 +204,7 @@ public class HomeFragment extends Fragment {
 
                             }
                         })
-                        .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
                             }
@@ -257,7 +259,7 @@ public class HomeFragment extends Fragment {
         universityName = prefs.getString(UNIVERSITY, "");
         facultyName = prefs.getString(FACULTY, "");
         degreeCourseName = prefs.getString(DEGREE_COURSE, "");
-        schoolSubjectList = prefs.getStringSet("schoolSubject", null);
+        schoolSubjectList = prefs.getStringSet(SCHOOL_SUBJECT, null);
 
     }
 
