@@ -199,8 +199,12 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                         Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
                         hideProgressDialog();
 
+                        FirebaseUser user = task.getResult().getUser();
+
                         if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
+                            onAuthSuccess(user);
+                            // Write new user
+                            writeNewUser(user.getUid(), user.getEmail(), "", "", "", "", "");
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
                                     Toast.LENGTH_SHORT).show();
@@ -211,8 +215,6 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
     }
 
     private void onAuthSuccess(FirebaseUser user) {
-        // Write new user
-        writeNewUser(user.getUid(), user.getEmail(), "", "", "", "", "");
         // Go to MainActivity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();
@@ -232,6 +234,11 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
             result = false;
         } else {
             mPasswordField.setError(null);
+        }
+
+        if(mPasswordField.getText().length() <= 6){
+            mPasswordField.setError("At least 6 chars");
+            result = false;
         }
 
         return result;
