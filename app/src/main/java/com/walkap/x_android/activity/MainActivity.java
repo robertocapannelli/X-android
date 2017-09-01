@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements
         // Highlight the selected item has been done by NavigationView
         item.setChecked(true);
         // Set action bar title
-        setTitle(item.getTitle());
+        setToolbarTitle();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
