@@ -25,8 +25,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
 import com.walkap.x_android.model.User;
 
@@ -135,13 +138,38 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                                     Toast.LENGTH_SHORT).show();
                         } else {
 
-                            String userId = getUid();
-                            String email = acct.getEmail();
-                            String name = acct.getGivenName();
-                            String surname = acct.getFamilyName();
+                            mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                                final String userId = getUid();
+                                String email = acct.getEmail();
+                                String name = acct.getGivenName();
+                                String surname = acct.getFamilyName();
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            // Write new user
-                            writeNewUser(userId, email, name, surname, "", "", "");
+                                    boolean found = false;
+
+                                    for(DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()){
+                                        User user = noteDataSnapshot.getValue(User.class);
+                                        if(user.getEmail().equals(email)){
+                                            found = true;
+                                            Log.d(TAG, "the user is here, go to main");
+                                            break;
+                                        }else{
+                                            Log.d(TAG, "the user is not him");
+                                        }
+                                    }
+                                    Log.d(TAG, "User found: " + found);
+                                    if(!found){
+                                        // Write new user
+                                        writeNewUser(userId, email, name, surname, "", "", "");
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
 
                             //go to main activity
                             startActivity(new Intent(SignInActivity.this, MainActivity.class));
