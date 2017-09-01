@@ -3,23 +3,18 @@ package com.walkap.x_android.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,9 +67,6 @@ public class HomeFragment extends Fragment {
     private String facultyKey = "";
     private String degreeCourseKey = "";
 
-    private int[] positionGridView = new int[] {0, 0, 0, 0, 0, 0};
-    GridView gridView;
-
     private String universityName;
     private String facultyName;
     private String degreeCourseName;
@@ -87,6 +79,13 @@ public class HomeFragment extends Fragment {
     private final String DEGREE_COURSE = "degreeCourse";
 
     private final String TAG = "HomeFragment";
+
+    private ToggleButton toggleButton1;
+    private ToggleButton toggleButton2;
+    private ToggleButton toggleButton3;
+    private ToggleButton toggleButton4;
+    private ToggleButton toggleButton5;
+    private ToggleButton toggleButton6;
 
 
     public HomeFragment() {
@@ -131,7 +130,30 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        toggleButton1 = (ToggleButton) rootView.findViewById(R.id.toggleButton1);
+        toggleButton2 = (ToggleButton) rootView.findViewById(R.id.toggleButton2);
+        toggleButton3 = (ToggleButton) rootView.findViewById(R.id.toggleButton3);
+        toggleButton4 = (ToggleButton) rootView.findViewById(R.id.toggleButton4);
+        toggleButton5 = (ToggleButton) rootView.findViewById(R.id.toggleButton5);
+        toggleButton6 = (ToggleButton) rootView.findViewById(R.id.toggleButton6);
+
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+
+        switch (day){
+            case 0: toggleButton1.setChecked(true); break;
+            case 1: toggleButton2.setChecked(true); break;
+            case 2: toggleButton3.setChecked(true); break;
+            case 3: toggleButton4.setChecked(true); break;
+            case 4: toggleButton5.setChecked(true); break;
+            case 5: toggleButton6.setChecked(true); break;
+            default:                                break;
+        }
+
+
+        return rootView;
     }
 
     @Override
@@ -155,30 +177,12 @@ public class HomeFragment extends Fragment {
 
         listView = (ListView) getView().findViewById(R.id.mainActivityListView);
 
-        gridView = (GridView) getView().findViewById(R.id.mainActivityGridView);
-        String[] mainGrid = new String[]{
-                daysArray[0],   daysArray[1],  daysArray[2],  daysArray[3],  daysArray[4],  daysArray[5]
-        };
-
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-        positionGridView[day - 2] = 1;
-
-        /*ListAdapter adapterGrid = new ArrayAdapter<String>(content,
-                android.R.layout.simple_list_item_1, mainGrid);*/
-
-        gridView.setAdapter(new ArrayAdapter<String>(content,
-                android.R.layout.simple_list_item_1, mainGrid)
-        {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text = (TextView) view.findViewById(android.R.id.text1);
-                text.setTextColor(Color.BLACK);
-                return view;
-            }
-        });
-        gridView.setOnItemClickListener(GridClickListener);
+        toggleButton1.setOnClickListener(toggleButtonListener);
+        toggleButton2.setOnClickListener(toggleButtonListener);
+        toggleButton3.setOnClickListener(toggleButtonListener);
+        toggleButton4.setOnClickListener(toggleButtonListener);
+        toggleButton5.setOnClickListener(toggleButtonListener);
+        toggleButton6.setOnClickListener(toggleButtonListener);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -258,50 +262,72 @@ public class HomeFragment extends Fragment {
 
     }
 
-    AdapterView.OnItemClickListener GridClickListener = new AdapterView.OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> adapter, View view,
-                                int position, long id) {
-
-            if(positionGridView[position] == 0) {
-                positionGridView = setAllLessOne(position);
+    final View.OnClickListener toggleButtonListener = new View.OnClickListener() {
+        public void onClick(final View v) {
+            switch(v.getId()) {
+                case R.id.toggleButton1:
+                    setAllLessOne(0);
+                    break;
+                case R.id.toggleButton2:
+                    setAllLessOne(1);
+                    break;
+                case R.id.toggleButton3:
+                    setAllLessOne(2);
+                    break;
+                case R.id.toggleButton4:
+                    setAllLessOne(3);
+                    break;
+                case R.id.toggleButton5:
+                    setAllLessOne(4);
+                    break;
+                case R.id.toggleButton6:
+                    setAllLessOne(5);
+                    break;
             }
 
-            colorGridView();
-
-            if(schoolSubjectList != null) {
-                showScheduler();
-            }
-
+            showScheduler();
         }
-
     };
 
-    private void colorGridView() {
-        for(int i = 0; i < gridView.getNumColumns(); i++) {
-            if(positionGridView[i] == 0) {
-                gridView.getChildAt(i).setBackgroundColor(Color.WHITE);
-            }
-            else {
-                gridView.getChildAt(i).setBackgroundColor(Color.CYAN);
-            }
+    public void setAllLessOne(int one) {
+        toggleButton1.setChecked(false);
+        toggleButton2.setChecked(false);
+        toggleButton3.setChecked(false);
+        toggleButton4.setChecked(false);
+        toggleButton5.setChecked(false);
+        toggleButton6.setChecked(false);
+
+        switch (one){
+            case 0: toggleButton1.setChecked(true); break;
+            case 1: toggleButton2.setChecked(true); break;
+            case 2: toggleButton3.setChecked(true); break;
+            case 3: toggleButton4.setChecked(true); break;
+            case 4: toggleButton5.setChecked(true); break;
+            case 5: toggleButton6.setChecked(true); break;
+            default:                                break;
         }
     }
 
-    public int[] setAllLessOne(int one) {
-        int[] positionGridView = new int[]{0, 0, 0, 0, 0, 0};
-        positionGridView[one] = 1;
-        return  positionGridView;
-    }
-
-    public int actualPositionGridView(){
-        int i;
-        for(i = 0; i <= 5; i++){
-            if(positionGridView[i] == 1){
-                return i;
-            }
+    public int actualDaySelected(){
+        if(toggleButton1.isChecked()){
+            return 0;
         }
+        if(toggleButton2.isChecked()){
+            return 1;
+        }
+        if(toggleButton3.isChecked()){
+            return 2;
+        }
+        if(toggleButton4.isChecked()){
+            return 3;
+        }
+        if(toggleButton5.isChecked()){
+            return 4;
+        }
+        if(toggleButton6.isChecked()){
+            return 5;
+        }
+
         return -1;
     }
 
@@ -311,7 +337,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Scheduler> list = new ArrayList<Scheduler>();
-                final int day = actualPositionGridView();
+                final int day = actualDaySelected();
 
                 // attenzione errore se lista preferenze vuota
 
