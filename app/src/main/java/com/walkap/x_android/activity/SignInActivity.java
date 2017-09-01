@@ -142,7 +142,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                             String surname = acct.getFamilyName();
 
                             // Write new user
-                            writeNewUser(userId, username, email, name, surname, "", "", "");
+                            writeNewUser(userId, email, name, surname, "", "", "");
 
                             //go to main activity
                             startActivity(new Intent(SignInActivity.this, MainActivity.class));
@@ -215,7 +215,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         String username = usernameFromEmail(user.getEmail());
 
         // Write new user
-        writeNewUser(user.getUid(), username, user.getEmail(), "", "", "", "", "");
+        writeNewUser(user.getUid(), user.getEmail(), "", "", "", "", "");
         // Go to MainActivity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();
@@ -251,8 +251,8 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
     //end email and password scripts
 
     // [START basic_write]
-    private void writeNewUser(String userId, String username, String email, String name, String surname, String university, String faculty, String degreeCourse) {
-        User user = new User(username, email, name, surname, university, faculty, degreeCourse);
+    private void writeNewUser(String userId, String email, String name, String surname, String university, String faculty, String degreeCourse) {
+        User user = new User(email, name, surname, university, faculty, degreeCourse);
         mDatabase.child("users").child(userId).setValue(user);
     }
     // [END basic_write]
