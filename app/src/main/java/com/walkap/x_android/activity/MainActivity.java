@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements
     public void loadFragment(Class fragmentClass) {
 
         setToolbarTitle();
-
         Fragment newFragment = null;
         try {
             newFragment = (Fragment) fragmentClass.newInstance();
@@ -178,6 +177,13 @@ public class MainActivity extends AppCompatActivity implements
                 android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.flContent, newFragment);
         fragmentTransaction.commitAllowingStateLoss();
+
+        // Set the right menu item checked
+        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+
+        // Set action bar title
+        setToolbarTitle();
+
     }
 
     //make the sign out button works
@@ -250,12 +256,6 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "onNavigationItemSelected() The index is: " + navItemIndex);
 
         loadFragment(fragmentClass);
-
-        // Highlight the selected item has been done by NavigationView
-        item.setChecked(true);
-        // Set action bar title
-        setToolbarTitle();
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
