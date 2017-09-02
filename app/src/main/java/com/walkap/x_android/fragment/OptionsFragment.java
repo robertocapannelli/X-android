@@ -2,7 +2,6 @@ package com.walkap.x_android.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +27,6 @@ import com.walkap.x_android.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import com.walkap.x_android.activity.MainActivity;
 import com.walkap.x_android.model.DegreeCourse;
 import com.walkap.x_android.model.Faculty;
 import com.walkap.x_android.model.SchoolSubject;
