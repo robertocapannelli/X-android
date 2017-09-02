@@ -66,12 +66,12 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
 
                 if (task.isSuccessful()) {
                     Log.d(TAG, "Email sent.");
-                    Toast.makeText(ForgotPasswordActivity.this, "An email was sent to your address.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgotPasswordActivity.this, R.string.email_sent, Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(ForgotPasswordActivity.this, MainActivity.class));
 
                 } else {
                     Log.d(TAG, "Email error.");
-                    Toast.makeText(ForgotPasswordActivity.this, "Email not sent", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgotPasswordActivity.this, R.string.email_not_sent, Toast.LENGTH_SHORT).show();
                 }
             }
         });
