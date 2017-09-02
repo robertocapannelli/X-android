@@ -214,25 +214,6 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     editor.putString(FACULTY, facultyString);
                     editor.putString(DEGREE_COURSE, degreeCourseString);
                     editor.apply();
-
-                    if(universityOldKey.isEmpty()){
-                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityKey);
-                    }else{
-                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityOldKey);
-                    }
-
-                    if(facultyOldKey.isEmpty()){
-                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyKey);
-                    }else{
-                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyOldKey);
-                    }
-
-                    if(degreeCourseOldKey.isEmpty()){
-                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseKey);
-                    }else{
-                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseOldKey);
-                    }
-
                 }
             }
         }
@@ -265,6 +246,9 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
 
                                     University university = new University(universityString, "", "");
                                     mDatabase.child(UNIVERSITY).child(universityKey).setValue(university);
+
+                                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityKey);
+
                                     findFaculty(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
 
                                 }
@@ -278,6 +262,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             .show();
                 }
                 else{
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityOldKey);
                     findFaculty(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
                 }
             }
@@ -317,6 +302,8 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             .setMessage(R.string.faculty_not_found_add)
                             .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+
+                                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyKey);
                                     findDegreeCourse(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
 
                                 }
@@ -330,6 +317,8 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             .show();
                 }
                 else{
+
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyOldKey);
                     findDegreeCourse(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
                 }
 
@@ -353,7 +342,6 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                 degreeCourseOldKey = "";
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     DegreeCourse degreeCourse = noteDataSnapshot.getValue(DegreeCourse.class);
-                    Log.d("*** findDegree ***", degreeCourse.getName() + " = " + degreeCourseString + "?");
                     if (degreeCourse.getName().toString().equals(degreeCourseString) ) {
                         degreeCourseOldKey = noteDataSnapshot.getKey();
                         if(noteDataSnapshot.child(UNIVERSITY).child(universityOldKey).child(FACULTY).child(facultyOldKey).exists()
@@ -434,8 +422,13 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                                         }
                                     }
 
-                                    Intent myIntent = new Intent(getActivity(), MainActivity.class);
-                                    getActivity().startActivity(myIntent);
+                                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseKey);
+
+                                    Fragment fragment = new HomeFragment();
+
+                                    FragmentManager fragmentManager = getFragmentManager();
+
+                                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
                                 }
                             })
@@ -448,6 +441,9 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             .show();
                 }
                 else{
+
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseOldKey);
+
                     Fragment fragment = new HomeFragment();
 
                     FragmentManager fragmentManager = getFragmentManager();
