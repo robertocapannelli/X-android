@@ -53,6 +53,7 @@
     <string name="enter_faculty">Enter the faculty</string>
     <string name="add">Add</string>
     <string name="required">Required</string>
+    <string name="got_it">Got it</string>
 
     <string name="no" translatable="false">No</string>
     <string name="yes">Yes</string>
