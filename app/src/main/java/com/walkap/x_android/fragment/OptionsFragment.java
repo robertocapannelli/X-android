@@ -467,6 +467,24 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
         degreeCourseName = prefs.getString(DEGREE_COURSE, "");
     }
 
+    /*private void readDataFileDb(){
+
+        mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                universityKey = dataSnapshot.child(UNIVERSITY).getValue().toString();
+                facultyKey = dataSnapshot.child(FACULTY).getValue().toString();
+                degreeCourseKey = dataSnapshot.child(DEGREE_COURSE).getValue().toString();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+    }*/
+
     public void addListAutocomplete(final AutoCompleteTextView autoComplete, final String child) {
 
         mDatabase.child(child).addListenerForSingleValueEvent(new ValueEventListener() {
