@@ -44,6 +44,9 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
 
     private String classRoom;
     private String schoolSubject;
+    private String schoolSubjectKey = "";
+
+    private boolean find;
 
     private OnFragmentInteractionListener mListener;
 
@@ -211,6 +214,9 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     }
 
     public void addSchoolSubject() {
+
+        getSchoolSubjectKey(schoolSubjectAuto.getText().toString());
+
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
         if(schoolSubjectAuto.getText().toString().isEmpty()) {
@@ -249,5 +255,62 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
             schoolSubjects.setAdapter(adapter);
 
         }
+    }
+
+    private void getSchoolSubjectKey(final String name){
+
+        mDatabase.child(SCHOOLSUBJECT).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    if (noteDataSnapshot.child("name").getValue().toString().equals(name)){
+                        Log.d("*** setKey ***", "  " + noteDataSnapshot.child("name").getValue().toString());
+                        schoolSubjectKey = noteDataSnapshot.getKey();
+                        if(schoolSubjectKey.isEmpty()){
+                            /*** materia non trovata gestiscila ***/
+                        }
+                        else {
+                            Log.d("*** setKey ***", "  " + schoolSubjectKey);
+                            findInPreferences(schoolSubjectKey);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    private void findInPreferences(final String key){
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                find = false;
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    if (noteDataSnapshot.exists() && noteDataSnapshot.getKey().equals(key)){
+                        Log.d("*** findInPrefer ***", " find ");
+                        find = true;
+                        break;
+                    }
+                }
+                Log.d("*** findInPrefer ***", "  " + find);
+                if(!find){
+                    addInPreferences(schoolSubjectKey);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    private void addInPreferences(String key){
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").child(key).setValue(true);
     }
 }

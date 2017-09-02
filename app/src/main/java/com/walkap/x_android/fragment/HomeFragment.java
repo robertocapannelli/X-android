@@ -119,12 +119,6 @@ public class HomeFragment extends BaseFragment {
 
         content = getActivity().getApplicationContext();
 
-        /*else{
-            findUniversityKey(universityName);
-            findFacultyKey(facultyName);
-            findDegreeCourseKey(degreeCourseName);
-        }*/
-
         listView = (ListView) getView().findViewById(R.id.mainActivityListView);
 
         toggleButton1.setOnClickListener(toggleButtonListener);
@@ -205,9 +199,6 @@ public class HomeFragment extends BaseFragment {
 
     private void readDataFile(){
         SharedPreferences prefs = this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        /*universityName = prefs.getString(UNIVERSITY, "");
-        facultyName = prefs.getString(FACULTY, "");
-        degreeCourseName = prefs.getString(DEGREE_COURSE, "");*/
         schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);
     }
 
@@ -341,67 +332,4 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    /*private void findUniversityKey(final String universityString){
-
-        mDatabase.child(UNIVERSITY).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    University university = noteDataSnapshot.getValue(University.class);
-                    if (university.getName().equals(universityString)) {
-                        universityKey = noteDataSnapshot.getKey();
-                        findFacultyKey(facultyName);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void findFacultyKey(final String facultyString){
-
-        mDatabase.child(FACULTY).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Faculty faculty = noteDataSnapshot.getValue(Faculty.class);
-                    if (faculty.getName().equals(facultyString)) {
-                        facultyKey = noteDataSnapshot.getKey();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void findDegreeCourseKey(final String degreeCourseString){
-
-        mDatabase.child(DEGREE_COURSE).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    DegreeCourse degreeCourse = noteDataSnapshot.getValue(DegreeCourse.class);
-                    if (degreeCourse.getName().equals(degreeCourseString)) {
-                        degreeCourseKey = noteDataSnapshot.getKey();
-                        if(schoolSubjectList != null) {
-                            showScheduler();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 }
