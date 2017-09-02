@@ -21,74 +21,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ToggleButton
-                        android:id="@+id/toggleButton1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textOn="@string/monday"
-                        android:textOff="@string/monday"/>
-
-                    <ToggleButton
-                        android:id="@+id/toggleButton2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textOn="@string/tuesday"
-                        android:textOff="@string/tuesday"/>
-
-                    <ToggleButton
-                        android:id="@+id/toggleButton3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textOn="@string/Wednesday"
-                        android:textOff="@string/Wednesday"/>
-
-                    <ToggleButton
-                        android:id="@+id/toggleButton4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textOn="@string/thursday"
-                        android:textOff="@string/thursday"/>
-
-                    <ToggleButton
-                        android:id="@+id/toggleButton5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textOn="@string/friday"
-                        android:textOff="@string/friday"/>
-
-                    <ToggleButton
-                        android:id="@+id/toggleButton6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textOn="@string/saturday"
-                        android:textOff="@string/saturday"/>
-                </LinearLayout>
-
-                <GridView
-                    android:id="@+id/mainActivityGridView"
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:numColumns="6" />
+                    app:tabMode="scrollable"/>
 
-                <ListView
-                    android:id="@+id/mainActivityListView"
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:paddingTop="32dp"
-                    tools:layout_editor_absoluteX="8dp"
-                    tools:layout_editor_absoluteY="8dp" />
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             </LinearLayout>
 
