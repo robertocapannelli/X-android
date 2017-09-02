@@ -72,21 +72,21 @@
     <!-- Options Fragment -->
 
     <!-- University -->
-    <string name="university_error">University error</string>
-    <string name="university_empty">University is empty</string>
+    <string name="university_error">University field is empty</string>
+    <string name="university_empty">To use this app and have a great experience you must necessarily choose a university</string>
     <string name="university_not_found">University not found</string>
     <string name="university_not_found_add">University not found, do you want to add it?</string>
     <string name="university_select_another">Select another university</string>
     <!-- Faculty -->
-    <string name="faculty_error">Faculty error</string>
-    <string name="faculty_empty">Faculty is empty</string>
+    <string name="faculty_error">Faculty field is empty</string>
+    <string name="faculty_empty">To use this app and have a great experience you must necessarily choose a faculty</string>
     <string name="faculty_not_found">Faculty not found</string>
     <string name="faculty_not_found_add">Faculty not found, do you want to add it?</string>
     <string name="faculty_select_another">Select another faculty</string>
 
     <!-- Degree cource -->
-    <string name="degree_course_error">Degree course error</string>
-    <string name="degree_course_empty">Degree course is empty</string>
+    <string name="degree_course_error">Degree course field is empty</string>
+    <string name="degree_course_empty">To use this app and have a great experience you must necessarily choose a  Degree course</string>
     <string name="degree_course_not_found">Degree course not found</string>
     <string name="degree_course_not_found_add">Degree course not found, do you want to add it?</string>
     <string name="degree_course_select_another">Select another degree course</string>
