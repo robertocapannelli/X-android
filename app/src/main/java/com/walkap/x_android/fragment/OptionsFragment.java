@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -109,9 +110,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
         addListAutocomplete(degreeCourse, DEGREE_COURSE);
 
         university.setText(universityName);
-
         faculty.setText(facultyName);
-
         degreeCourse.setText(degreeCourseName);
 
         //Button listener
@@ -169,6 +168,16 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
     }
 
 
+    public void alertDialog(int title, int message, int drawable){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setIcon(drawable)
+                .show();
+    }
+
     public void saveData(){
 
         String universityString = university.getText().toString();
@@ -176,45 +185,17 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
         String degreeCourseString = degreeCourse.getText().toString();
 
         if(universityString.isEmpty()){
-
-            Log.d(TAG, "uni empty");
-
-            AlertDialog.Builder builder;
-            builder = new AlertDialog.Builder(getActivity());
-
-            builder.setTitle(R.string.university_error)
-                    .setMessage(R.string.university_empty)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        }
-        else{
+            Log.d(TAG, "University is empty");
+            alertDialog(R.string.university_error, R.string.university_empty, android.R.drawable.ic_dialog_alert);
+        }else{
             if(facultyString.isEmpty()){
-
-                Log.d(TAG, "faculty empty");
-
-                AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(getActivity());
-
-                builder.setTitle(R.string.faculty_error)
-                        .setMessage(R.string.faculty_empty)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-
-            }
-            else{
+                Log.d(TAG, "Faculty is empty");
+                alertDialog(R.string.faculty_error, R.string.faculty_empty, android.R.drawable.ic_dialog_alert);
+            }else{
                 if(degreeCourseString.isEmpty()){
-
-                    Log.d(TAG, "degree empty");
-
-                    AlertDialog.Builder builder;
-                    builder = new AlertDialog.Builder(getActivity());
-
-                    builder.setTitle(R.string.degree_course_error)
-                            .setMessage(R.string.degree_course_empty)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-
-                }else {
+                    Log.d(TAG, "Degree Course is empty");
+                    alertDialog(R.string.degree_course_error, R.string.degree_course_empty, android.R.drawable.ic_dialog_alert);
+                }else{
 
                     String universityKey = mDatabase.child(UNIVERSITY).push().getKey();
                     String facultyKey = mDatabase.child(FACULTY).push().getKey();
@@ -228,9 +209,23 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                     editor.putString(DEGREE_COURSE, degreeCourseString);
                     editor.apply();
 
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityString);
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyString);
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseString);
+                    if(universityOldKey.isEmpty()){
+                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityKey);
+                    }else{
+                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityOldKey);
+                    }
+
+                    if(facultyOldKey.isEmpty()){
+                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyKey);
+                    }else{
+                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyOldKey);
+                    }
+
+                    if(degreeCourseOldKey.isEmpty()){
+                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseKey);
+                    }else{
+                        mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseOldKey);
+                    }
 
                 }
             }
