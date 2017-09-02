@@ -23,10 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
 import com.walkap.x_android.adapter.CustomAdapter;
-import com.walkap.x_android.model.DegreeCourse;
-import com.walkap.x_android.model.Faculty;
 import com.walkap.x_android.model.Scheduler;
-import com.walkap.x_android.model.University;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,13 +52,10 @@ public class HomeFragment extends BaseFragment {
 
     private String MY_PREFS_NAME = "preferences";
 
-    private String universityKey = "";
-    private String facultyKey = "";
-    private String degreeCourseKey = "";
+    private String userUniversityKey;
+    private String userFacultyKey;
+    private String userDegreeCourseKey;
 
-    private String universityName;
-    private String facultyName;
-    private String degreeCourseName;
     private Set<String> schoolSubjectList;
 
     private String[] daysArray;
@@ -87,6 +81,7 @@ public class HomeFragment extends BaseFragment {
         mDatabase =  FirebaseDatabase.getInstance().getReference();
         daysArray = getResources().getStringArray(R.array.daysArray);
         readDataFile();
+        readDataFileDb();
     }
 
     @Override
@@ -124,18 +119,11 @@ public class HomeFragment extends BaseFragment {
 
         content = getActivity().getApplicationContext();
 
-        if(universityName.isEmpty() || facultyName.isEmpty() || degreeCourseName.isEmpty()){
-            Fragment fragment = new OptionsFragment();
-
-            FragmentManager fragmentManager = getFragmentManager();
-
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        }
-        else{
+        /*else{
             findUniversityKey(universityName);
             findFacultyKey(facultyName);
             findDegreeCourseKey(degreeCourseName);
-        }
+        }*/
 
         listView = (ListView) getView().findViewById(R.id.mainActivityListView);
 
@@ -217,10 +205,40 @@ public class HomeFragment extends BaseFragment {
 
     private void readDataFile(){
         SharedPreferences prefs = this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        universityName = prefs.getString(UNIVERSITY, "");
+        /*universityName = prefs.getString(UNIVERSITY, "");
         facultyName = prefs.getString(FACULTY, "");
-        degreeCourseName = prefs.getString(DEGREE_COURSE, "");
+        degreeCourseName = prefs.getString(DEGREE_COURSE, "");*/
         schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);
+    }
+
+    private void readDataFileDb(){
+
+        mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userUniversityKey = dataSnapshot.child(UNIVERSITY).getValue().toString();
+                userFacultyKey = dataSnapshot.child(FACULTY).getValue().toString();
+                userDegreeCourseKey = dataSnapshot.child(DEGREE_COURSE).getValue().toString();
+
+                Log.d("*** read db ***", userUniversityKey + "  " + userFacultyKey + "  " + userDegreeCourseKey);
+
+                if(userUniversityKey.isEmpty() || userFacultyKey.isEmpty() || userDegreeCourseKey.isEmpty()){
+                    Fragment fragment = new OptionsFragment();
+
+                    FragmentManager fragmentManager = getFragmentManager();
+
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                }
+
+                showScheduler();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
     }
 
     final View.OnClickListener toggleButtonListener = new View.OnClickListener() {
@@ -300,13 +318,12 @@ public class HomeFragment extends BaseFragment {
                 List<Scheduler> list = new ArrayList<Scheduler>();
                 final int day = actualDaySelected();
 
-                // attenzione errore se lista preferenze vuota
-
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     Scheduler scheduler = noteDataSnapshot.getValue(Scheduler.class);
 
-                    if (day == scheduler.getTime().getDay() && noteDataSnapshot.child(UNIVERSITY).getValue().toString().equals(universityKey)
-                            && noteDataSnapshot.child(FACULTY).getValue().toString().equals(facultyKey) && noteDataSnapshot.child(DEGREE_COURSE).getValue().toString().equals(degreeCourseKey)
+                    if (!schoolSubjectList.isEmpty() && day == scheduler.getTime().getDay() && noteDataSnapshot.child(UNIVERSITY).getValue().toString().equals(userUniversityKey)
+                            && noteDataSnapshot.child(FACULTY).getValue().toString().equals(userFacultyKey)
+                            && noteDataSnapshot.child(DEGREE_COURSE).getValue().toString().equals(userDegreeCourseKey)
                             && schoolSubjectList.contains(scheduler.getSchoolSubject())) {
                         scheduler.setSchedulerId(noteDataSnapshot.getKey());
                         list.add(scheduler);
@@ -324,7 +341,7 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    private void findUniversityKey(final String universityString){
+    /*private void findUniversityKey(final String universityString){
 
         mDatabase.child(UNIVERSITY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -386,5 +403,5 @@ public class HomeFragment extends BaseFragment {
 
             }
         });
-    }
+    }*/
 }

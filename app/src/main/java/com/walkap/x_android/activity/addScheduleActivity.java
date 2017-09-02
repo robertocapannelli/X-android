@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +15,15 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
+import com.walkap.x_android.fragment.OptionsFragment;
 import com.walkap.x_android.model.DegreeCourse;
 import com.walkap.x_android.model.Faculty;
 import com.walkap.x_android.model.Scheduler;
@@ -27,6 +32,11 @@ import com.walkap.x_android.model.TimeSchoolSubject;
 import com.walkap.x_android.model.University;
 
 public class addScheduleActivity extends AppCompatActivity {
+
+    private final String TAG = "addSchedulerActivity";
+
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     private DatabaseReference mDatabase;
 
@@ -37,19 +47,15 @@ public class addScheduleActivity extends AppCompatActivity {
 
     private String classroomName;
     private String schoolSubjectName;
-    private String universityName;
-    private String facultyName;
-    private String degreeCourseName;
+
+    private String userUniversityKey;
+    private String userFacultyKey;
+    private String userDegreeCourseKey;
 
     private Boolean waitForSecondTap = false;
     private int beginning = 0;
 
-    private String universityKey = "";
-    private String facultyKey = "";
-    private String degreeCourseKey = "";
     private String schoolSubjectKey = "";
-
-    private String MY_PREFS_NAME = "preferences";
 
     private int[] positionGridView = new int[] {1, 0, 0, 0, 0, 0};
 
@@ -67,6 +73,8 @@ public class addScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_schedule);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
         gridView = (GridView) this.findViewById(R.id.schedulerGridView);
         String[] schedulerGrid = new String[]{
@@ -98,11 +106,8 @@ public class addScheduleActivity extends AppCompatActivity {
             schoolSubjectName = (String) bundle.get("schoolSubject");
         }
 
-        readDataFile();
+        readDataFileDb();
 
-        findUniversityKey(universityName);
-        findFacultyKey(facultyName);
-        findDegreeCourse(degreeCourseName);
         findSchoolSubject(schoolSubjectName);
 
     }
@@ -120,8 +125,7 @@ public class addScheduleActivity extends AppCompatActivity {
         };
     }
 
-    private void writeNewScheduler(String classroom, String schoolSubjectName,
-                                   String degreeCourse, TimeSchoolSubject time) {
+    private void writeNewScheduler(String classroom, String schoolSubjectName, TimeSchoolSubject time) {
 
         Scheduler scheduler = new Scheduler(classroom, schoolSubjectName, time);
 
@@ -134,7 +138,7 @@ public class addScheduleActivity extends AppCompatActivity {
             String newSchoolSubjectKey = mDatabase.child("schoolSubject").push().getKey();
 
             mDatabase.child("schoolSubject").child(newSchoolSubjectKey).setValue(schoolSubject);
-            mDatabase.child("schoolSubject").child(newSchoolSubjectKey).child("university").child(universityKey).child(facultyKey).child(degreeCourseKey).setValue(true);
+            mDatabase.child("schoolSubject").child(newSchoolSubjectKey).child("university").child(userUniversityKey).child(userFacultyKey).child(userDegreeCourseKey).setValue(true);
 
             mDatabase.child("scheduler").child(schedulerKey).child("schoolSubjectId").setValue(newSchoolSubjectKey);
             mDatabase.child("scheduler").child(schedulerKey).child("schoolSubject").setValue(schoolSubjectName);
@@ -144,14 +148,14 @@ public class addScheduleActivity extends AppCompatActivity {
         }
         else{
 
-            mDatabase.child("schoolSubject").child(schoolSubjectKey).child("university").child(universityKey).child(facultyKey).child(degreeCourseKey).setValue(true);
+            mDatabase.child("schoolSubject").child(schoolSubjectKey).child("university").child(userUniversityKey).child(userFacultyKey).child(userDegreeCourseKey).setValue(true);
             mDatabase.child("scheduler").child(schedulerKey).child("schoolSubjectId").setValue(schoolSubjectKey);
             mDatabase.child("scheduler").child(schedulerKey).child("schoolSubject").setValue(schoolSubjectName);
         }
 
-        mDatabase.child("scheduler").child(schedulerKey).child("university").setValue(universityKey);
-        mDatabase.child("scheduler").child(schedulerKey).child("faculty").setValue(facultyKey);
-        mDatabase.child("scheduler").child(schedulerKey).child("degreeCourse").setValue(degreeCourseKey);
+        mDatabase.child("scheduler").child(schedulerKey).child("university").setValue(userUniversityKey);
+        mDatabase.child("scheduler").child(schedulerKey).child("faculty").setValue(userFacultyKey);
+        mDatabase.child("scheduler").child(schedulerKey).child("degreeCourse").setValue(userDegreeCourseKey);
     }
 
     private int getGridViewSelected() {
@@ -218,7 +222,7 @@ public class addScheduleActivity extends AppCompatActivity {
 
                 if(positionListView[i][j] == 0 && count !=0){
                     TimeSchoolSubject time = new TimeSchoolSubject(i, startHour + (j - count) / 4 , ((j - count) % 4) * 15, (count - 1) * 15);
-                    writeNewScheduler(classroomName, schoolSubjectName, degreeCourseName, time);
+                    writeNewScheduler(classroomName, schoolSubjectName, time);
                     count = 0;
                 }
             }
@@ -288,69 +292,20 @@ public class addScheduleActivity extends AppCompatActivity {
         }
     }
 
-    private void readDataFile(){
-        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        universityName = prefs.getString("university", "");
-        facultyName = prefs.getString("faculty", "");
-        degreeCourseName = prefs.getString("degreeCourse", "");
-    }
+    private void readDataFileDb(){
 
-    private void findUniversityKey(final String universityString){
-
-        mDatabase.child("university").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    University university = noteDataSnapshot.getValue(University.class);
-                    if (university.getName().equals(universityString)) {
-                        universityKey = noteDataSnapshot.getKey();
-                    }
-                }
+                userUniversityKey = dataSnapshot.child("university").getValue().toString();
+                userFacultyKey = dataSnapshot.child("faculty").getValue().toString();
+                userDegreeCourseKey = dataSnapshot.child("degreeCourse").getValue().toString();
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void findFacultyKey(final String facultyString){
-
-        mDatabase.child("faculty").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Faculty faculty = noteDataSnapshot.getValue(Faculty.class);
-                    if (faculty.getName().equals(facultyString)) {
-                        facultyKey = noteDataSnapshot.getKey();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void findDegreeCourse(final String degreeCourseString){
-
-        mDatabase.child("degreeCourse").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    DegreeCourse degreeCourse = noteDataSnapshot.getValue(DegreeCourse.class);
-                    if (degreeCourse.getName().equals(degreeCourseString)) {
-                        degreeCourseKey = noteDataSnapshot.getKey();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+                Log.e(TAG, "onCancelled", databaseError.toException());
             }
         });
     }
@@ -374,5 +329,4 @@ public class addScheduleActivity extends AppCompatActivity {
             }
         });
     }
-
 }
