@@ -12,4 +12,5 @@
     <dimen name="flat_margin_button">8dp</dimen>
     <!-- Floating button -->
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>
