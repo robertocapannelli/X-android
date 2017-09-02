@@ -138,12 +138,13 @@ public class AddSchoolSubjectFragment extends Fragment implements View.OnClickLi
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                                schoolSubjectList.remove(parent.getItemAtPosition(position).toString());
 
-                                editor.putStringSet(SCHOOLSUBJECT, schoolSubjectList);
+                                Set<String> set = new HashSet<String>();
+                                list.remove(parent.getItemAtPosition(position).toString());
+                                set.addAll(list);
+                                editor.putStringSet(SCHOOLSUBJECT, set);
                                 editor.apply();
 
-                                List<String> list = new ArrayList<String>(schoolSubjectList);
                                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  list);
                                 schoolSubjects.setAdapter(adapter);
                             }
@@ -263,7 +264,7 @@ public class AddSchoolSubjectFragment extends Fragment implements View.OnClickLi
 
             }
             else {
-                if (!schoolSubjectList.contains(schoolSubjectAuto.getText().toString())) {
+                if (!list.contains(schoolSubjectAuto.getText().toString())) {
                     Log.d(TAG, schoolSubjectAuto.getText().toString());
 
                     Set<String> set = new HashSet<String>();
@@ -274,8 +275,9 @@ public class AddSchoolSubjectFragment extends Fragment implements View.OnClickLi
                 }
             }
 
-            /*Intent myIntent = new Intent(AddSchoolSubject.this, MainActivity.class);
-            AddSchoolSubject.this.startActivity(myIntent);*/
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  list);
+            schoolSubjects.setAdapter(adapter);
+
         }
     }
 }
