@@ -29,6 +29,13 @@ import com.walkap.x_android.fragment.AddSchoolSubjectFragment;
 import com.walkap.x_android.fragment.ChoiceSchoolSubjectFragment;
 import com.walkap.x_android.fragment.HomeFragment;
 import com.walkap.x_android.fragment.OptionsFragment;
+import com.walkap.x_android.fragment.days.BaseDayFragment;
+import com.walkap.x_android.fragment.days.FridayFragment;
+import com.walkap.x_android.fragment.days.MondayFragment;
+import com.walkap.x_android.fragment.days.SaturdayFragment;
+import com.walkap.x_android.fragment.days.ThursdayFragment;
+import com.walkap.x_android.fragment.days.TuesdayFragment;
+import com.walkap.x_android.fragment.days.WednesdayFragment;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -38,7 +45,14 @@ public class MainActivity extends BaseActivity implements
         ChoiceSchoolSubjectFragment.OnFragmentInteractionListener,
         OptionsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
-        AddSchoolSubjectFragment.OnFragmentInteractionListener {
+        AddSchoolSubjectFragment.OnFragmentInteractionListener,
+        BaseDayFragment.OnFragmentInteractionListener,
+        MondayFragment.OnFragmentInteractionListener,
+        TuesdayFragment.OnFragmentInteractionListener,
+        WednesdayFragment.OnFragmentInteractionListener,
+        ThursdayFragment.OnFragmentInteractionListener,
+        FridayFragment.OnFragmentInteractionListener,
+        SaturdayFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "MainActivity";
 
@@ -64,7 +78,6 @@ public class MainActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         //Set a toolbar to replace action bar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
