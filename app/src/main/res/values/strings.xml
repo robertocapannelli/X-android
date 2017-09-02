@@ -54,7 +54,8 @@
     <string name="add">Add</string>
     <string name="required">Required</string>
     <string name="got_it">Got it</string>
-
+    <string name="email_sent">An email was sent to yuor address.</string>
+    <string name="email_not_sent">Email not sent</string>
     <string name="no" translatable="false">No</string>
     <string name="yes">Yes</string>
 

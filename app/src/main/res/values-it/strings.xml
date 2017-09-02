@@ -70,4 +70,6 @@
     <string name="add_course">Aggiungi Corso</string>
     <string name="do_you_want_delete_this_schedule">Vuoi eliminare l\'orario di %1s?</string>
     <string name="got_it">Ho capito</string>
+    <string name="email_not_sent">Email non inviata</string>
+    <string name="email_sent">Una email è stata inviata al tuo indirizzo</string>
 </resources>
