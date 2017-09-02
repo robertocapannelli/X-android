@@ -272,6 +272,7 @@ public class AddSchoolSubjectFragment extends Fragment implements View.OnClickLi
                     set.addAll(list);
                     editor.putStringSet(SCHOOLSUBJECT, set);
                     editor.apply();
+                    schoolSubjectAuto.setText("");
                 }
             }
 
