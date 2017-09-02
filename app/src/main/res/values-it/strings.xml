@@ -72,4 +72,9 @@
     <string name="got_it">Ho capito</string>
     <string name="email_not_sent">Email non inviata</string>
     <string name="email_sent">Una email è stata inviata al tuo indirizzo</string>
+    <string name="saturday">S</string>
+    <string name="tuesday">M</string>
+    <string name="thursday">G</string>
+    <string name="friday">V</string>
+    <string name="monday">L</string>
 </resources>
