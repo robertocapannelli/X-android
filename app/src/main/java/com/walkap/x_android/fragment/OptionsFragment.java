@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
+
+import static android.R.attr.id;
 import static android.content.Context.MODE_PRIVATE;
 
 import com.walkap.x_android.activity.MainActivity;
@@ -175,6 +177,12 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
         builder.setTitle(title)
                 .setMessage(message)
                 .setIcon(drawable)
+                .setPositiveButton(R.string.got_it, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    // User clicked OK button
+                        dialog.cancel();
+                    }
+                })
                 .show();
     }
 
