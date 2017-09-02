@@ -16,12 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
 
@@ -43,19 +39,11 @@ import java.util.List;
  * Use the {@link OptionsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OptionsFragment extends Fragment implements View.OnClickListener{
+public class OptionsFragment extends BaseFragment implements View.OnClickListener{
 
     private static final String TAG = "OptionsFragment";
 
     private String MY_PREFS_NAME = "preferences";
-
-    private final String UNIVERSITY = "university";
-    private final String UNIVERSITIES = "universities";
-
-    private final String FACULTY = "faculty";
-    private final String FACULTIES = "faculties";
-
-    private final String DEGREE_COURSE = "degreeCourse";
 
     private String universityName;
     private String facultyName;
@@ -69,10 +57,6 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
     private AutoCompleteTextView faculty;
     private AutoCompleteTextView degreeCourse;
 
-    private DatabaseReference mDatabase;
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
-
     private OnFragmentInteractionListener mListener;
 
     public OptionsFragment() {
@@ -83,13 +67,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mDatabase =  FirebaseDatabase.getInstance().getReference();
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
         readDataFile();
-
     }
 
     @Override
@@ -245,7 +223,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                                     University university = new University(universityString, "", "");
                                     mDatabase.child(UNIVERSITY).child(universityKey).setValue(university);
 
-                                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityKey);
+                                    mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityKey);
 
                                     findFaculty(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
 
@@ -260,7 +238,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             .show();
                 }
                 else{
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityOldKey);
+                    mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(UNIVERSITY).setValue(universityOldKey);
                     findFaculty(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
                 }
             }
@@ -301,7 +279,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                             .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyKey);
+                                    mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyKey);
                                     findDegreeCourse(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
 
                                 }
@@ -316,7 +294,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                 }
                 else{
 
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyOldKey);
+                    mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(FACULTY).setValue(facultyOldKey);
                     findDegreeCourse(universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
                 }
 
@@ -420,7 +398,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                                         }
                                     }
 
-                                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseKey);
+                                    mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseKey);
 
                                     Fragment fragment = new HomeFragment();
 
@@ -440,7 +418,7 @@ public class OptionsFragment extends Fragment implements View.OnClickListener{
                 }
                 else{
 
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseOldKey);
+                    mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(DEGREE_COURSE).setValue(degreeCourseOldKey);
 
                     Fragment fragment = new HomeFragment();
 

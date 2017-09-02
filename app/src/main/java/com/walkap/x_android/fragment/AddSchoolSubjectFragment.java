@@ -19,8 +19,6 @@ import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
 import com.walkap.x_android.model.SchoolSubject;
@@ -40,16 +38,10 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link AddSchoolSubjectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddSchoolSubjectFragment extends Fragment implements View.OnClickListener {
+public class AddSchoolSubjectFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "AddSchoolSubjectFrag";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String CLASSROOM = "classRoom";
-    private static final String SCHOOLSUBJECT = "schoolSubject";
-
-    // TODO: Rename and change types of parameters
     private String classRoom;
     private String schoolSubject;
 
@@ -60,31 +52,11 @@ public class AddSchoolSubjectFragment extends Fragment implements View.OnClickLi
 
     private List<String> list;
 
-    private DatabaseReference mDatabase;
-
     private String MY_PREFS_NAME = "preferences";
     private Set<String> schoolSubjectList;
 
     public AddSchoolSubjectFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param classRoom Parameter 1.
-     * @param schoolSubject Parameter 2.
-     * @return A new instance of fragment AddScheduleFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddSchoolSubjectFragment newInstance(String classRoom, String schoolSubject) {
-        AddSchoolSubjectFragment fragment = new AddSchoolSubjectFragment();
-        Bundle args = new Bundle();
-        args.putString(CLASSROOM, classRoom);
-        args.putString(SCHOOLSUBJECT, schoolSubject);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -97,11 +69,8 @@ public class AddSchoolSubjectFragment extends Fragment implements View.OnClickLi
 
         Log.d(TAG, classRoom + " " + schoolSubject);
 
-        mDatabase =  FirebaseDatabase.getInstance().getReference();
-
         SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);
-
 
     }
 

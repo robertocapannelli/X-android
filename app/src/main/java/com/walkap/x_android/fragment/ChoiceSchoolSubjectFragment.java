@@ -23,9 +23,9 @@ import com.walkap.x_android.R;
  * Use the {@link ChoiceSchoolSubjectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChoiceSchoolSubjectFragment extends Fragment implements View.OnClickListener {
+public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.OnClickListener {
 
-    private static final String TAG = "ChoiceSchoolSubjectFragment";
+    private static final String TAG = "ChoiceSchoolSubjectFrag";
 
     private OnFragmentInteractionListener mListener;
 
