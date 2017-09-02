@@ -2,7 +2,6 @@ package com.walkap.x_android.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,9 +19,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
-
-import static android.content.Context.MODE_PRIVATE;
-
 import com.walkap.x_android.model.DegreeCourse;
 import com.walkap.x_android.model.Faculty;
 import com.walkap.x_android.model.SchoolSubject;
@@ -43,11 +39,13 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
 
     private static final String TAG = "OptionsFragment";
 
-    private String MY_PREFS_NAME = "preferences";
+    private String universityName = "";
+    private String facultyName = "";
+    private String degreeCourseName = "";
 
-    private String universityName;
-    private String facultyName;
-    private String degreeCourseName;
+    private String userUniversityKey;
+    private String userFacultyKey;
+    private String userDegreeCourseKey;
 
     private String universityOldKey;
     private String facultyOldKey;
@@ -67,7 +65,7 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        readDataFile();
+        readDataFileDb();
     }
 
     @Override
@@ -85,9 +83,19 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
         addListAutocomplete(faculty, FACULTY);
         addListAutocomplete(degreeCourse, DEGREE_COURSE);
 
-        university.setText(universityName);
-        faculty.setText(facultyName);
-        degreeCourse.setText(degreeCourseName);
+        Log.d("*** on create view ", "  " + universityName + "  " + facultyName + "  " + degreeCourseName);
+
+        if(!universityName.isEmpty()){
+            university.setText(universityName);
+        }
+
+        if(!facultyName.isEmpty()){
+            faculty.setText(facultyName);
+        }
+
+        if(!degreeCourseName.isEmpty()){
+            degreeCourse.setText(degreeCourseName);
+        }
 
         //Button listener
         Button btn = (Button) rootView.findViewById(R.id.saveButton);
@@ -183,13 +191,10 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
                     String facultyKey = mDatabase.child(FACULTY).push().getKey();
                     String degreeCourseKey = mDatabase.child(DEGREE_COURSE).push().getKey();
 
+                    Log.d("*** saveData ***", "  " + universityKey + "  " + facultyKey + "  " + degreeCourseKey);
+
                     findUniversity(universityString, universityKey, facultyString, facultyKey, degreeCourseString, degreeCourseKey);
 
-                    SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                    editor.putString(UNIVERSITY, universityString);
-                    editor.putString(FACULTY, facultyString);
-                    editor.putString(DEGREE_COURSE, degreeCourseString);
-                    editor.apply();
                 }
             }
         }
@@ -436,21 +441,20 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
         });
     }
 
-    private void readDataFile(){
-        SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        universityName = prefs.getString(UNIVERSITY, "");
-        facultyName = prefs.getString(FACULTY, "");
-        degreeCourseName = prefs.getString(DEGREE_COURSE, "");
-    }
-
-    /*private void readDataFileDb(){
+    private void readDataFileDb(){
 
         mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                universityKey = dataSnapshot.child(UNIVERSITY).getValue().toString();
-                facultyKey = dataSnapshot.child(FACULTY).getValue().toString();
-                degreeCourseKey = dataSnapshot.child(DEGREE_COURSE).getValue().toString();
+                userUniversityKey = dataSnapshot.child(UNIVERSITY).getValue().toString();
+                userFacultyKey = dataSnapshot.child(FACULTY).getValue().toString();
+                userDegreeCourseKey = dataSnapshot.child(DEGREE_COURSE).getValue().toString();
+
+                Log.d("*** read db ***", userUniversityKey + "  " + userFacultyKey + "  " + userDegreeCourseKey);
+
+                keyUniversityToName(userUniversityKey);
+                keyFacultyToName(userFacultyKey);
+                keyDegreeCourseToName(userDegreeCourseKey);
 
             }
 
@@ -459,7 +463,76 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
                 Log.e(TAG, "onCancelled", databaseError.toException());
             }
         });
-    }*/
+    }
+
+    private void keyUniversityToName(final String key){
+
+        mDatabase.child(UNIVERSITY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    if(noteDataSnapshot.getKey().equals(key)){
+                        universityName = noteDataSnapshot.child("name").getValue().toString();
+                        if(university != null){
+                            university.setText(universityName);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("*** main activity ***", "onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    private void keyFacultyToName(final String key){
+
+        mDatabase.child(FACULTY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    if(noteDataSnapshot.getKey().equals(key)){
+                        facultyName = noteDataSnapshot.child("name").getValue().toString();
+                        if(faculty != null){
+                            faculty.setText(facultyName);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("*** main activity ***", "onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    private void keyDegreeCourseToName(final String key){
+
+        mDatabase.child(DEGREE_COURSE).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    if(noteDataSnapshot.getKey().equals(key)){
+                        degreeCourseName = noteDataSnapshot.child("name").getValue().toString();
+                        if(degreeCourse != null){
+                            degreeCourse.setText(degreeCourseName);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("*** main activity ***", "onCancelled", databaseError.toException());
+            }
+        });
+    }
 
     public void addListAutocomplete(final AutoCompleteTextView autoComplete, final String child) {
 
