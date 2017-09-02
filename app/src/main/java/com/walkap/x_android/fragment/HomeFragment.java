@@ -43,7 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -73,12 +73,6 @@ public class HomeFragment extends Fragment {
     private Set<String> schoolSubjectList;
 
     private String[] daysArray;
-
-    private final String UNIVERSITY = "university";
-    private final String FACULTY = "faculty";
-    private final String DEGREE_COURSE = "degreeCourse";
-
-    private final String SCHOOL_SUBJECT = "schoolSubject";
 
     private final String TAG = "HomeFragment";
 
@@ -259,8 +253,7 @@ public class HomeFragment extends Fragment {
         universityName = prefs.getString(UNIVERSITY, "");
         facultyName = prefs.getString(FACULTY, "");
         degreeCourseName = prefs.getString(DEGREE_COURSE, "");
-        schoolSubjectList = prefs.getStringSet(SCHOOL_SUBJECT, null);
-
+        schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);
     }
 
     final View.OnClickListener toggleButtonListener = new View.OnClickListener() {
