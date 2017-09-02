@@ -18,8 +18,6 @@ import android.widget.ToggleButton;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
 import com.walkap.x_android.adapter.CustomAdapter;
@@ -47,8 +45,6 @@ public class HomeFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private DatabaseReference mDatabase;
-
     ListView listView;
 
     Context content;
@@ -63,8 +59,6 @@ public class HomeFragment extends BaseFragment {
     private String facultyName;
     private String degreeCourseName;
     private Set<String> schoolSubjectList;
-
-    private String[] daysArray;
 
     private final String TAG = "HomeFragment";
 
@@ -83,9 +77,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mDatabase =  FirebaseDatabase.getInstance().getReference();
-        daysArray = getResources().getStringArray(R.array.daysArray);
         readDataFile();
     }
 
@@ -126,9 +117,7 @@ public class HomeFragment extends BaseFragment {
 
         if(universityName.isEmpty() || facultyName.isEmpty() || degreeCourseName.isEmpty()){
             Fragment fragment = new OptionsFragment();
-
             FragmentManager fragmentManager = getFragmentManager();
-
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
         else{
