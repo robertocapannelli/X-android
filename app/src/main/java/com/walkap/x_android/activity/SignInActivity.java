@@ -165,7 +165,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-
+                                    Log.d(TAG, "Database error");
                                 }
                             });
 
