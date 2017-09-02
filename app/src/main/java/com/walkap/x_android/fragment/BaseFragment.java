@@ -15,14 +15,16 @@ public class BaseFragment extends Fragment{
 
     public final String UNIVERSITY = "university";
     public final String UNIVERSITIES = "universities";
+
     public final String FACULTY = "faculty";
     public final String FACULTIES = "faculties";
-    public final String DEGREE_COURSE = "degreeCourse";
 
-    public final String USERS = "users";
+    public final String DEGREE_COURSE = "degreeCourse";
 
     public final String CLASSROOM = "classRoom";
     public final String SCHOOLSUBJECT = "schoolSubject";
+
+    public final String USERS = "users";
 
     @Override
     public void onCreate(Bundle savedInstanceState){

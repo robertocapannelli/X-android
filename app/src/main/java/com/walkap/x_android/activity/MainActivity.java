@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -25,10 +24,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.walkap.x_android.R;
 import com.walkap.x_android.fragment.AddSchoolSubjectFragment;
 import com.walkap.x_android.fragment.ChoiceSchoolSubjectFragment;
@@ -37,7 +32,7 @@ import com.walkap.x_android.fragment.OptionsFragment;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         NavigationView.OnNavigationItemSelectedListener,
         ChoiceSchoolSubjectFragment.OnFragmentInteractionListener,
@@ -47,14 +42,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final String TAG = "MainActivity";
 
-    //Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
-    private DatabaseReference mDatabase;
-
     //Google Api Sign in
     private GoogleApiClient mGoogleApiClient;
-
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -98,12 +87,6 @@ public class MainActivity extends AppCompatActivity implements
         header = navigationView.getHeaderView(0);
 
         arrayNavigation = getResources().getStringArray(R.array.navigation_array);
-
-        //Playing with Firebase realtime database
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        //universityEndPoint = mDatabase.child("university");
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
         tvUserName = (TextView) header.findViewById(R.id.tvUserName);
         tvEmail = (TextView) header.findViewById(R.id.tvEmail);
