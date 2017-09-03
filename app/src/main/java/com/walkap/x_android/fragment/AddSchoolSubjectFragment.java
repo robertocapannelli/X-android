@@ -2,7 +2,6 @@ package com.walkap.x_android.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,11 +23,7 @@ import com.walkap.x_android.R;
 import com.walkap.x_android.model.SchoolSubject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,8 +37,6 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
 
     private static final String TAG = "AddSchoolSubjectFrag";
 
-    private String classRoom;
-    private String schoolSubject;
     private String schoolSubjectKey = "";
 
     private boolean find;
@@ -53,10 +46,10 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     private AutoCompleteTextView schoolSubjectAuto;
     private ListView schoolSubjects;
 
-    private List<String> list;
+    /*private List<String> list;
 
     private String MY_PREFS_NAME = "preferences";
-    private Set<String> schoolSubjectList;
+    private Set<String> schoolSubjectList;*/
 
     public AddSchoolSubjectFragment() {
         // Required empty public constructor
@@ -65,15 +58,9 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            classRoom = getArguments().getString(CLASSROOM);
-            schoolSubject = getArguments().getString(SCHOOLSUBJECT);
-        }
 
-        Log.d(TAG, classRoom + " " + schoolSubject);
-
-        SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);
+        /*SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);*/
 
     }
 
@@ -90,11 +77,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
         Button btn = (Button) rootView.findViewById(R.id.addSchoolSubject);
         btn.setOnClickListener(this);
 
-        if(schoolSubjectList != null) {
-            list = new ArrayList<String>(schoolSubjectList);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  list);
-            schoolSubjects.setAdapter(adapter);
-        }
+        setAdapterList();
 
         addListAutocomplete();
 
@@ -111,16 +94,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
                             public void onClick(DialogInterface dialog, int which) {
                                 deleteSchoolSubject(parent.getItemAtPosition(position).toString());
 
-                                SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-
-                                Set<String> set = new HashSet<String>();
-                                list.remove(parent.getItemAtPosition(position).toString());
-                                set.addAll(list);
-                                editor.putStringSet(SCHOOLSUBJECT, set);
-                                editor.apply();
-
-                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  list);
-                                schoolSubjects.setAdapter(adapter);
+                                setAdapterList();
 
                             }
                         })
@@ -140,16 +114,13 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        addSchoolSubject();
+        getSchoolSubjectKey(schoolSubjectAuto.getText().toString());
     }
 
 
     @Override
     public void onStart(){
         super.onStart();
-
-        /*schoolSubjectAuto = (AutoCompleteTextView) this.findViewById(R.id.schoolSubjectAutoCompleteTextView);
-        schoolSubjects = (ListView) this.findViewById(R.id.schoolSubjectListView);*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -216,48 +187,26 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
         });
     }
 
-    public void addSchoolSubject() {
+    private void setAdapterList(){
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> list = new ArrayList<String>();
 
-        getSchoolSubjectKey(schoolSubjectAuto.getText().toString());
-
-        SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-
-        if(schoolSubjectAuto.getText().toString().isEmpty()) {
-            AlertDialog.Builder builder;
-            builder = new AlertDialog.Builder(getActivity());
-
-            builder.setTitle(R.string.school_subject_error)
-                    .setMessage(R.string.school_subject_empty)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        }
-        else{
-            if(schoolSubjectList == null){
-                Log.d(TAG, schoolSubjectAuto.getText().toString());
-
-                Set<String> set = new HashSet<String>();
-                set.add(schoolSubjectAuto.getText().toString());
-                editor.putStringSet(SCHOOLSUBJECT, set);
-                editor.commit();
-
-            }
-            else {
-                if (!list.contains(schoolSubjectAuto.getText().toString())) {
-                    Log.d(TAG, schoolSubjectAuto.getText().toString());
-
-                    Set<String> set = new HashSet<String>();
-                    list.add(schoolSubjectAuto.getText().toString());
-                    set.addAll(list);
-                    editor.putStringSet(SCHOOLSUBJECT, set);
-                    editor.apply();
-                    schoolSubjectAuto.setText("");
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    list.add(noteDataSnapshot.getValue().toString());
                 }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
+
+                schoolSubjects.setAdapter(adapter);
             }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  list);
-            schoolSubjects.setAdapter(adapter);
-
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
     }
 
     private void getSchoolSubjectKey(final String name){
@@ -274,7 +223,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
                         }
                         else {
                             Log.d("*** setKey ***", "  " + schoolSubjectKey);
-                            findInPreferences(schoolSubjectKey);
+                            findInPreferences(schoolSubjectKey, name);
                         }
                         break;
                     }
@@ -288,7 +237,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
         });
     }
 
-    private void findInPreferences(final String key){
+    private void findInPreferences(final String key, final String name){
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -302,7 +251,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
                 }
                 Log.d("*** findInPrefer ***", "  " + find);
                 if(!find){
-                    addInPreferences(schoolSubjectKey);
+                    addInPreferences(schoolSubjectKey, name);
                 }
             }
 
@@ -313,8 +262,10 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
         });
     }
 
-    private void addInPreferences(String key){
-        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").child(key).setValue(true);
+    private void addInPreferences(String key, String name){
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").child(key).setValue(name);
+        setAdapterList();
+
     }
 
     private void deleteSchoolSubject(final String name){
