@@ -2,7 +2,6 @@ package com.walkap.x_android.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,9 +27,6 @@ import com.walkap.x_android.model.Scheduler;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,13 +46,11 @@ public class HomeFragment extends BaseFragment {
 
     Context content;
 
-    private String MY_PREFS_NAME = "preferences";
-
     private String userUniversityKey;
     private String userFacultyKey;
     private String userDegreeCourseKey;
 
-    private Set<String> schoolSubjectList;
+    private List<String> preferences = new ArrayList<>();
 
     private String[] daysArray;
 
@@ -80,7 +74,7 @@ public class HomeFragment extends BaseFragment {
 
         mDatabase =  FirebaseDatabase.getInstance().getReference();
         daysArray = getResources().getStringArray(R.array.daysArray);
-        readDataFile();
+
         readDataFileDb();
     }
 
@@ -197,11 +191,6 @@ public class HomeFragment extends BaseFragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void readDataFile(){
-        SharedPreferences prefs = this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);
-    }
-
     private void readDataFileDb(){
 
         mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -221,7 +210,7 @@ public class HomeFragment extends BaseFragment {
                     fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 }
 
-                showScheduler();
+                fillListPreferences();
 
             }
 
@@ -301,7 +290,27 @@ public class HomeFragment extends BaseFragment {
         return -1;
     }
 
-    public void showScheduler() {
+    private void fillListPreferences(){
+
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    Log.d("*** fillList ***", "  " + noteDataSnapshot.getValue().toString());
+                    preferences.add(noteDataSnapshot.getValue().toString());
+                }
+                showScheduler();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+
+    }
+
+    private void showScheduler() {
 
         mDatabase.child("scheduler").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -312,10 +321,10 @@ public class HomeFragment extends BaseFragment {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     Scheduler scheduler = noteDataSnapshot.getValue(Scheduler.class);
 
-                    if (!schoolSubjectList.isEmpty() && day == scheduler.getTime().getDay() && noteDataSnapshot.child(UNIVERSITY).getValue().toString().equals(userUniversityKey)
+                    if (!preferences.isEmpty() && day == scheduler.getTime().getDay() && noteDataSnapshot.child(UNIVERSITY).getValue().toString().equals(userUniversityKey)
                             && noteDataSnapshot.child(FACULTY).getValue().toString().equals(userFacultyKey)
                             && noteDataSnapshot.child(DEGREE_COURSE).getValue().toString().equals(userDegreeCourseKey)
-                            && schoolSubjectList.contains(scheduler.getSchoolSubject())) {
+                            && preferences.contains(scheduler.getSchoolSubject())) {
                         scheduler.setSchedulerId(noteDataSnapshot.getKey());
                         list.add(scheduler);
                     }
