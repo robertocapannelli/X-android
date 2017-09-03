@@ -140,7 +140,6 @@ public class MondayFragment extends BaseFragment {
         void onFragmentInteraction(Uri uri);
     }
 
-
     private void readDataFile(){
 
 
@@ -159,7 +158,7 @@ public class MondayFragment extends BaseFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Scheduler> list = new ArrayList<Scheduler>();
-                final int day = 5;
+                final int day = 3;
 
                 // attenzione errore se lista preferenze vuota
 

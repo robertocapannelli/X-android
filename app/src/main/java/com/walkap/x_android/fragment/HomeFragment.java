@@ -122,5 +122,4 @@ public class HomeFragment extends BaseFragment{
         void onFragmentInteraction(Uri uri);
     }
 
-
 }
