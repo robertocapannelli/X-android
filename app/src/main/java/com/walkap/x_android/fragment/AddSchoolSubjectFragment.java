@@ -109,6 +109,8 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
                         .setMessage(getResources().getString(R.string.do_not_want_to_follow_anymore, parent.getItemAtPosition(position).toString()))
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                deleteSchoolSubject(parent.getItemAtPosition(position).toString());
+
                                 SharedPreferences.Editor editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
                                 Set<String> set = new HashSet<String>();
@@ -119,6 +121,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
 
                                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,  list);
                                 schoolSubjects.setAdapter(adapter);
+
                             }
                         })
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -312,5 +315,26 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
 
     private void addInPreferences(String key){
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").child(key).setValue(true);
+    }
+
+    private void deleteSchoolSubject(final String name){
+        mDatabase.child(SCHOOLSUBJECT).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    if (noteDataSnapshot.child("name").getValue().toString().equals(name)){
+                        Log.d("*** delete ***", "  " + noteDataSnapshot.child("name").getValue().toString());
+                        String Key = noteDataSnapshot.getKey();
+                        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").child(Key).removeValue();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
     }
 }
