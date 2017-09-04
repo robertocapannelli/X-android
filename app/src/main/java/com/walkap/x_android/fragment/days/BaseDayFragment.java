@@ -114,9 +114,9 @@ public abstract class BaseDayFragment extends Fragment {
         mDatabase.child(USER).child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userUniversityKey = dataSnapshot.child(UNIVERSITY).getValue().toString();
-                userFacultyKey = dataSnapshot.child(FACULTY).getValue().toString();
-                userDegreeCourseKey = dataSnapshot.child(DEGREE_COURSE).getValue().toString();
+                String userUniversityKey = (String) dataSnapshot.child(UNIVERSITY).getValue();
+                String userFacultyKey = (String) dataSnapshot.child(FACULTY).getValue();
+                String userDegreeCourseKey = (String) dataSnapshot.child(DEGREE_COURSE).getValue();
 
                 Log.d("*** read db ***", userUniversityKey + "  " + userFacultyKey + "  " + userDegreeCourseKey);
 
