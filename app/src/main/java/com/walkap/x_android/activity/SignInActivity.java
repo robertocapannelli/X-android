@@ -3,7 +3,9 @@ package com.walkap.x_android.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -147,6 +149,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                         }
                                     }
                                     Log.d(TAG, "User found: " + found);
+
                                     if(!found){
                                         // Write new user
                                         writeNewUser(userId, email, name, surname, "", "", "");
@@ -238,6 +241,31 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private boolean validateForm() {
         boolean result = true;
+
+        final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        final String email = mEmailField.getText().toString();
+
+        mEmailField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!email.matches(emailPattern)){
+                    mEmailField.setError("Invalid email address");
+                }else{
+                    mEmailField.setError(null);
+                }
+            }
+        });
+
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
             mEmailField.setError("Required");
             result = false;
