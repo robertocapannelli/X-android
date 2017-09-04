@@ -252,7 +252,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             mPasswordField.setError(null);
         }
 
-        if(mPasswordField.getText().length() <= 6){
+        if(mPasswordField.getText().length() < 6){
             mPasswordField.setError("At least 6 chars");
             result = false;
         }

@@ -34,7 +34,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
     @Override
     public void onBindViewHolder(LessonViewHolder holder, int position) {
         Scheduler lessons = allLessons.get(position);
-        Log.d(TAG, "Lssons: " + lessons);
+        Log.d(TAG, "Lessons: " + lessons);
         holder.classroom.setText(lessons.getClassroom());
         holder.schoolSubject.setText(lessons.getSchoolSubject());
     }
