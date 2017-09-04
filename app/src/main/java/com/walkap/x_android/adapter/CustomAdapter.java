@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.walkap.x_android.R;
@@ -16,6 +17,7 @@ import java.util.List;
 public class CustomAdapter extends ArrayAdapter<Scheduler> {
 
     private final String TAG = "CustomAdapter";
+    
 
     public CustomAdapter(Context context, int textViewResourceId, List<Scheduler> objects) {
         super(context, textViewResourceId, objects);
@@ -33,6 +35,7 @@ public class CustomAdapter extends ArrayAdapter<Scheduler> {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.row, null);
             viewHolder = new ViewHolder();
+            viewHolder.icon = (ImageView) convertView.findViewById(R.id.imageView);
             viewHolder.classroom = (TextView)convertView.findViewById(R.id.optionsClassroomTextView);
             viewHolder.schoolSubject = (TextView)convertView.findViewById(R.id.optionsSchoolSubjectTextView);
             viewHolder.hourBeginning = (TextView)convertView.findViewById(R.id.optionsHoursBeginningTextView);
@@ -49,10 +52,10 @@ public class CustomAdapter extends ArrayAdapter<Scheduler> {
         int hour = scheduler.getTime().getHour();
         int minute = scheduler.getTime().getMinute();
         if(scheduler.getTime().getMinute() == 0){
-            viewHolder.hourBeginning.setText("to the hour " + hour + ":0" + minute);
+            viewHolder.hourBeginning.setText(hour + ":0" + minute);
         }
         else {
-            viewHolder.hourBeginning.setText("to the hour " + hour + ":" + minute);
+            viewHolder.hourBeginning.setText(hour + ":" + minute);
         }
         viewHolder.hourBeginning.setTextColor(Color.BLACK);
         viewHolder.duration.setText("for " + scheduler.getTime().getDuration() + " minutes");
@@ -67,6 +70,7 @@ public class CustomAdapter extends ArrayAdapter<Scheduler> {
         public TextView duration;
 
         private String schedulerId;
+        public ImageView icon;
     }
 
 

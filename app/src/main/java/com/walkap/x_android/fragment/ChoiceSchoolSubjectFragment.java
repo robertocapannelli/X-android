@@ -61,7 +61,7 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
     @Override
     public void onClick(View view) {
         if (!validateForm()) {
-            return;
+            return ;
         }else{
             addScheduler();
         }
