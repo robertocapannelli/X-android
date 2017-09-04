@@ -24,6 +24,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
 import com.walkap.x_android.fragment.AddSchoolSubjectFragment;
 import com.walkap.x_android.fragment.ChoiceSchoolSubjectFragment;
@@ -59,6 +62,17 @@ public class MainActivity extends BaseActivity implements
     private String name, email, uid;
     private Uri photoUrl;
     private boolean emailVerified;
+
+    public final String UNIVERSITY = "university";
+    public final String FACULTY = "faculty";
+    public final String DEGREE_COURSE = "degreeCourse";
+
+    public String userUniversityKey;
+    public String userFacultyKey;
+    public String userDegreeCourseKey;
+
+    private FragmentManager fragmentManager;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,12 +135,41 @@ public class MainActivity extends BaseActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
+        checkDataDb();
+
         //Default fragment to display
         if (savedInstanceState == null) {
             navItemIndex = 0;
             Class fragmentClass = HomeFragment.class;
             loadFragment(fragmentClass);
         }
+    }
+
+
+
+    private void checkDataDb(){
+        mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userUniversityKey = (String) dataSnapshot.child(UNIVERSITY).getValue();
+                userFacultyKey = (String) dataSnapshot.child(FACULTY).getValue();
+                userDegreeCourseKey = (String) dataSnapshot.child(DEGREE_COURSE).getValue();
+
+                if(userUniversityKey.isEmpty() || userFacultyKey.isEmpty() || userDegreeCourseKey.isEmpty()){
+                    fragmentManager = getSupportFragmentManager();
+                    final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragment = new OptionsFragment();
+                    fragmentTransaction.replace(R.id.flContent, fragment);
+                    fragmentTransaction.commit();
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+
     }
 
     private void loadNavHeader() {

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -109,22 +110,19 @@ public abstract class BaseDayFragment extends Fragment {
 
     public abstract int getDay();
 
+    private FragmentManager fragmentManager;
+    private Fragment fragment;
+
     public void readDataFileDb(){
 
         mDatabase.child(USER).child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String userUniversityKey = (String) dataSnapshot.child(UNIVERSITY).getValue();
-                String userFacultyKey = (String) dataSnapshot.child(FACULTY).getValue();
-                String userDegreeCourseKey = (String) dataSnapshot.child(DEGREE_COURSE).getValue();
+                userUniversityKey = (String) dataSnapshot.child(UNIVERSITY).getValue();
+                userFacultyKey = (String) dataSnapshot.child(FACULTY).getValue();
+                userDegreeCourseKey = (String) dataSnapshot.child(DEGREE_COURSE).getValue();
 
                 Log.d("*** read db ***", userUniversityKey + "  " + userFacultyKey + "  " + userDegreeCourseKey);
-
-                if(userUniversityKey.isEmpty() || userFacultyKey.isEmpty() || userDegreeCourseKey.isEmpty()){
-                    Fragment fragment = new OptionsFragment();
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.mainActivityListView, fragment).commit();
-                }
 
                 fillListPreferences();
 
