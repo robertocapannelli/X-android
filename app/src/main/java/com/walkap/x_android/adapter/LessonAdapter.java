@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.walkap.x_android.R;
-import com.walkap.x_android.ViewHolder.LessonViewHolder;
+import com.walkap.x_android.viewHolder.LessonViewHolder;
 import com.walkap.x_android.model.Scheduler;
 
 import java.util.List;

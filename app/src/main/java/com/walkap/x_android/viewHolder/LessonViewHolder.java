@@ -1,4 +1,4 @@
-package com.walkap.x_android.ViewHolder;
+package com.walkap.x_android.viewHolder;
 
 
 import android.support.v7.widget.RecyclerView;
