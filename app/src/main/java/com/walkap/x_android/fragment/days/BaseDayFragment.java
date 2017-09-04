@@ -123,7 +123,7 @@ public abstract class BaseDayFragment extends Fragment {
                 if(userUniversityKey.isEmpty() || userFacultyKey.isEmpty() || userDegreeCourseKey.isEmpty()){
                     Fragment fragment = new OptionsFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                    fragmentManager.beginTransaction().replace(R.id.mainActivityListView, fragment).commit();
                 }
 
                 fillListPreferences();
