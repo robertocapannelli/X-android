@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
-                    android:text="enter the schoolSubject"
+                    android:text="@string/add_course_label"
                     android:textSize="12sp" />
 
                 <AutoCompleteTextView
@@ -45,7 +45,7 @@
                     android:onClick="addSchoolSubject"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:text="addSchoolSubject"
+                    android:text="@string/add_school_subject_button"
                     android:textSize="16sp" />
 
                 <ListView

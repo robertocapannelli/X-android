@@ -64,7 +64,7 @@
     <string-array name="navigation_array">
         <item>Home</item>
         <item>Aggiungi orario</item>
-        <item>Aggiungi corso</item>
+        <item>Aggiungi corso ai preferiti</item>
         <item>Opzioni</item>
     </string-array>
     <string name="add_course">Aggiungi Corso</string>
@@ -77,4 +77,6 @@
     <string name="thursday">G</string>
     <string name="friday">V</string>
     <string name="monday">L</string>
+    <string name="add_school_subject_button">Aggiungi corso</string>
+    <string name="add_course_label">Scrivi il corso</string>
 </resources>

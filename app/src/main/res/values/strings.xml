@@ -30,7 +30,7 @@
     <string-array name="navigation_array">
         <item>Home</item>
         <item>Add Schedule</item>
-        <item>Add School Subject</item>
+        <item>Add Course to favorites</item>
         <item>Options</item>
     </string-array>
 
@@ -93,7 +93,7 @@
     <string name="faculty_not_found_add">Faculty not found, do you want to add it?</string>
     <string name="faculty_select_another">Select another faculty</string>
 
-    <!-- Degree cource -->
+    <!-- Degree course -->
     <string name="degree_course_error">Degree course field is empty</string>
     <string name="degree_course_empty">To use this app and have a great experience you must necessarily choose a  Degree course</string>
     <string name="degree_course_not_found">Degree course not found</string>
@@ -104,5 +104,7 @@
     <string name="do_not_want_to_follow_anymore">Do not want to follow %1s anymore?</string>
     <string name="school_subject_error">School subject error</string>
     <string name="school_subject_empty">School subject is empty</string>
+    <string name="add_school_subject_button">Add course</string>
+    <string name="add_course_label">Type the course</string>
 
 </resources>
