@@ -53,30 +53,14 @@ public class HomeFragment extends BaseFragment{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
-
-        mViewPager = (ViewPager) rootView.findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        mViewPager.setOffscreenPageLimit(6);
-
-        setupViewPager(mViewPager);
-
         TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
+        mViewPager = (ViewPager) rootView.findViewById(R.id.view_pager);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(6);
         tabLayout.setupWithViewPager(mViewPager);
 
         return rootView;
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new MondayFragment(), "Monday");
-        adapter.addFragment(new TuesdayFragment(), "Tuesday");
-        adapter.addFragment(new WednesdayFragment(), "Wednesday");
-        adapter.addFragment(new ThursdayFragment(), "Thursday");
-        adapter.addFragment(new FridayFragment(), "Friday");
-        adapter.addFragment(new SaturdayFragment(), "Saturday");
-        viewPager.setAdapter(adapter);
     }
 
     @Override
