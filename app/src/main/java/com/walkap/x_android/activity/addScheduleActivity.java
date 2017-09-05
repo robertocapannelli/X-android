@@ -1,11 +1,8 @@
 package com.walkap.x_android.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,13 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
-import com.walkap.x_android.fragment.OptionsFragment;
-import com.walkap.x_android.model.DegreeCourse;
-import com.walkap.x_android.model.Faculty;
 import com.walkap.x_android.model.Scheduler;
 import com.walkap.x_android.model.SchoolSubject;
 import com.walkap.x_android.model.TimeSchoolSubject;
-import com.walkap.x_android.model.University;
 
 public class addScheduleActivity extends AppCompatActivity {
 
@@ -51,6 +44,17 @@ public class addScheduleActivity extends AppCompatActivity {
     private String userUniversityKey;
     private String userFacultyKey;
     private String userDegreeCourseKey;
+
+    private final String UNIVERSITY = "university";
+    private final String FACULTY = "faculty";
+    private final String DEGREE_COURSE = "degreeCourse";
+
+    private final String SCHEDULER = "scheduler";
+    private final String SCHOOOL_SUBJECT = "schoolSubject";
+    private final String SCHOOL_SUBJECT_ID = "schoolSubjectId";
+
+    private final String CLASSROOM = "classroom";
+
 
     private Boolean waitForSecondTap = false;
     private int beginning = 0;
@@ -102,8 +106,8 @@ public class addScheduleActivity extends AppCompatActivity {
 
         if(bundle != null)
         {
-            classroomName =(String) bundle.get("classroom");
-            schoolSubjectName = (String) bundle.get("schoolSubject");
+            classroomName =(String) bundle.get(CLASSROOM);
+            schoolSubjectName = (String) bundle.get(SCHOOOL_SUBJECT);
         }
 
         readDataFileDb();
@@ -128,34 +132,33 @@ public class addScheduleActivity extends AppCompatActivity {
     private void writeNewScheduler(String classroom, String schoolSubjectName, TimeSchoolSubject time) {
 
         Scheduler scheduler = new Scheduler(classroom, schoolSubjectName, time);
-
         SchoolSubject schoolSubject = new SchoolSubject(schoolSubjectName);
-        String schedulerKey = mDatabase.child("scheduler").push().getKey();
 
-        mDatabase.child("scheduler").child(schedulerKey).setValue(scheduler);
+        String schedulerKey = mDatabase.child(SCHEDULER).push().getKey();
+
+        mDatabase.child(SCHEDULER).child(schedulerKey).setValue(scheduler);
 
         if(schoolSubjectKey.isEmpty()) {
-            String newSchoolSubjectKey = mDatabase.child("schoolSubject").push().getKey();
+            String newSchoolSubjectKey = mDatabase.child(SCHOOOL_SUBJECT).push().getKey();
 
-            mDatabase.child("schoolSubject").child(newSchoolSubjectKey).setValue(schoolSubject);
-            mDatabase.child("schoolSubject").child(newSchoolSubjectKey).child("university").child(userUniversityKey).child(userFacultyKey).child(userDegreeCourseKey).setValue(true);
+            mDatabase.child(SCHOOOL_SUBJECT).child(newSchoolSubjectKey).setValue(schoolSubject);
+            mDatabase.child(SCHOOOL_SUBJECT).child(newSchoolSubjectKey).child(UNIVERSITY).child(userUniversityKey).child(userFacultyKey).child(userDegreeCourseKey).setValue(true);
 
-            mDatabase.child("scheduler").child(schedulerKey).child("schoolSubjectId").setValue(newSchoolSubjectKey);
-            mDatabase.child("scheduler").child(schedulerKey).child("schoolSubject").setValue(schoolSubjectName);
+            mDatabase.child(SCHEDULER).child(schedulerKey).child(SCHOOL_SUBJECT_ID).setValue(newSchoolSubjectKey);
+            mDatabase.child(SCHEDULER).child(schedulerKey).child(SCHOOOL_SUBJECT).setValue(schoolSubjectName);
 
             schoolSubjectKey = newSchoolSubjectKey;
 
-        }
-        else{
+        }else{
 
-            mDatabase.child("schoolSubject").child(schoolSubjectKey).child("university").child(userUniversityKey).child(userFacultyKey).child(userDegreeCourseKey).setValue(true);
-            mDatabase.child("scheduler").child(schedulerKey).child("schoolSubjectId").setValue(schoolSubjectKey);
-            mDatabase.child("scheduler").child(schedulerKey).child("schoolSubject").setValue(schoolSubjectName);
+            mDatabase.child(SCHOOOL_SUBJECT).child(schoolSubjectKey).child(UNIVERSITY).child(userUniversityKey).child(userFacultyKey).child(userDegreeCourseKey).setValue(true);
+            mDatabase.child(SCHEDULER).child(schedulerKey).child(SCHOOL_SUBJECT_ID).setValue(schoolSubjectKey);
+            mDatabase.child(SCHEDULER).child(schedulerKey).child(SCHOOOL_SUBJECT).setValue(schoolSubjectName);
         }
 
-        mDatabase.child("scheduler").child(schedulerKey).child("university").setValue(userUniversityKey);
-        mDatabase.child("scheduler").child(schedulerKey).child("faculty").setValue(userFacultyKey);
-        mDatabase.child("scheduler").child(schedulerKey).child("degreeCourse").setValue(userDegreeCourseKey);
+        mDatabase.child(SCHEDULER).child(schedulerKey).child(UNIVERSITY).setValue(userUniversityKey);
+        mDatabase.child(SCHEDULER).child(schedulerKey).child(FACULTY).setValue(userFacultyKey);
+        mDatabase.child(SCHEDULER).child(schedulerKey).child(DEGREE_COURSE).setValue(userDegreeCourseKey);
     }
 
     private int getGridViewSelected() {
@@ -297,9 +300,9 @@ public class addScheduleActivity extends AppCompatActivity {
         mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userUniversityKey = dataSnapshot.child("university").getValue().toString();
-                userFacultyKey = dataSnapshot.child("faculty").getValue().toString();
-                userDegreeCourseKey = dataSnapshot.child("degreeCourse").getValue().toString();
+                userUniversityKey = dataSnapshot.child(UNIVERSITY).getValue().toString();
+                userFacultyKey = dataSnapshot.child(FACULTY).getValue().toString();
+                userDegreeCourseKey = dataSnapshot.child(DEGREE_COURSE).getValue().toString();
 
             }
 
@@ -312,7 +315,7 @@ public class addScheduleActivity extends AppCompatActivity {
 
     private void findSchoolSubject(final String schoolSubjectString){
 
-        mDatabase.child("schoolSubject").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(SCHOOOL_SUBJECT).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {

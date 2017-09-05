@@ -112,9 +112,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGooogle:" + acct.getId());
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
+        Log.d(TAG, "firebaseAuthWithGooogle:" + account.getId());
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mFirebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -132,9 +132,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
                             mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                                 final String userId = getUid();
-                                String email = acct.getEmail();
-                                String name = acct.getGivenName();
-                                String surname = acct.getFamilyName();
+                                String email = account.getEmail();
+                                String name = account.getGivenName();
+                                String surname = account.getFamilyName();
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
