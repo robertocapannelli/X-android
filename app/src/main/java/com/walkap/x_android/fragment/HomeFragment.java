@@ -13,12 +13,8 @@ import android.view.ViewGroup;
 
 import com.walkap.x_android.R;
 import com.walkap.x_android.adapter.SectionsPagerAdapter;
-import com.walkap.x_android.fragment.days.FridayFragment;
-import com.walkap.x_android.fragment.days.MondayFragment;
-import com.walkap.x_android.fragment.days.SaturdayFragment;
-import com.walkap.x_android.fragment.days.ThursdayFragment;
-import com.walkap.x_android.fragment.days.TuesdayFragment;
-import com.walkap.x_android.fragment.days.WednesdayFragment;
+
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +33,9 @@ public class HomeFragment extends BaseFragment{
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+
+    private Calendar calendar = Calendar.getInstance();
+    private int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -59,6 +58,8 @@ public class HomeFragment extends BaseFragment{
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(6);
         tabLayout.setupWithViewPager(mViewPager);
+
+        mViewPager.setCurrentItem(day);
 
         return rootView;
     }
