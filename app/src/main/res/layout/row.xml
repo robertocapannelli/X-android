@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16sp"
+    android:layout_marginBottom="4dp"
     android:layout_marginTop="16sp"
     android:orientation="horizontal">
 
@@ -21,6 +21,7 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:paddingStart="15sp"
+            android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -32,6 +33,7 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:paddingStart="15sp"
+            android:textAlignment="center"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -69,7 +71,9 @@
                 android:id="@id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="7"
                 app:srcCompat="@drawable/ic_place_black_24dp" />
 
             <TextView
@@ -77,9 +81,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:paddingStart="10sp"
-                android:text=""
+                android:textAlignment="textStart"
                 android:textSize="16sp" />
         </LinearLayout>
 
