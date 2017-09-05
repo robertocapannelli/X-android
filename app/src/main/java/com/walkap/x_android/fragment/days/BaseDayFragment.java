@@ -110,9 +110,6 @@ public abstract class BaseDayFragment extends Fragment {
 
     public abstract int getDay();
 
-    private FragmentManager fragmentManager;
-    private Fragment fragment;
-
     public void readDataFileDb(){
 
         mDatabase.child(USER).child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
