@@ -31,12 +31,4 @@ public class LessonViewHolder extends RecyclerView.ViewHolder {
         Log.d(TAG, "Set views: " + classroom + schoolSubject + start + end);
     }
 
-    /*public void bindToPost(Scheduler schedule){
-        classroom.setText(schedule.classroom);
-        Log.d(TAG, "classroom:" + schedule.classroom);
-
-        schoolSubject.setText(schedule.schoolSubject);
-        Log.d(TAG, "schoolSubject: " + schedule.schoolSubject);
-        start.setText("start");
-    }*/
 }
