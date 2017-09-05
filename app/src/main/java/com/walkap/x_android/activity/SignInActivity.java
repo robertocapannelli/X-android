@@ -154,6 +154,10 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                         // Write new user
                                         writeNewUser(userId, email, name, surname, "", "", "");
                                     }
+                                    else{
+                                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                                        finish();
+                                    }
                                 }
 
                                 @Override
@@ -161,10 +165,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                     Log.d(TAG, "Database error");
                                 }
                             });
-
-                            //go to main activity
-                            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                            finish();
                         }
                     }
                 });
@@ -294,6 +294,13 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private void writeNewUser(String userId, String email, String name, String surname, String university, String faculty, String degreeCourse) {
         User user = new User(email, name, surname, university, faculty, degreeCourse);
         mDatabase.child("users").child(userId).setValue(user);
+
+        Log.d("*** writeNewUser ***", "  " + userId + "  " + email);
+
+        //go to main activity
+        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+        finish();
+
     }
     // [END basic_write]
 

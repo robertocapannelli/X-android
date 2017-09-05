@@ -2,6 +2,7 @@ package com.walkap.x_android.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ToggleButton;
+
 import com.walkap.x_android.activity.addScheduleActivity;
 
 import com.walkap.x_android.R;
@@ -31,6 +34,13 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
 
     private EditText classroomEditText;
     private EditText schoolSubjectEditText;
+
+    private ToggleButton toggleButton1;
+    private ToggleButton toggleButton2;
+    private ToggleButton toggleButton3;
+    private ToggleButton toggleButton4;
+    private ToggleButton toggleButton5;
+    private ToggleButton toggleButton6;
 
     public ChoiceSchoolSubjectFragment() {
         // Required empty public constructor
@@ -54,6 +64,26 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
         Button btn = (Button) rootView.findViewById(R.id.saveButton);
         btn.setOnClickListener(this);
 
+        toggleButton1 = (ToggleButton) rootView.findViewById(R.id.toggleButton1);
+        toggleButton2 = (ToggleButton) rootView.findViewById(R.id.toggleButton2);
+        toggleButton3 = (ToggleButton) rootView.findViewById(R.id.toggleButton3);
+        toggleButton4 = (ToggleButton) rootView.findViewById(R.id.toggleButton4);
+        toggleButton5 = (ToggleButton) rootView.findViewById(R.id.toggleButton5);
+        toggleButton6 = (ToggleButton) rootView.findViewById(R.id.toggleButton6);
+
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+
+        switch (day){
+            case 0: toggleButton1.setChecked(true); break;
+            case 1: toggleButton2.setChecked(true); break;
+            case 2: toggleButton3.setChecked(true); break;
+            case 3: toggleButton4.setChecked(true); break;
+            case 4: toggleButton5.setChecked(true); break;
+            case 5: toggleButton6.setChecked(true); break;
+            default:                                break;
+        }
+
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -66,6 +96,18 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
             addScheduler();
         }
 
+    }
+
+    @Override
+    public  void onStart(){
+        super.onStart();
+
+        toggleButton1.setOnClickListener(toggleButtonListener);
+        toggleButton2.setOnClickListener(toggleButtonListener);
+        toggleButton3.setOnClickListener(toggleButtonListener);
+        toggleButton4.setOnClickListener(toggleButtonListener);
+        toggleButton5.setOnClickListener(toggleButtonListener);
+        toggleButton6.setOnClickListener(toggleButtonListener);
     }
 
 
@@ -116,6 +158,7 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
         Intent myIntent = new Intent(getActivity(), addScheduleActivity.class);
         myIntent.putExtra("classroom", classroomString); //Optional parameters
         myIntent.putExtra("schoolSubject", schoolSubjectString);
+        myIntent.putExtra("day", actualDaySelected());
         getActivity().startActivity(myIntent);
     }
 
@@ -136,6 +179,73 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
         }
 
         return result;
+    }
+
+    final View.OnClickListener toggleButtonListener = new View.OnClickListener() {
+        public void onClick(final View v) {
+            switch(v.getId()) {
+                case R.id.toggleButton1:
+                    setAllLessOne(0);
+                    break;
+                case R.id.toggleButton2:
+                    setAllLessOne(1);
+                    break;
+                case R.id.toggleButton3:
+                    setAllLessOne(2);
+                    break;
+                case R.id.toggleButton4:
+                    setAllLessOne(3);
+                    break;
+                case R.id.toggleButton5:
+                    setAllLessOne(4);
+                    break;
+                case R.id.toggleButton6:
+                    setAllLessOne(5);
+                    break;
+            }
+        }
+    };
+
+    public void setAllLessOne(int one) {
+        toggleButton1.setChecked(false);
+        toggleButton2.setChecked(false);
+        toggleButton3.setChecked(false);
+        toggleButton4.setChecked(false);
+        toggleButton5.setChecked(false);
+        toggleButton6.setChecked(false);
+
+        switch (one){
+            case 0: toggleButton1.setChecked(true); break;
+            case 1: toggleButton2.setChecked(true); break;
+            case 2: toggleButton3.setChecked(true); break;
+            case 3: toggleButton4.setChecked(true); break;
+            case 4: toggleButton5.setChecked(true); break;
+            case 5: toggleButton6.setChecked(true); break;
+            default:                                break;
+        }
+    }
+
+    public int actualDaySelected(){
+        if(toggleButton1.isChecked()){
+            return 0;
+        }
+        if(toggleButton2.isChecked()){
+            return 1;
+        }
+        if(toggleButton3.isChecked()){
+            return 2;
+        }
+        if(toggleButton4.isChecked()){
+            return 3;
+        }
+        if(toggleButton5.isChecked()){
+            return 4;
+        }
+        if(toggleButton6.isChecked()){
+            return 5;
+        }
+
+        return -1;
     }
 
 }

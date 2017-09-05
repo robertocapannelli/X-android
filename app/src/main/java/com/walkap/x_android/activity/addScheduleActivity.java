@@ -33,13 +33,13 @@ public class addScheduleActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
 
-    static private int numColumn = 6;
     static private int numRow = 20;
 
     static private int startHour = 8;
 
     private String classroomName;
     private String schoolSubjectName;
+    private int day;
 
     private String userUniversityKey;
     private String userFacultyKey;
@@ -61,14 +61,8 @@ public class addScheduleActivity extends AppCompatActivity {
 
     private String schoolSubjectKey = "";
 
-    private int[] positionGridView = new int[] {1, 0, 0, 0, 0, 0};
+    private int[] positionListView = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    private int[][] positionListView = new int[][] {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-
-    private GridView gridView;
     private ListView listView;
 
     @Override
@@ -79,16 +73,6 @@ public class addScheduleActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
-        gridView = (GridView) this.findViewById(R.id.schedulerGridView);
-        String[] schedulerGrid = new String[]{
-                "L",   "M",  "M",    "G",  "V",  "S"
-        };
-
-        ListAdapter adapterGrid = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, schedulerGrid);
-        gridView.setAdapter(adapterGrid);
-        gridView.setOnItemClickListener(GridClickListener);
 
         listView = (ListView) this.findViewById(R.id.schedulerListView);
         String[] schedulerList = new String[]{
@@ -108,25 +92,14 @@ public class addScheduleActivity extends AppCompatActivity {
         {
             classroomName =(String) bundle.get(CLASSROOM);
             schoolSubjectName = (String) bundle.get(SCHOOOL_SUBJECT);
+            day = (Integer) bundle.get("day");
+
         }
 
         readDataFileDb();
 
         findSchoolSubject(schoolSubjectName);
 
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        for(int i = 0; i < gridView.getNumColumns(); i++) {
-            if(positionGridView[i] == 0) {
-                gridView.getChildAt(i).setBackgroundColor(Color.WHITE);
-            }
-            else {
-                gridView.getChildAt(i).setBackgroundColor(Color.CYAN);
-            }
-        };
     }
 
     private void writeNewScheduler(String classroom, String schoolSubjectName, TimeSchoolSubject time) {
@@ -161,75 +134,21 @@ public class addScheduleActivity extends AppCompatActivity {
         mDatabase.child(SCHEDULER).child(schedulerKey).child(DEGREE_COURSE).setValue(userDegreeCourseKey);
     }
 
-    private int getGridViewSelected() {
-        int selected = 0;
-
-        for(int i = 0; i < gridView.getNumColumns(); i++) {
-            if(positionGridView[i] == 1)
-                selected = i;
-        }
-
-        return selected;
-    }
-
-    public int[] setAllLessOne(int one) {
-        int[] positionGridView = new int[]{0, 0, 0, 0, 0, 0};
-        positionGridView[one] = 1;
-        return  positionGridView;
-    }
-
-    private void colorGridView() {
-        for(int i = 0; i < gridView.getNumColumns(); i++) {
-            if(positionGridView[i] == 0) {
-                gridView.getChildAt(i).setBackgroundColor(Color.WHITE);
-            }
-            else {
-                gridView.getChildAt(i).setBackgroundColor(Color.CYAN);
-            }
-        }
-    }
-
-    public void repaintListView(int day) {
-        for(int i = 0; i < numRow; i++) {
-            if(positionListView[day][i] == 0) {
-                getViewByPosition(i, listView).setBackgroundColor(Color.WHITE);
-            }
-            else {
-                getViewByPosition(i, listView).setBackgroundColor(Color.MAGENTA);
-            }
-        }
-    }
-
-    public View getViewByPosition(int pos, ListView listView) {
-        final int firstListItemPosition = listView.getFirstVisiblePosition();
-        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
-
-        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
-            return listView.getAdapter().getView(pos, null, listView);
-        } else {
-            final int childIndex = pos - firstListItemPosition;
-            return listView.getChildAt(childIndex);
-        }
-    }
-
     public void saveScheduler(View view) {
-        int i,j,count;
+        int i,count;
 
         count = 0;
 
-        for(i = 0; i < numColumn; i++){
-            for(j = 0; j < numRow; j++) {
-                if (positionListView[i][j] == 1){
-                    count ++;
-                }
-
-                if(positionListView[i][j] == 0 && count !=0){
-                    TimeSchoolSubject time = new TimeSchoolSubject(i, startHour + (j - count) / 4 , ((j - count) % 4) * 15, (count - 1) * 15);
-                    writeNewScheduler(classroomName, schoolSubjectName, time);
-                    count = 0;
-                }
+        for(i = 0; i < numRow; i++){
+            if (positionListView[i] == 1){
+                count ++;
             }
 
+            if(positionListView[i] == 0 && count !=0){
+                TimeSchoolSubject time = new TimeSchoolSubject(day, startHour + (i - count) / 4 , ((i - count) % 4) * 15, (count - 1) * 15);
+                writeNewScheduler(classroomName, schoolSubjectName, time);
+                count = 0;
+            }
         }
 
         Intent myIntent = new Intent(addScheduleActivity.this, MainActivity.class);
@@ -237,48 +156,28 @@ public class addScheduleActivity extends AppCompatActivity {
 
     }
 
-    AdapterView.OnItemClickListener GridClickListener = new AdapterView.OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> adapter, View view,
-                                int position, long id) {
-
-            if(positionGridView[position] == 0) {
-                positionGridView = setAllLessOne(position);
-                repaintListView(position);
-            }
-
-            waitForSecondTap = false;
-            colorGridView();
-
-        }
-
-    };
-
     AdapterView.OnItemClickListener ListClickListener = new AdapterView.OnItemClickListener() {
 
         @Override
         public void onItemClick(AdapterView<?> adapter, View view,
                                 int position, long id) {
 
-            int selected = getGridViewSelected();
-
             if(!waitForSecondTap) {
-                if (positionListView[selected][position] == 0) {
-                    positionListView[selected][position] = 1;
+                if (positionListView[position] == 0) {
+                    positionListView[position] = 1;
                     view.setBackgroundColor(Color.MAGENTA);
                     waitForSecondTap = true;
                     beginning = position;
                 } else {
-                    positionListView[selected][position] = 0;
+                    positionListView[position] = 0;
                     view.setBackgroundColor(Color.WHITE);
                 }
             }
             else {
-                if (positionListView[selected][position] == 0) {
-                    setPosition(beginning, position, selected);
+                if (positionListView[position] == 0) {
+                    setPosition(beginning, position);
                 } else {
-                    positionListView[selected][position] = 0;
+                    positionListView[position] = 0;
                     view.setBackgroundColor(Color.WHITE);
                 }
                 waitForSecondTap = false;
@@ -288,9 +187,9 @@ public class addScheduleActivity extends AppCompatActivity {
 
     };
 
-    private void setPosition(int beginning, int end, int day){
+    private void setPosition(int beginning, int end){
         for(int i = beginning; i <= end; i++){
-            positionListView[day][i] = 1;
+            positionListView[i] = 1;
             listView.getChildAt(i).setBackgroundColor(Color.MAGENTA);
         }
     }
