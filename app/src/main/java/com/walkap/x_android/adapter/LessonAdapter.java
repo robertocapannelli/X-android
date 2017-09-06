@@ -39,7 +39,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         holder.schoolSubject.setText(lessons.getSchoolSubject());
         holder.start.setText(lessons.getTime().getHour() + " : " + lessons.getTime().getMinute());
         holder.end.setText((lessons.getTime().getHour() + (lessons.getTime().getMinute() + lessons.getTime().getDuration()) / 60) % 24  + " : " +
-                (lessons.getTime().getMinute() + lessons.getTime().getDuration() % 60));
+                ((lessons.getTime().getMinute() + lessons.getTime().getDuration()) % 60));
     }
 
     @Override
