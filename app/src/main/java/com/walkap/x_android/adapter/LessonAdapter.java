@@ -47,5 +47,4 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         Log.d(TAG, "allLessons.size(): " + allLessons.size());
         return allLessons.size();
     }
-
 }
