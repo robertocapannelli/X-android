@@ -63,15 +63,7 @@ public class addScheduleActivity extends AppCompatActivity {
 
     private final String CLASSROOM = "classroom";
 
-
-    private Boolean waitForSecondTap = false;
-    private int beginning = 0;
-
     private String schoolSubjectKey = "";
-
-    private int[] positionListView = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
