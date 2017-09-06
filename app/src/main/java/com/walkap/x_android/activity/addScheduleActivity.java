@@ -141,10 +141,10 @@ public class addScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(editTextView.getId() == editTextStart.getId()){
-                    editTextStart.setText(timePicker.getHour() + " : " + timePicker.getMinute());
+                    editTextStart.setText(String.format("%02d:%02d",timePicker.getHour(), timePicker.getMinute()));
                 }
                 else{
-                    editTextEnd.setText(timePicker.getHour() + " : " + timePicker.getMinute());
+                    editTextEnd.setText(String.format("%02d:%02d",timePicker.getHour(), timePicker.getMinute()));
                 }
                 d.cancel();
             }
