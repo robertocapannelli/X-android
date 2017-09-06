@@ -2,19 +2,14 @@ package com.walkap.x_android.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextClock;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +24,11 @@ import com.walkap.x_android.model.Scheduler;
 import com.walkap.x_android.model.SchoolSubject;
 import com.walkap.x_android.model.TimeSchoolSubject;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 public class addScheduleActivity extends AppCompatActivity {
 
     private final String TAG = "addSchedulerActivity";
@@ -37,10 +37,6 @@ public class addScheduleActivity extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
 
     private DatabaseReference mDatabase;
-
-    static private int numRow = 20;
-
-    static private int startHour = 8;
 
     EditText editTextStart;
     EditText editTextEnd;
@@ -64,6 +60,8 @@ public class addScheduleActivity extends AppCompatActivity {
     private final String CLASSROOM = "classroom";
 
     private String schoolSubjectKey = "";
+
+    private final static int TIME_PICKER_INTERVAL = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +119,26 @@ public class addScheduleActivity extends AppCompatActivity {
         final TimePicker timePicker = (TimePicker) d.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        setTimePickerInterval(timePicker);
+
+        // Configure displayed time
+        if (((minute % TIME_PICKER_INTERVAL) != 0)) {
+            int minuteFloor = (minute + TIME_PICKER_INTERVAL) - (minute % TIME_PICKER_INTERVAL);
+            minute = minuteFloor + (minute == (minuteFloor + 1) ? TIME_PICKER_INTERVAL : 0);
+            if (minute >= 60) {
+                minute = minute % 60;
+                hour++;
+            }
+
+            timePicker.setCurrentHour(hour);
+            timePicker.setCurrentMinute(minute / TIME_PICKER_INTERVAL);
+        }
+
         if(editTextView.getId() == editTextStart.getId()){
             if(!editTextStart.getText().toString().isEmpty()){
                 String text = editTextStart.getText().toString();
@@ -151,6 +169,29 @@ public class addScheduleActivity extends AppCompatActivity {
         });
         d.show();
     }
+
+    /**
+     * Set TimePicker interval by adding a custom minutes list
+     *
+     * @param timePicker
+     */
+    private void setTimePickerInterval(TimePicker timePicker) {
+        try {
+
+            NumberPicker minutePicker = (NumberPicker) timePicker.findViewById(Resources.getSystem().getIdentifier(
+                    "minute", "id", "android"));
+            minutePicker.setMinValue(0);
+            minutePicker.setMaxValue((60 / TIME_PICKER_INTERVAL) - 1);
+            List<String> displayedValues = new ArrayList<String>();
+            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+                displayedValues.add(String.format("%02d", i));
+            }
+            minutePicker.setDisplayedValues(displayedValues.toArray(new String[0]));
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: " + e);
+        }
+    }
+
 
     private void writeNewScheduler(String classroom, String schoolSubjectName, TimeSchoolSubject time) {
 
