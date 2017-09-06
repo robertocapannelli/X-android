@@ -1,5 +1,6 @@
 package com.walkap.x_android.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,9 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextClock;
+import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +41,9 @@ public class addScheduleActivity extends AppCompatActivity {
     static private int numRow = 20;
 
     static private int startHour = 8;
+
+    EditText editTextStart;
+    EditText editTextEnd;
 
     private String classroomName;
     private String schoolSubjectName;
@@ -74,16 +82,26 @@ public class addScheduleActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        listView = (ListView) this.findViewById(R.id.schedulerListView);
-        String[] schedulerList = new String[]{
-                "8:00",  "8:15",  "8:30",  "8:45",  "9:00",  "9:15",  "9:30",  "9:45",
-                "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45",
-                "12:00", "12:15", "12:30", "12:45"};
+        editTextStart = (EditText) findViewById(R.id.editTextStart);
+        editTextEnd = (EditText) findViewById(R.id.editTextEnd);
 
-        ListAdapter adapterList = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, schedulerList);
-        listView.setAdapter(adapterList);
-        listView.setOnItemClickListener(ListClickListener);
+        editTextStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    showPicker(view);
+                }
+            }
+        });
+
+        editTextEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    showPicker(view);
+                }
+            }
+        });
 
         Intent intent= getIntent();
         Bundle bundle = intent.getExtras();
@@ -100,6 +118,47 @@ public class addScheduleActivity extends AppCompatActivity {
 
         findSchoolSubject(schoolSubjectName);
 
+    }
+
+    public void showPicker(final View editTextView)
+    {
+
+        final Dialog d = new Dialog(addScheduleActivity.this);
+        d.setTitle("timePicker");
+        d.setContentView(R.layout.time_select);
+        Button b1 = (Button) d.findViewById(R.id.saveTimeButton);
+        final TimePicker timePicker = (TimePicker) d.findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
+
+        if(editTextView.getId() == editTextStart.getId()){
+            if(!editTextStart.getText().toString().isEmpty()){
+                String text = editTextStart.getText().toString();
+                timePicker.setHour(Integer.parseInt(text.substring(0, text.indexOf(":") - 1)));
+                timePicker.setMinute(Integer.parseInt(text.substring(text.indexOf(":") + 2)));
+            }
+        }
+        else{
+            if(!editTextEnd.getText().toString().isEmpty()) {
+                String text = editTextEnd.getText().toString();
+                timePicker.setHour(Integer.parseInt(text.substring(0, text.indexOf(":") - 1)));
+                timePicker.setMinute(Integer.parseInt(text.substring(text.indexOf(":") + 2)));
+            }
+        }
+
+        b1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                if(editTextView.getId() == editTextStart.getId()){
+                    editTextStart.setText(timePicker.getHour() + " : " + timePicker.getMinute());
+                }
+                else{
+                    editTextEnd.setText(timePicker.getHour() + " : " + timePicker.getMinute());
+                }
+                d.cancel();
+            }
+        });
+        d.show();
     }
 
     private void writeNewScheduler(String classroom, String schoolSubjectName, TimeSchoolSubject time) {
@@ -135,63 +194,24 @@ public class addScheduleActivity extends AppCompatActivity {
     }
 
     public void saveScheduler(View view) {
-        int i,count;
 
-        count = 0;
+        String textStart = editTextStart.getText().toString();
+        String textEnd = editTextEnd.getText().toString();
 
-        for(i = 0; i < numRow; i++){
-            if (positionListView[i] == 1){
-                count ++;
-            }
+        Integer hourStart = Integer.parseInt(textStart.substring(0, textStart.indexOf(":") - 1));
+        Integer minuteStart = Integer.parseInt(textStart.substring(textStart.indexOf(":") + 2));
 
-            if(positionListView[i] == 0 && count !=0){
-                TimeSchoolSubject time = new TimeSchoolSubject(day, startHour + (i - count) / 4 , ((i - count) % 4) * 15, (count - 1) * 15);
-                writeNewScheduler(classroomName, schoolSubjectName, time);
-                count = 0;
-            }
-        }
+        Integer hourEnd = Integer.parseInt(textEnd.substring(0, textEnd.indexOf(":") - 1));
+        Integer minuteEnd = Integer.parseInt(textEnd.substring(textEnd.indexOf(":") + 2));
+
+        int duration = (hourEnd - hourStart) * 60 - (minuteStart - minuteEnd);
+
+        TimeSchoolSubject time = new TimeSchoolSubject(day, hourStart, minuteStart, duration);
+        writeNewScheduler(classroomName, schoolSubjectName, time);
 
         Intent myIntent = new Intent(addScheduleActivity.this, MainActivity.class);
         addScheduleActivity.this.startActivity(myIntent);
 
-    }
-
-    AdapterView.OnItemClickListener ListClickListener = new AdapterView.OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> adapter, View view,
-                                int position, long id) {
-
-            if(!waitForSecondTap) {
-                if (positionListView[position] == 0) {
-                    positionListView[position] = 1;
-                    view.setBackgroundColor(Color.MAGENTA);
-                    waitForSecondTap = true;
-                    beginning = position;
-                } else {
-                    positionListView[position] = 0;
-                    view.setBackgroundColor(Color.WHITE);
-                }
-            }
-            else {
-                if (positionListView[position] == 0) {
-                    setPosition(beginning, position);
-                } else {
-                    positionListView[position] = 0;
-                    view.setBackgroundColor(Color.WHITE);
-                }
-                waitForSecondTap = false;
-            }
-            Log.d("*** second tap ***", "" + waitForSecondTap );
-        }
-
-    };
-
-    private void setPosition(int beginning, int end){
-        for(int i = beginning; i <= end; i++){
-            positionListView[i] = 1;
-            listView.getChildAt(i).setBackgroundColor(Color.MAGENTA);
-        }
     }
 
     private void readDataFileDb(){

@@ -11,9 +11,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
+
+        <TextView
+            android:id="@+id/textViewStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ora inizio" />
+
+        <EditText
+            android:id="@+id/editTextStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/textViewEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ora fine" />
+
+        <EditText
+            android:id="@+id/editTextEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="" />
 
         <ListView
             android:id="@+id/schedulerListView"

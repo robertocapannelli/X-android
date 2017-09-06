@@ -34,9 +34,6 @@ public class HomeFragment extends BaseFragment{
 
     private ViewPager mViewPager;
 
-    private Calendar calendar = Calendar.getInstance();
-    private int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -51,6 +48,9 @@ public class HomeFragment extends BaseFragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
 
         TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
         mViewPager = (ViewPager) rootView.findViewById(R.id.view_pager);
