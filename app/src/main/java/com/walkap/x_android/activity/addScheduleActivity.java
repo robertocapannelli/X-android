@@ -117,7 +117,6 @@ public class addScheduleActivity extends AppCompatActivity {
         readDataFileDb();
 
         findSchoolSubject(schoolSubjectName);
-
     }
 
     public void showPicker(final View editTextView)
