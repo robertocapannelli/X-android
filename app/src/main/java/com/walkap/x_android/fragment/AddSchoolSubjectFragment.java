@@ -56,6 +56,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -88,8 +89,6 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
                             public void onClick(DialogInterface dialog, int which) {
                                 deleteSchoolSubject(parent.getItemAtPosition(position).toString());
 
-                                setAdapterList();
-
                             }
                         })
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -109,6 +108,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     @Override
     public void onClick(View view) {
         getSchoolSubjectKey(schoolSubjectAuto.getText().toString());
+        schoolSubjectAuto.setText("");
     }
 
 
@@ -189,6 +189,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
 
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     list.add(noteDataSnapshot.getValue().toString());
+                    Log.d("*** setAdapter ***", "aggoirno l' adapter");
                 }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
@@ -268,9 +269,10 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     if (noteDataSnapshot.child("name").getValue().toString().equals(name)){
-                        Log.d("*** delete ***", "  " + noteDataSnapshot.child("name").getValue().toString());
                         String Key = noteDataSnapshot.getKey();
+                        setAdapterList();
                         mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(PREFERENCES).child(Key).removeValue();
+                        setAdapterList();
                         break;
                     }
                 }
