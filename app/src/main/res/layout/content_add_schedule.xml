@@ -45,14 +45,6 @@
             android:inputType="textPersonName"
             android:text="" />
 
-        <ListView
-            android:id="@+id/schedulerListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp" />
-
         <Button
             android:id="@+id/saveButton"
             style="@style/FirebaseUI.Button"
