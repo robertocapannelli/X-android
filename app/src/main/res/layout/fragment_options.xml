@@ -5,86 +5,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.walkap.x_android.fragment.OptionsFragment">
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
-
-
-        <TextView
-            android:id="@+id/universityTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:text="@string/enter_university"
-            android:textSize="12sp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/universityAutoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:text=""
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/facultyTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:text="@string/enter_faculty"
-            android:textSize="12sp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/facultyAutoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/degreeCourseTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:text="@string/enter_the_degree_course"
-            android:textSize="12sp" />
-
-        <AutoCompleteTextView
-            android:id="@+id/degreeCourseAutoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="16sp" />
-
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
 
-            <Button
-                android:id="@+id/saveButton"
-                style="@style/FirebaseUI.Button"
-                android:layout_weight="1"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/confirm"
+
+            <TextView
+                android:id="@+id/universityTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="@string/enter_university"
+                android:textSize="12sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/universityAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text=""
                 android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/facultyTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="@string/enter_faculty"
+                android:textSize="12sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/facultyAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/degreeCourseTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="@string/enter_the_degree_course"
+                android:textSize="12sp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/degreeCourseAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/saveButton"
+                    style="@style/FirebaseUI.Button"
+                    android:layout_weight="1"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/confirm"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
 
 </FrameLayout>

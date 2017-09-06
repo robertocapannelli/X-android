@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +78,8 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
 
         final View rootView = inflater.inflate(R.layout.fragment_options, container, false);
 
+        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout)  rootView.findViewById(R.id.coordinatorLayout);
+
         university = (AutoCompleteTextView) rootView.findViewById(R.id.universityAutoCompleteTextView);
         faculty = (AutoCompleteTextView) rootView.findViewById(R.id.facultyAutoCompleteTextView);
         degreeCourse = (AutoCompleteTextView) rootView.findViewById(R.id.degreeCourseAutoCompleteTextView);
@@ -87,14 +92,20 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
 
         if(!universityName.isEmpty()){
             university.setText(universityName);
+        }else{
+            showSnackbar(coordinatorLayout);
         }
 
         if(!facultyName.isEmpty()){
             faculty.setText(facultyName);
+        }else{
+            showSnackbar(coordinatorLayout);
         }
 
         if(!degreeCourseName.isEmpty()){
             degreeCourse.setText(degreeCourseName);
+        }else{
+            showSnackbar(coordinatorLayout);
         }
 
         //Button listener
@@ -103,6 +114,21 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
 
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    public void showSnackbar(CoordinatorLayout coordinatorLayout){
+        final Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "Per utilizzare l'applicazione compila i campi qui sopra!", Snackbar.LENGTH_INDEFINITE)
+                .setAction("HO CAPITO!", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+
+                });
+
+        snackbar.show();
+
     }
 
 
