@@ -37,9 +37,36 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         Log.d(TAG, "Lessons: " + lessons);
         holder.classroom.setText(lessons.getClassroom().toUpperCase());
         holder.schoolSubject.setText(lessons.getSchoolSubject());
-        holder.start.setText(lessons.getTime().getHour() + " : " + lessons.getTime().getMinute());
-        holder.end.setText((lessons.getTime().getHour() + (lessons.getTime().getMinute() + lessons.getTime().getDuration()) / 60) % 24  + " : " +
-                ((lessons.getTime().getMinute() + lessons.getTime().getDuration()) % 60));
+
+        int hour = lessons.getTime().getHour();
+        int minute = lessons.getTime().getMinute();
+        int duration = lessons.getTime().getDuration();
+        int endHour = (hour + (minute + duration) / 60) % 24;
+        int endMinute = (minute + duration) % 60;
+
+        String sStartHour = "" + hour;
+        String sStartMinute = "" + minute;
+        String sEndHour = "" + endHour;
+        String sEndMinute = "" + endMinute;
+
+        if(hour < 10){
+            sStartHour = "0" + hour;
+        }
+
+        if(minute < 10){
+            sStartMinute = "0" + minute;
+        }
+
+        if(endHour < 10){
+            sEndHour = "0" + endHour;
+        }
+
+        if(endMinute < 10){
+            sEndMinute = "0" + endMinute;
+        }
+
+        holder.start.setText(sStartHour + " : " + sStartMinute);
+        holder.end.setText(sEndHour  + " : " + sEndMinute);
     }
 
     @Override

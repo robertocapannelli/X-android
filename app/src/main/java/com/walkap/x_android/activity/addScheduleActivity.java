@@ -119,29 +119,10 @@ public class addScheduleActivity extends AppCompatActivity {
         final TimePicker timePicker = (TimePicker) d.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        setTimePickerInterval(timePicker);
-
-        // Configure displayed time
-        if (((minute % TIME_PICKER_INTERVAL) != 0)) {
-            int minuteFloor = (minute + TIME_PICKER_INTERVAL) - (minute % TIME_PICKER_INTERVAL);
-            minute = minuteFloor + (minute == (minuteFloor + 1) ? TIME_PICKER_INTERVAL : 0);
-            if (minute >= 60) {
-                minute = minute % 60;
-                hour++;
-            }
-
-            timePicker.setCurrentHour(hour);
-            timePicker.setCurrentMinute(minute / TIME_PICKER_INTERVAL);
-        }
-
         if(editTextView.getId() == editTextStart.getId()){
             if(!editTextStart.getText().toString().isEmpty()){
                 String text = editTextStart.getText().toString();
+                Log.d(TAG, text);
                 timePicker.setHour(Integer.parseInt(text.substring(0, text.indexOf(":") - 1)));
                 timePicker.setMinute(Integer.parseInt(text.substring(text.indexOf(":") + 2)));
             }
@@ -158,40 +139,29 @@ public class addScheduleActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+
+                String sHour = "" + timePicker.getHour();
+                String sMinute = "" + timePicker.getMinute();
+
+                if(timePicker.getHour() < 10){
+                    sHour = "0" + sHour;
+                }
+
+                if(timePicker.getMinute() < 10 ){
+                    sMinute = "0" + sMinute;
+                }
+
                 if(editTextView.getId() == editTextStart.getId()){
-                    editTextStart.setText(String.format("%02d:%02d",timePicker.getHour(), timePicker.getMinute()));
+                    editTextStart.setText(sHour + " : " + sMinute);
                 }
                 else{
-                    editTextEnd.setText(String.format("%02d:%02d",timePicker.getHour(), timePicker.getMinute()));
+                    editTextEnd.setText(timePicker.getHour() + " : " + timePicker.getMinute());
                 }
                 d.cancel();
             }
         });
         d.show();
     }
-
-    /**
-     * Set TimePicker interval by adding a custom minutes list
-     *
-     * @param timePicker
-     */
-    private void setTimePickerInterval(TimePicker timePicker) {
-        try {
-
-            NumberPicker minutePicker = (NumberPicker) timePicker.findViewById(Resources.getSystem().getIdentifier(
-                    "minute", "id", "android"));
-            minutePicker.setMinValue(0);
-            minutePicker.setMaxValue((60 / TIME_PICKER_INTERVAL) - 1);
-            List<String> displayedValues = new ArrayList<String>();
-            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
-                displayedValues.add(String.format("%02d", i));
-            }
-            minutePicker.setDisplayedValues(displayedValues.toArray(new String[0]));
-        } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e);
-        }
-    }
-
 
     private void writeNewScheduler(String classroom, String schoolSubjectName, TimeSchoolSubject time) {
 
