@@ -37,6 +37,9 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
 
     private static final String TAG = "AddSchoolSubjectFrag";
 
+    private static final String USERS = "users";
+    private static final String PREFERENCES = "preferences";
+
     private String schoolSubjectKey = "";
 
     private boolean find;
@@ -46,11 +49,6 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     private AutoCompleteTextView schoolSubjectAuto;
     private ListView schoolSubjects;
 
-    /*private List<String> list;
-
-    private String MY_PREFS_NAME = "preferences";
-    private Set<String> schoolSubjectList;*/
-
     public AddSchoolSubjectFragment() {
         // Required empty public constructor
     }
@@ -58,10 +56,6 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /*SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        schoolSubjectList = prefs.getStringSet(SCHOOLSUBJECT, null);*/
-
     }
 
     @Override
@@ -188,7 +182,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     }
 
     private void setAdapterList(){
-        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(PREFERENCES).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> list = new ArrayList<String>();
@@ -238,7 +232,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     }
 
     private void findInPreferences(final String key, final String name){
-        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(PREFERENCES).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 find = false;
@@ -263,7 +257,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     }
 
     private void addInPreferences(String key, String name){
-        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").child(key).setValue(name);
+        mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(PREFERENCES).child(key).setValue(name);
         setAdapterList();
 
     }
@@ -276,7 +270,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
                     if (noteDataSnapshot.child("name").getValue().toString().equals(name)){
                         Log.d("*** delete ***", "  " + noteDataSnapshot.child("name").getValue().toString());
                         String Key = noteDataSnapshot.getKey();
-                        mDatabase.child("users").child(mFirebaseUser.getUid()).child("preferences").child(Key).removeValue();
+                        mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(PREFERENCES).child(Key).removeValue();
                         break;
                     }
                 }
