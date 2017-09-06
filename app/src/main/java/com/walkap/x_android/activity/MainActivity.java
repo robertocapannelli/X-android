@@ -28,7 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
-import com.walkap.x_android.fragment.AddSchoolSubjectFragment;
+import com.walkap.x_android.fragment.AddCourseFragment;
 import com.walkap.x_android.fragment.ChoiceSchoolSubjectFragment;
 import com.walkap.x_android.fragment.HomeFragment;
 import com.walkap.x_android.fragment.OptionsFragment;
@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity implements
         ChoiceSchoolSubjectFragment.OnFragmentInteractionListener,
         OptionsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
-        AddSchoolSubjectFragment.OnFragmentInteractionListener{
+        AddCourseFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "MainActivity";
 
@@ -265,7 +265,7 @@ public class MainActivity extends BaseActivity implements
                 break;
             case R.id.add_school_subject:
                 navItemIndex = 2;
-                fragmentClass = AddSchoolSubjectFragment.class;
+                fragmentClass = AddCourseFragment.class;
                 break;
             case R.id.options:
                 navItemIndex = 3;
