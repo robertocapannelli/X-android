@@ -39,6 +39,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
 
     private static final String USERS = "users";
     private static final String PREFERENCES = "preferences";
+    private static final String NAME = "name";
 
     private String schoolSubjectKey = "";
 
@@ -210,8 +211,8 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    if (noteDataSnapshot.child("name").getValue().toString().equals(name)){
-                        Log.d("*** setKey ***", "  " + noteDataSnapshot.child("name").getValue().toString());
+                    if (noteDataSnapshot.child(NAME).getValue().toString().equals(name)){
+                        Log.d("*** setKey ***", "  " + noteDataSnapshot.child(NAME).getValue().toString());
                         schoolSubjectKey = noteDataSnapshot.getKey();
                         if(schoolSubjectKey.isEmpty()){
                             /*** materia non trovata gestiscila ***/
@@ -268,9 +269,8 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    if (noteDataSnapshot.child("name").getValue().toString().equals(name)){
+                    if (noteDataSnapshot.child(NAME).getValue().toString().equals(name)){
                         String Key = noteDataSnapshot.getKey();
-                        setAdapterList();
                         mDatabase.child(USERS).child(mFirebaseUser.getUid()).child(PREFERENCES).child(Key).removeValue();
                         setAdapterList();
                         break;
