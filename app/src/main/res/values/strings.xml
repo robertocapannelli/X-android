@@ -61,7 +61,7 @@
 
     <string name="monday">M</string>
     <string name="tuesday">T</string>
-    <string name="Wednesday">W</string>
+    <string name="wednesday">W</string>
     <string name="thursday">T</string>
     <string name="friday">F</string>
     <string name="saturday">S</string>
@@ -106,5 +106,11 @@
     <string name="school_subject_empty">School subject is empty</string>
     <string name="add_school_subject_button">Add course</string>
     <string name="add_course_label">Type the course</string>
+    <string name="select_the_day">Select the day</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="hint">hint</string>
+    <string name="hour">HOUR</string>
+    <string name="minutes">MINUTES</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -60,6 +61,8 @@ public class addScheduleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_schedule);
+        setTitle("ACTIVITY");
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -67,6 +70,8 @@ public class addScheduleActivity extends AppCompatActivity {
 
         editTextStart = (EditText) findViewById(R.id.editTextStart);
         editTextEnd = (EditText) findViewById(R.id.editTextEnd);
+        editTextStart.setKeyListener(null);
+        editTextEnd.setKeyListener(null);
 
         editTextStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -76,6 +81,25 @@ public class addScheduleActivity extends AppCompatActivity {
                 }
             }
         });
+
+        editTextStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view == editTextStart) {
+                    showPicker(view);
+                }
+            }
+        });
+
+        editTextEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view == editTextEnd) {
+                    showPicker(view);
+                }
+            }
+        });
+
 
         editTextEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -148,7 +172,7 @@ public class addScheduleActivity extends AppCompatActivity {
                     editTextStart.setText(sHour + " : " + sMinute);
                 }
                 else{
-                    editTextEnd.setText(timePicker.getHour() + " : " + timePicker.getMinute());
+                    editTextEnd.setText(sHour + " : " + sMinute);
                 }
                 d.cancel();
             }

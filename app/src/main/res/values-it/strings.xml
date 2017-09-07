@@ -79,4 +79,11 @@
     <string name="monday">L</string>
     <string name="add_school_subject_button">Aggiungi corso</string>
     <string name="add_course_label">Scrivi il corso</string>
+    <string name="Wednesday">Mercoledì</string>
+    <string name="select_the_day">Seleziona il giorno</string>
+    <string name="start_time">Inizio orario</string>
+    <string name="end_time">Fine orario</string>
+    <string name="wednesday">M</string>
+    <string name="hour">ORA</string>
+    <string name="minutes">MINUTI</string>
 </resources>

@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.walkap.x_android.fragment.ChoiceSchoolSubjectFragment">
 
     <LinearLayout
@@ -57,13 +57,15 @@
                 android:text=""
                 android:textSize="16sp" />
 
+
+
             <TextView
                 android:id="@+id/textViewSelectDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                android:text="select the day"
+                android:text="@string/select_the_day"
                 android:textSize="12sp" />
 
             <LinearLayout
@@ -73,57 +75,57 @@
 
                 <ToggleButton
                     android:id="@+id/toggleButton1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ToggleButtonStyle"
                     android:layout_weight="1"
-                    android:textOn="L"
-                    android:textOff="L"/>
+                    android:textColor="@color/toogle_text"
+                    android:textOff="@string/monday"
+                    android:textOn="@string/monday" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ToggleButtonStyle"
                     android:layout_weight="1"
-                    android:textOn="M"
-                    android:textOff="M" />
+                    android:textColor="@color/toogle_text"
+                    android:textOn="@string/tuesday"
+                    android:textOff="@string/tuesday" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ToggleButtonStyle"
                     android:layout_weight="1"
-                    android:textOn="M"
-                    android:textOff="M" />
+                    android:textColor="@color/toogle_text"
+                    android:textOn="@string/wednesday"
+                    android:textOff="@string/wednesday" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ToggleButtonStyle"
                     android:layout_weight="1"
-                    android:textOn="G"
-                    android:textOff="G" />
+                    android:textColor="@color/toogle_text"
+                    android:textOn="@string/thursday"
+                    android:textOff="@string/thursday" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ToggleButtonStyle"
                     android:layout_weight="1"
-                    android:textOn="V"
-                    android:textOff="V" />
+                    android:textColor="@color/toogle_text"
+                    android:textOn="@string/friday"
+                    android:textOff="@string/friday" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ToggleButtonStyle"
                     android:layout_weight="1"
-                    android:textOn="S"
-                    android:textOff="S" />
+                    android:textColor="@color/toogle_text"
+                    android:textOn="@string/saturday"
+                    android:textOff="@string/saturday" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 

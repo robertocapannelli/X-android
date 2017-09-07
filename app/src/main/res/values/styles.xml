@@ -34,4 +34,16 @@
         <item name="android:shadowColor">@color/transparent</item>
     </style>
 
+
+    <!-- Toggle button style... -->
+    <style name="ToggleButtonStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/toggle_selector</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_margin">4dp</item>
+
+    </style>
+
 </resources>
