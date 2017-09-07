@@ -35,8 +35,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
     public void onBindViewHolder(LessonViewHolder holder, int position) {
         Scheduler lessons = allLessons.get(position);
         Log.d(TAG, "Lessons: " + lessons);
-        holder.classroom.setText(lessons.getClassroom().toUpperCase());
-        holder.schoolSubject.setText(lessons.getSchoolSubject());
+        holder.classroom.setText(lessons.getClassroom().substring(0, 1).toUpperCase() + lessons.getClassroom().substring(1));
+        holder.schoolSubject.setText(lessons.getSchoolSubject().substring(0, 1).toUpperCase() + lessons.getSchoolSubject().substring(1));
 
         int hour = lessons.getTime().getHour();
         int minute = lessons.getTime().getMinute();

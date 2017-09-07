@@ -155,7 +155,7 @@ public class addScheduleActivity extends AppCompatActivity {
                     editTextStart.setText(sHour + " : " + sMinute);
                 }
                 else{
-                    editTextEnd.setText(timePicker.getHour() + " : " + timePicker.getMinute());
+                    editTextEnd.setText(sHour + " : " + sMinute);
                 }
                 d.cancel();
             }

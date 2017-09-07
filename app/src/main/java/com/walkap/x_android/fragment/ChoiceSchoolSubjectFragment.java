@@ -13,10 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ToggleButton;
-
 import com.walkap.x_android.activity.addScheduleActivity;
-
 import com.walkap.x_android.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +25,8 @@ import com.walkap.x_android.R;
  * Use the {@link ChoiceSchoolSubjectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
 public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "ChoiceSchoolSubjectFrag";
