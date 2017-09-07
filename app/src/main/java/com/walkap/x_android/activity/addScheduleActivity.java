@@ -2,6 +2,7 @@ package com.walkap.x_android.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -68,8 +69,6 @@ public class addScheduleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_schedule);
-        setTitle("ACTIVITY");
-
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -140,6 +139,7 @@ public class addScheduleActivity extends AppCompatActivity {
         d.setTitle("timePicker");
         d.setContentView(R.layout.time_select);
         Button b1 = (Button) d.findViewById(R.id.saveTimeButton);
+        Button b2 = (Button) d.findViewById(R.id.cancelButton);
         final TimePicker timePicker = (TimePicker) d.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
@@ -185,6 +185,13 @@ public class addScheduleActivity extends AppCompatActivity {
             }
         });
         d.show();
+
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.cancel();
+            }
+        });
     }
 
     private void writeNewScheduler(String classroom, String schoolSubjectName, TimeSchoolSubject time) {

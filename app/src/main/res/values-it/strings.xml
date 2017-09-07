@@ -86,4 +86,5 @@
     <string name="wednesday">M</string>
     <string name="hour">ORA</string>
     <string name="minutes">MINUTI</string>
+    <string name="cancel">ANNULLA</string>
 </resources>
