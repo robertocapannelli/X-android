@@ -136,7 +136,7 @@
                     android:onClick="addScheduler"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:text="@string/choose_time"
+                    android:text="@string/forward"
                     android:textSize="16sp" />
             </LinearLayout>
 
