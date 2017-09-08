@@ -156,11 +156,11 @@ public class MainActivity extends BaseActivity implements
                 userDegreeCourseKey = (String) dataSnapshot.child(DEGREE_COURSE).getValue();
 
                 if(userUniversityKey.isEmpty() || userFacultyKey.isEmpty() || userDegreeCourseKey.isEmpty()){
-                    fragmentManager = getSupportFragmentManager();
-                    final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragment = new OptionsFragment();
-                    fragmentTransaction.replace(R.id.flContent, fragment);
-                    fragmentTransaction.commit();
+
+                    Class fragmentClass = OptionsFragment.class;
+                    navItemIndex = 3;
+                    setToolbarTitle();
+                    loadFragment(fragmentClass);
                 }
 
             }
