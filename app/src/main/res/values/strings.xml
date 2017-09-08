@@ -58,6 +58,8 @@
     <string name="email_not_sent">Email not sent</string>
     <string name="no" translatable="false">No</string>
     <string name="yes">Yes</string>
+    <string name="invalid_email">Invalid email address</string>
+    <string name="at_least_6_chars">At least 6 characters</string>
 
     <string name="monday">M</string>
     <string name="tuesday">T</string>
@@ -113,5 +115,6 @@
     <string name="hour">HOUR</string>
     <string name="minutes">MINUTES</string>
     <string name="cancel">CANCEL</string>
+    <string name="Wednesday">Wednesday</string>
 
 </resources>

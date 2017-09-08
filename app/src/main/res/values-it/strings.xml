@@ -87,4 +87,6 @@
     <string name="hour">ORA</string>
     <string name="minutes">MINUTI</string>
     <string name="cancel">ANNULLA</string>
+    <string name="at_least_6_chars">Almeno 6 caratteri</string>
+    <string name="invalid_email">Email non valida</string>
 </resources>
