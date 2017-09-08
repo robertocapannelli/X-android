@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.walkap.x_android.fragment.ChoiceSchoolSubjectFragment">
+    tools:context="com.walkap.x_android.fragment.AddScheduleFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

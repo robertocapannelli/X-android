@@ -28,12 +28,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddSchoolSubjectFragment.OnFragmentInteractionListener} interface
+ * {@link AddFavoriteCoursesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddSchoolSubjectFragment#newInstance} factory method to
+ * Use the {@link AddFavoriteCoursesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddSchoolSubjectFragment extends BaseFragment implements View.OnClickListener {
+public class AddFavoriteCoursesFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "AddSchoolSubjectFrag";
 
@@ -50,7 +50,7 @@ public class AddSchoolSubjectFragment extends BaseFragment implements View.OnCli
     private AutoCompleteTextView schoolSubjectAuto;
     private ListView schoolSubjects;
 
-    public AddSchoolSubjectFragment() {
+    public AddFavoriteCoursesFragment() {
         // Required empty public constructor
     }
 

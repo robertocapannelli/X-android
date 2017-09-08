@@ -13,21 +13,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ToggleButton;
-import com.walkap.x_android.activity.addScheduleActivity;
+import com.walkap.x_android.activity.ChooseLessonTimeActivity;
 import com.walkap.x_android.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ChoiceSchoolSubjectFragment.OnFragmentInteractionListener} interface
+ * {@link AddScheduleFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ChoiceSchoolSubjectFragment#newInstance} factory method to
+ * Use the {@link AddScheduleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 
 
-public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.OnClickListener {
+public class AddScheduleFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "ChoiceSchoolSubjectFrag";
 
@@ -43,7 +43,7 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
     private ToggleButton toggleButton5;
     private ToggleButton toggleButton6;
 
-    public ChoiceSchoolSubjectFragment() {
+    public AddScheduleFragment() {
         // Required empty public constructor
     }
 
@@ -156,7 +156,7 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
         String classroomString = classroomEditText.getText().toString();
         String schoolSubjectString = schoolSubjectEditText.getText().toString();
 
-        Intent myIntent = new Intent(getActivity(), addScheduleActivity.class);
+        Intent myIntent = new Intent(getActivity(), ChooseLessonTimeActivity.class);
         myIntent.putExtra("classroom", classroomString); //Optional parameters
         myIntent.putExtra("schoolSubject", schoolSubjectString);
         myIntent.putExtra("day", actualDaySelected());

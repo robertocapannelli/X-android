@@ -25,7 +25,7 @@ import com.walkap.x_android.model.Scheduler;
 import com.walkap.x_android.model.SchoolSubject;
 import com.walkap.x_android.model.TimeSchoolSubject;
 
-public class addScheduleActivity extends AppCompatActivity {
+public class ChooseLessonTimeActivity extends AppCompatActivity {
 
     private final String TAG = "addSchedulerActivity";
 
@@ -133,7 +133,7 @@ public class addScheduleActivity extends AppCompatActivity {
     public void showPicker(final View editTextView)
     {
 
-        final Dialog d = new Dialog(addScheduleActivity.this);
+        final Dialog d = new Dialog(ChooseLessonTimeActivity.this);
         d.setTitle("timePicker");
         d.setContentView(R.layout.time_select);
         Button b1 = (Button) d.findViewById(R.id.saveTimeButton);
@@ -252,8 +252,8 @@ public class addScheduleActivity extends AppCompatActivity {
                 TimeSchoolSubject time = new TimeSchoolSubject(day, hourStart, minuteStart, duration);
                 writeNewScheduler(classroomName, schoolSubjectName, time);
 
-                Intent myIntent = new Intent(addScheduleActivity.this, MainActivity.class);
-                addScheduleActivity.this.startActivity(myIntent);
+                Intent myIntent = new Intent(ChooseLessonTimeActivity.this, MainActivity.class);
+                ChooseLessonTimeActivity.this.startActivity(myIntent);
 
             }
             else{
