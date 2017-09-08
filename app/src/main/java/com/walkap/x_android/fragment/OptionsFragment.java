@@ -59,6 +59,8 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
 
     private OnFragmentInteractionListener mListener;
 
+    private CoordinatorLayout coordinatorLayout;
+
     public OptionsFragment() {
         // Required empty public constructor
     }
@@ -77,7 +79,7 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
 
         final View rootView = inflater.inflate(R.layout.fragment_options, container, false);
 
-        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout)  rootView.findViewById(R.id.coordinatorLayout);
+        coordinatorLayout = (CoordinatorLayout)  rootView.findViewById(R.id.coordinatorLayout);
 
         university = (AutoCompleteTextView) rootView.findViewById(R.id.universityAutoCompleteTextView);
         faculty = (AutoCompleteTextView) rootView.findViewById(R.id.facultyAutoCompleteTextView);
@@ -91,20 +93,13 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
 
         if(!universityName.isEmpty()){
             university.setText(universityName);
-        }else{
-            showSnackbar(coordinatorLayout);
         }
 
         if(!facultyName.isEmpty()){
             faculty.setText(facultyName);
-        }else{
-            showSnackbar(coordinatorLayout);
         }
-
         if(!degreeCourseName.isEmpty()){
             degreeCourse.setText(degreeCourseName);
-        }else{
-            showSnackbar(coordinatorLayout);
         }
 
         //Button listener
@@ -477,6 +472,7 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
 
                 Log.d("*** read db ***", userUniversityKey + "  " + userFacultyKey + "  " + userDegreeCourseKey);
 
+
                 keyUniversityToName(userUniversityKey);
                 keyFacultyToName(userFacultyKey);
                 keyDegreeCourseToName(userDegreeCourseKey);
@@ -500,9 +496,14 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
                         universityName = noteDataSnapshot.child("name").getValue().toString();
                         if(university != null){
                             university.setText(universityName);
+
                         }
                         break;
                     }
+                }
+                if(universityName.isEmpty()){
+
+                    showSnackbar(coordinatorLayout);
                 }
             }
 
@@ -523,9 +524,15 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
                         facultyName = noteDataSnapshot.child("name").getValue().toString();
                         if(faculty != null){
                             faculty.setText(facultyName);
+
                         }
                         break;
                     }
+                }
+
+                if(facultyName.isEmpty()){
+
+                    showSnackbar(coordinatorLayout);
                 }
             }
 
@@ -546,9 +553,16 @@ public class OptionsFragment extends BaseFragment implements View.OnClickListene
                         degreeCourseName = noteDataSnapshot.child("name").getValue().toString();
                         if(degreeCourse != null){
                             degreeCourse.setText(degreeCourseName);
+
                         }
                         break;
                     }
+                }
+
+                if(degreeCourseName.isEmpty()){
+
+                    showSnackbar(coordinatorLayout);
+
                 }
             }
 
