@@ -259,7 +259,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void afterTextChanged(Editable s) {
                 if(!email.matches(emailPattern)){
-                    mEmailField.setError("Invalid email address");
+                    mEmailField.setError(getResources().getString(R.string.invalid_email));
                 }else{
                     mEmailField.setError(null);
                 }
@@ -267,21 +267,21 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         });
 
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
-            mEmailField.setError("Required");
+            mEmailField.setError(getResources().getString(R.string.required));
             result = false;
         } else {
             mEmailField.setError(null);
         }
 
         if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
-            mPasswordField.setError("Required");
+            mPasswordField.setError(getResources().getString(R.string.required));
             result = false;
         } else {
             mPasswordField.setError(null);
         }
 
         if(mPasswordField.getText().length() < 6){
-            mPasswordField.setError("At least 6 chars");
+            mPasswordField.setError(getResources().getString(R.string.at_least_6_chars));
             result = false;
         }
 

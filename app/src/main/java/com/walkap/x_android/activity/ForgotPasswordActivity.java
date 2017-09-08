@@ -42,7 +42,7 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mYourEmail.getText().toString())) {
-            mYourEmail.setError("Required");
+            mYourEmail.setError(getResources().getString(R.string.required));
             result = false;
         } else {
             mYourEmail.setError(null);

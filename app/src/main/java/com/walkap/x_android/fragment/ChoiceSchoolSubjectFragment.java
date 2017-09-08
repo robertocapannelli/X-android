@@ -166,14 +166,14 @@ public class ChoiceSchoolSubjectFragment extends BaseFragment implements View.On
     private boolean validateForm() {
         boolean result = true;
         if (TextUtils.isEmpty(classroomEditText.getText().toString())) {
-            classroomEditText.setError("Required");
+            classroomEditText.setError(getResources().getString(R.string.required));
             result = false;
         } else {
             classroomEditText.setError(null);
         }
 
         if (TextUtils.isEmpty(schoolSubjectEditText.getText().toString())) {
-            schoolSubjectEditText.setError("Required");
+            schoolSubjectEditText.setError(getResources().getString(R.string.required));
             result = false;
         } else {
             schoolSubjectEditText.setError(null);
