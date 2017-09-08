@@ -33,9 +33,7 @@
                 android:id="@+id/universityAutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:text=""
-                android:textSize="16sp" />
+                android:text="" />
 
 
             <TextView
@@ -68,8 +66,7 @@
                 android:id="@+id/degreeCourseAutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp" />
+                android:text="" />
 
 
             <LinearLayout
