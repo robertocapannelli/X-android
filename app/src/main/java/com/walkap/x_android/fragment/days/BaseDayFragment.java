@@ -188,7 +188,6 @@ public abstract class BaseDayFragment extends Fragment {
                 Log.e(TAG, "onCancelled", databaseError.toException());
             }
         });
-
     }
 
     private void showScheduler() {
