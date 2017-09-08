@@ -20,7 +20,7 @@
         </activity>
         <activity android:name=".activity.SignInActivity" />
         <activity
-            android:name=".activity.addScheduleActivity"
+            android:name=".activity.ChooseLessonTimeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.ForgotPasswordActivity"/>
     </application>
