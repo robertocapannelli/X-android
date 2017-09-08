@@ -1,16 +1,16 @@
 package com.walkap.x_android.activity;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,11 +24,6 @@ import com.walkap.x_android.R;
 import com.walkap.x_android.model.Scheduler;
 import com.walkap.x_android.model.SchoolSubject;
 import com.walkap.x_android.model.TimeSchoolSubject;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 public class addScheduleActivity extends AppCompatActivity {
 
@@ -61,6 +56,8 @@ public class addScheduleActivity extends AppCompatActivity {
     private final String CLASSROOM = "classroom";
 
     private String schoolSubjectKey = "";
+
+    private Context content = this;
 
     private final static int TIME_PICKER_INTERVAL = 5;
 
@@ -232,19 +229,54 @@ public class addScheduleActivity extends AppCompatActivity {
         String textStart = editTextStart.getText().toString();
         String textEnd = editTextEnd.getText().toString();
 
-        Integer hourStart = Integer.parseInt(textStart.substring(0, textStart.indexOf(":") - 1));
-        Integer minuteStart = Integer.parseInt(textStart.substring(textStart.indexOf(":") + 2));
+        if(textStart.isEmpty() || textEnd.isEmpty()){
 
-        Integer hourEnd = Integer.parseInt(textEnd.substring(0, textEnd.indexOf(":") - 1));
-        Integer minuteEnd = Integer.parseInt(textEnd.substring(textEnd.indexOf(":") + 2));
+            if(textStart.isEmpty()){
+                editTextStart.setError(getResources().getString(R.string.required));
+            }
+            if(textEnd.isEmpty()){
+                editTextEnd.setError(getResources().getString(R.string.required));
+            }
 
-        int duration = (hourEnd - hourStart) * 60 - (minuteStart - minuteEnd);
+        }
+        else{
+            Integer hourStart = Integer.parseInt(textStart.substring(0, textStart.indexOf(":") - 1));
+            Integer minuteStart = Integer.parseInt(textStart.substring(textStart.indexOf(":") + 2));
 
-        TimeSchoolSubject time = new TimeSchoolSubject(day, hourStart, minuteStart, duration);
-        writeNewScheduler(classroomName, schoolSubjectName, time);
+            Integer hourEnd = Integer.parseInt(textEnd.substring(0, textEnd.indexOf(":") - 1));
+            Integer minuteEnd = Integer.parseInt(textEnd.substring(textEnd.indexOf(":") + 2));
 
-        Intent myIntent = new Intent(addScheduleActivity.this, MainActivity.class);
-        addScheduleActivity.this.startActivity(myIntent);
+            int duration = (hourEnd - hourStart) * 60 - (minuteStart - minuteEnd);
+            if(duration > 0){
+
+                TimeSchoolSubject time = new TimeSchoolSubject(day, hourStart, minuteStart, duration);
+                writeNewScheduler(classroomName, schoolSubjectName, time);
+
+                Intent myIntent = new Intent(addScheduleActivity.this, MainActivity.class);
+                addScheduleActivity.this.startActivity(myIntent);
+
+            }
+            else{
+
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(content);
+
+                builder.setTitle(R.string.general_error)
+                        .setMessage(R.string.wrong_end_time)
+                        .setPositiveButton(R.string.got_it, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                editTextEnd.setText("");
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+            }
+
+
+        }
+
 
     }
 
