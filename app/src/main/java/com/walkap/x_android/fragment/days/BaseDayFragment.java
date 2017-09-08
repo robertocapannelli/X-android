@@ -1,17 +1,20 @@
 package com.walkap.x_android.fragment.days;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,6 +54,8 @@ public abstract class BaseDayFragment extends Fragment {
     public final String SCHEDULER = "scheduler";
     public final String PREFERENCES = "preferences";
 
+    public LessonAdapter mAdapter;
+
     public List<Scheduler> list;
 
     private List<String> preferences = new ArrayList<>();
@@ -89,6 +94,40 @@ public abstract class BaseDayFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecycler.setLayoutManager(linearLayoutManager);
         mRecycler.setHasFixedSize(true);
+        mRecycler.addOnItemTouchListener(new RecyclerItemClickListener(content, mRecycler ,new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(getActivity());
+
+                final String id = mAdapter.getChild(position).getSchedulerId();
+                final String name = mAdapter.getChild(position).getSchoolSubject();
+
+                builder.setTitle("delete")
+                        .setMessage("do u want delete this " + name +  " scheduler? ")
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                mDatabase.child("scheduler").child(id).removeValue();
+                                showScheduler();
+
+                            }
+                        })
+                        .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
 
         return rootView;
     }
@@ -149,7 +188,6 @@ public abstract class BaseDayFragment extends Fragment {
                 Log.e(TAG, "onCancelled", databaseError.toException());
             }
         });
-
     }
 
     private void showScheduler() {
@@ -176,7 +214,7 @@ public abstract class BaseDayFragment extends Fragment {
 
                 Log.d(TAG, "List: " + list);
 
-                LessonAdapter mAdapter = new LessonAdapter(getActivity(), list);
+                mAdapter = new LessonAdapter(getActivity(), list);
                 mRecycler.setAdapter(mAdapter);
             }
 

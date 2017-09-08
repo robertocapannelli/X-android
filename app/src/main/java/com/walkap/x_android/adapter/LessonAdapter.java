@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.walkap.x_android.R;
-import com.walkap.x_android.viewHolder.LessonViewHolder;
 import com.walkap.x_android.model.Scheduler;
+import com.walkap.x_android.viewHolder.LessonViewHolder;
 
 import java.util.List;
 
@@ -74,4 +74,9 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonViewHolder> {
         Log.d(TAG, "allLessons.size(): " + allLessons.size());
         return allLessons.size();
     }
+
+    public Scheduler getChild(int position){
+        return allLessons.get(position);
+    }
+
 }

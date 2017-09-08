@@ -2,6 +2,7 @@ package com.walkap.x_android.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +24,11 @@ import com.walkap.x_android.R;
 import com.walkap.x_android.model.Scheduler;
 import com.walkap.x_android.model.SchoolSubject;
 import com.walkap.x_android.model.TimeSchoolSubject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class addScheduleActivity extends AppCompatActivity {
 
@@ -133,6 +140,7 @@ public class addScheduleActivity extends AppCompatActivity {
         d.setTitle("timePicker");
         d.setContentView(R.layout.time_select);
         Button b1 = (Button) d.findViewById(R.id.saveTimeButton);
+        Button b2 = (Button) d.findViewById(R.id.cancelButton);
         final TimePicker timePicker = (TimePicker) d.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
 
@@ -178,6 +186,13 @@ public class addScheduleActivity extends AppCompatActivity {
             }
         });
         d.show();
+
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.cancel();
+            }
+        });
     }
 
     private void writeNewScheduler(String classroom, String schoolSubjectName, TimeSchoolSubject time) {
