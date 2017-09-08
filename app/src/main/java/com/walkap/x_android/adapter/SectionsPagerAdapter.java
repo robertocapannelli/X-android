@@ -11,9 +11,6 @@ import com.walkap.x_android.fragment.days.ThursdayFragment;
 import com.walkap.x_android.fragment.days.TuesdayFragment;
 import com.walkap.x_android.fragment.days.WednesdayFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private static final int FRAGMENT_COUNT = 6;
