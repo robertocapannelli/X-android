@@ -60,6 +60,7 @@
     <string name="yes">Yes</string>
     <string name="invalid_email">Invalid email address</string>
     <string name="at_least_6_chars">At least 6 characters</string>
+    <string name="wrong_end_time">The ending time should be greater than the beginning time</string>
 
     <string name="monday">M</string>
     <string name="tuesday">T</string>

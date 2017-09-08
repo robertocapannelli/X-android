@@ -89,4 +89,5 @@
     <string name="cancel">ANNULLA</string>
     <string name="at_least_6_chars">Almeno 6 caratteri</string>
     <string name="invalid_email">Email non valida</string>
+    <string name="wrong_end_time">L\'orario finale dovrebbe essere maggiore di quello iniziale</string>
 </resources>
