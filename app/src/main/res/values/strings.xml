@@ -68,6 +68,7 @@
     <string name="friday">F</string>
     <string name="saturday">S</string>
     <string name="forward">Forward</string>
+    <string name="ok">Ok</string>
 
     <string-array name="daysArray">
         <item>M</item>
