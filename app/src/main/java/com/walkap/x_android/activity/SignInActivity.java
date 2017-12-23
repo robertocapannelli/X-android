@@ -29,7 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
-import com.walkap.x_android.model.User;
+import com.walkap.x_android.model.user.User;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener {
 
