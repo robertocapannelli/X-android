@@ -2,10 +2,10 @@ package com.walkap.x_android.model.user;
 
 public abstract class UserBuilder {
 
-    private User myUser;
+    protected User myUser;
 
-    public void createUser(String email, String name){
-        myUser = new User(email, name);
+    public void createUser(String email, String name, String type){
+        myUser = new User(email, name, type);
     }
 
     public User getMyUser(){
@@ -31,4 +31,7 @@ public abstract class UserBuilder {
         myUser.setDegreeCourse(degreeCourse);
         return this;
     }
+
+    public abstract void setType();
+
 }
