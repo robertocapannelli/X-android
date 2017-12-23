@@ -1,7 +1,6 @@
 package com.walkap.x_android.model.user.concreteBuilder;
 
 import com.walkap.x_android.model.user.User;
-import com.walkap.x_android.model.user.UserBuilder;
 
 public class UserDirector {
 

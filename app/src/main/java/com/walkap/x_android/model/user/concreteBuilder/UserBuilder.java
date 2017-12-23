@@ -1,4 +1,6 @@
-package com.walkap.x_android.model.user;
+package com.walkap.x_android.model.user.concreteBuilder;
+
+import com.walkap.x_android.model.user.User;
 
 public abstract class UserBuilder {
 
@@ -10,6 +12,16 @@ public abstract class UserBuilder {
 
     public User getMyUser(){
         return myUser;
+    }
+
+    public UserBuilder setUserId(String userId){
+        myUser.setUserId(userId);
+        return this;
+    }
+
+    public UserBuilder setName(String name){
+        myUser.setName(name);
+        return this;
     }
 
     public UserBuilder setSurname(String surname){

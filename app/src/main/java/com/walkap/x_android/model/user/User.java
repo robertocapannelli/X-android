@@ -9,10 +9,13 @@ public class User {
     private String name;
     private String type;
     //optional
+    private String userId;
     private String surname;
     private String university;
     private String faculty;
     private String degreeCourse;
+
+    public User(){}
 
     /**
      * Default constructor
@@ -25,22 +28,31 @@ public class User {
         this.name = type;
     }
 
-    public User(String email, String name, String surname, String university, String faculty, String degreeCourse) {
+    /*public User(String email, String name, String surname, String university, String faculty, String degreeCourse) {
         this.email = email;
         this.name = name;
         this.surname = surname;
         this.university = university;
         this.faculty = faculty;
         this.degreeCourse = degreeCourse;
-    }
+    }*/
 
     /** Getters **/
-    public String getType(){
-        return type;
+
+    public String getUserId(){
+        return userId;
     }
 
     public String getEmail(){
         return email;
+    }
+
+    public String getType(){
+        return type;
+    }
+
+    public String getName(){
+        return name;
     }
 
     public String getSurname() {
@@ -59,21 +71,26 @@ public class User {
         return degreeCourse;
     }
 
-    public String getName(){
-        return name;
-    }
-
     /** Setters **/
 
-    public void setType(String type){
-        this.type = type;
+    public void setUserId(String userId){
+        this.userId = userId;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public void setName(String name){
         this.name = name;
     }
 
     public void setSurname(String surname){
         this.surname = surname;
+    }
+
+    public void setType(String type){
+        this.type = type;
     }
 
     public void setUniversity(String university){
@@ -87,4 +104,6 @@ public class User {
     public void setDegreeCourse(String degreeCourse){
         this.degreeCourse = degreeCourse;
     }
+
+
 }
