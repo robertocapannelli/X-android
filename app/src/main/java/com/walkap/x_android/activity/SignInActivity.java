@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -25,11 +24,12 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.walkap.x_android.R;
+import com.walkap.x_android.dao.user.UserDaoImpl;
 import com.walkap.x_android.model.user.User;
+import com.walkap.x_android.model.user.concreteBuilder.UserBuilder;
+import com.walkap.x_android.model.user.concreteBuilder.UserDirector;
+import com.walkap.x_android.dao.user.UserDao;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener {
 
@@ -112,6 +112,10 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    /**
+     * This method is used to perform the google SignIn
+     * @param account - GoogleSignInAccount
+     */
     private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGooogle:" + account.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -129,51 +133,22 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-
-                            mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                                final String userId = getUid();
-                                String email = account.getEmail();
-                                String name = account.getGivenName();
-                                String surname = account.getFamilyName();
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                    boolean found = false;
-
-                                    for(DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()){
-                                        User user = noteDataSnapshot.getValue(User.class);
-                                        if(user.getEmail().equals(email)){
-                                            found = true;
-                                            Log.d(TAG, "the user is here, go to main");
-                                            break;
-                                        }
-                                    }
-                                    Log.d(TAG, "User found: " + found);
-
-                                    if(!found){
-                                        // Write new user
-                                        writeNewUser(userId, email, name, surname, "", "", "");
-                                    }
-                                    else{
-                                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                                        finish();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    Log.d(TAG, "Database error");
-                                }
-                            });
+                            UserDirector director = new UserDirector();
+                            UserBuilder builder = director.buildUser(account.getEmail(), account.getGivenName(), "Student");
+                            User user = builder.getMyUser();
+                            //TODO we should use the same id used from google to write up on the database
+                            user.setSurname(account.getFamilyName());
+                            Log.d(TAG, "firebaseAuthWithGoogle() " + user.getEmail() + " " + user.getName() + " " + user.getSurname() + " " + user.getType());
+                            writeNewUser(user);
                         }
                     }
                 });
     }
 
-    //End google scripts
-
-
-    //start email password scripts
+    /**
+     * This method is used to sign in a user
+     * from the email and password form
+     */
     private void signIn() {
         Log.d(TAG, "signIn");
         if (!validateForm()) {
@@ -201,12 +176,15 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 });
     }
 
+    /**
+     * This method is used to sign up a new user
+     * from the email and password form
+     */
     private void signUp() {
         Log.d(TAG, "signUp");
         if (!validateForm()) {
             return;
         }
-
         showProgressDialog();
         String email = mEmailField.getText().toString();
         String password = mPasswordField.getText().toString();
@@ -217,13 +195,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
                         hideProgressDialog();
-
                         FirebaseUser user = task.getResult().getUser();
 
                         if (task.isSuccessful()) {
                             onAuthSuccess(user);
+                            UserDirector director = new UserDirector();
+                            UserBuilder builder = director.buildUser(user.getEmail(), user.getDisplayName(), "Student");
                             // Write new user
-                            writeNewUser(user.getUid(), user.getEmail(), "", "", "", "", "");
+                            writeNewUser(builder.getMyUser());
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
                                     Toast.LENGTH_SHORT).show();
@@ -239,6 +218,10 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         finish();
     }
 
+    /**
+     * This method validate the form, based on simple email pattern
+     * @return - boolean
+     */
     private boolean validateForm() {
         boolean result = true;
 
@@ -288,21 +271,17 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         return result;
     }
 
-    //end email and password scripts
-
-    // [START basic_write]
-    private void writeNewUser(String userId, String email, String name, String surname, String university, String faculty, String degreeCourse) {
-        User user = new User(email, name, surname, university, faculty, degreeCourse);
-        mDatabase.child("users").child(userId).setValue(user);
-
-        Log.d("*** writeNewUser ***", "  " + userId + "  " + email);
-
+    /**
+     * This method insert new user in the firestore database if he doesn't exists
+     * @param user - User
+     */
+    private void writeNewUser(User user) {
+        UserDao userDao = new UserDaoImpl();
+        userDao.addUserIfNotPresent(user);
         //go to main activity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();
-
     }
-    // [END basic_write]
 
     @Override
     public void onClick(View v) {
