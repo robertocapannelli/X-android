@@ -25,7 +25,7 @@ public class User {
     public User(String email, String name, String type) {
         this.email = email;
         this.name = name;
-        this.name = type;
+        this.type = type;
     }
 
     /*public User(String email, String name, String surname, String university, String faculty, String degreeCourse) {
@@ -36,6 +36,8 @@ public class User {
         this.faculty = faculty;
         this.degreeCourse = degreeCourse;
     }*/
+
+    //TODO add timestamp
 
     /** Getters **/
 
