@@ -25,8 +25,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.walkap.x_android.R;
-import com.walkap.x_android.dao.user.UserDao;
-import com.walkap.x_android.dao.user.UserDaoImpl;
+import com.walkap.x_android.dao.userDao.UserDao;
+import com.walkap.x_android.dao.userDao.UserDaoImpl;
 import com.walkap.x_android.model.user.User;
 import com.walkap.x_android.model.user.concreteBuilder.UserBuilder;
 import com.walkap.x_android.model.user.concreteBuilder.UserDirector;
@@ -35,9 +35,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
-
     private GoogleApiClient mGoogleApiClient;
-
     private EditText mEmailField;
     private EditText mPasswordField;
     private Button mSignInButton;
@@ -136,9 +134,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         } else {
                             UserDirector director = new UserDirector();
                             UserBuilder builder = director.buildUser(account.getEmail(), account.getGivenName(), "Student");
+                            builder.setSurname(account.getFamilyName()).setUserId(getUid());
                             User user = builder.getMyUser();
                             //TODO we should use the same id used from google to write up on the database
-                            user.setSurname(account.getFamilyName());
                             Log.d(TAG, "firebaseAuthWithGoogle() " + user.getEmail() + " " + user.getName() + " " + user.getSurname() + " " + user.getType());
                             writeNewUser(user);
                         }
@@ -189,28 +187,27 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         showProgressDialog();
         String email = mEmailField.getText().toString();
         String password = mPasswordField.getText().toString();
-
         mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUser:onComplete:" + task.isSuccessful());
                         hideProgressDialog();
-                        FirebaseUser user = task.getResult().getUser();
-
+                        FirebaseUser firebaseUser = task.getResult().getUser();
                         if (task.isSuccessful()) {
-                            onAuthSuccess(user);
+                            onAuthSuccess(firebaseUser);
                             UserDirector director = new UserDirector();
-                            UserBuilder builder = director.buildUser(user.getEmail(), user.getDisplayName(), "Student");
+                            UserBuilder builder = director.buildUser(firebaseUser.getEmail(), firebaseUser.getDisplayName(), "Student");
+                            builder.setUserId(firebaseUser.getUid());
+                            User user = builder.getMyUser();
                             // Write new user
-                            writeNewUser(builder.getMyUser());
+                            writeNewUser(user);
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
     }
 
     private void onAuthSuccess(FirebaseUser user) {
