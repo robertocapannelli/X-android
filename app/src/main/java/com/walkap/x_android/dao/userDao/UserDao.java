@@ -1,4 +1,4 @@
-package com.walkap.x_android.dao.user;
+package com.walkap.x_android.dao.userDao;
 
 import com.walkap.x_android.model.user.User;
 
