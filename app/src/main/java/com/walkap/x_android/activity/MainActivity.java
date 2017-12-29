@@ -18,16 +18,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.walkap.x_android.R;
+import com.walkap.x_android.dao.userDao.UserDao;
+import com.walkap.x_android.dao.userDao.UserDaoImpl;
 import com.walkap.x_android.fragment.AddFavoriteCoursesFragment;
 import com.walkap.x_android.fragment.AddScheduleFragment;
 import com.walkap.x_android.fragment.HomeFragment;
@@ -41,16 +40,13 @@ public class MainActivity extends BaseActivity implements
         AddScheduleFragment.OnFragmentInteractionListener,
         OptionsFragment.OnFragmentInteractionListener,
         HomeFragment.OnFragmentInteractionListener,
-        AddFavoriteCoursesFragment.OnFragmentInteractionListener{
+        AddFavoriteCoursesFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "MainActivity";
-
     //Google Api Sign in
     private GoogleApiClient mGoogleApiClient;
-
     // index to identify current nav menu item
-    public static int navItemIndex = 0;
-
+    private static int navItemIndex = 0;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -58,53 +54,36 @@ public class MainActivity extends BaseActivity implements
     private TextView tvUserName, tvEmail;
     private ImageView ivUserProfile;
     private String[] arrayNavigation;
-
     private String name, email, uid;
     private Uri photoUrl;
-    private boolean emailVerified;
 
-    public final String UNIVERSITY = "university";
-    public final String FACULTY = "faculty";
-    public final String DEGREE_COURSE = "degreeCourse";
-
-    public String userUniversityKey;
-    public String userFacultyKey;
-    public String userDegreeCourseKey;
-
-    private FragmentManager fragmentManager;
-    private Fragment fragment;
+    //Firestore instance
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Set a toolbar to replace action bar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         //Find our drawer view
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         //Enable hamburger toggle button
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         //Find navigation drawer
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         //Navigation listener
         navigationView.setNavigationItemSelectedListener(this);
         //Header View (aat the top of drawer layout)
         header = navigationView.getHeaderView(0);
-
         arrayNavigation = getResources().getStringArray(R.array.navigation_array);
-
         tvUserName = (TextView) header.findViewById(R.id.tvUserName);
         tvEmail = (TextView) header.findViewById(R.id.tvEmail);
         ivUserProfile = (ImageView) header.findViewById(R.id.imageView);
-
         //Check if the user is logged in
         if (mFirebaseUser == null) {
             // Not signed in, launch the Sign In activity
@@ -116,26 +95,26 @@ public class MainActivity extends BaseActivity implements
             name = mFirebaseUser.getDisplayName();
             email = mFirebaseUser.getEmail();
             photoUrl = mFirebaseUser.getPhotoUrl();
-
-            // Check if user's email is verified
-            emailVerified = mFirebaseUser.isEmailVerified();
-
             // The user's ID, unique to the Firebase project. Do NOT use this value to
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getToken() instead.
             uid = mFirebaseUser.getUid();
-
             loadNavHeader();
-
         }
-
         //Google sign connection
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-        checkDataDb();
+        //Check if the user has the basic information
+        UserDao userDao = new UserDaoImpl();
+        if(userDao.hasBasicInfo(uid)){
+            Class fragmentClass = OptionsFragment.class;
+            navItemIndex = 3;
+            setToolbarTitle();
+            loadFragment(fragmentClass);
+        }
 
         //Default fragment to display
         if (savedInstanceState == null) {
@@ -145,33 +124,10 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-
-
-    private void checkDataDb(){
-        mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userUniversityKey = (String) dataSnapshot.child(UNIVERSITY).getValue();
-                userFacultyKey = (String) dataSnapshot.child(FACULTY).getValue();
-                userDegreeCourseKey = (String) dataSnapshot.child(DEGREE_COURSE).getValue();
-
-                if(userUniversityKey.isEmpty() || userFacultyKey.isEmpty() || userDegreeCourseKey.isEmpty()){
-
-                    Class fragmentClass = OptionsFragment.class;
-                    navItemIndex = 3;
-                    setToolbarTitle();
-                    loadFragment(fragmentClass);
-                }
-
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "onCancelled", databaseError.toException());
-            }
-        });
-
-    }
-
+    /**
+     * This method load the header information
+     * inside the slidebar such a name, email and photo
+     */
     private void loadNavHeader() {
         tvUserName.setText(name);
         tvEmail.setText(email);
@@ -186,8 +142,13 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * This method load the right fragment based on the menu clicking
+     * in the slider bar, set the right title and close the older fragment
+     *
+     * @param fragmentClass - Class
+     */
     public void loadFragment(Class fragmentClass) {
-
         setToolbarTitle();
         Fragment newFragment = null;
         try {
@@ -195,22 +156,25 @@ public class MainActivity extends BaseActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out);
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.flContent, newFragment);
         fragmentTransaction.commitAllowingStateLoss();
-
         // Set the right menu item checked
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
-
         // Set action bar title
         setToolbarTitle();
-
     }
 
-    //make the sign out button works
+    /**
+     * This method is a listener for the menu at the top
+     * the only one button present is the sign out button
+     * once we push we are redirect to the SingInActivity
+     *
+     * @param item - Menu Item
+     * @return - boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -224,11 +188,22 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * This method retrieve a log message when the connection failed
+     *
+     * @param connectionResult - ConnectionResult
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
+    /**
+     * Menu inflater
+     *
+     * @param menu - Menu
+     * @return - boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -236,13 +211,16 @@ public class MainActivity extends BaseActivity implements
         return true;
     }
 
+    /**
+     * This method handle the app behavior when the back button
+     * is pressed, and navigates through the fragments
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-
         if (navItemIndex != 0) {
             navItemIndex = 0;
             Class fragmentClass = HomeFragment.class;
@@ -252,6 +230,14 @@ public class MainActivity extends BaseActivity implements
         super.onBackPressed();
     }
 
+    /**
+     * This method is a listener for the slidebar menu
+     * and set the right fragement when a menu item
+     * is selected
+     *
+     * @param item - MenuItem
+     * @return - boolean
+     */
     public boolean onNavigationItemSelected(MenuItem item) {
         Class fragmentClass;
         switch (item.getItemId()) {
@@ -276,15 +262,17 @@ public class MainActivity extends BaseActivity implements
                 fragmentClass = HomeFragment.class;
                 break;
         }
-
         Log.d(TAG, "onNavigationItemSelected() The index is: " + navItemIndex);
-
         loadFragment(fragmentClass);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /**
+     * This method set the right toolbar title
+     * based on the fragment selected
+     */
     private void setToolbarTitle() {
         getSupportActionBar().setTitle(arrayNavigation[navItemIndex]);
     }
@@ -293,5 +281,4 @@ public class MainActivity extends BaseActivity implements
     public void onFragmentInteraction(Uri uri) {
         //Need this to make the fragment work
     }
-
 }
