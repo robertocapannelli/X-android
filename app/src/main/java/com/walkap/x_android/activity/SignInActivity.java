@@ -47,23 +47,19 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
         // Views
         mEmailField = (EditText) findViewById(R.id.eT_email);
         mPasswordField = (EditText) findViewById(R.id.eT_password);
         mSignInButton = (Button) findViewById(R.id.sign_in_button_email);
         mSignUpButton = (Button) findViewById(R.id.sign_up_button_email);
         mForgotPassword = (TextView) findViewById(R.id.forgot_password);
-
         // Click listeners
         mSignInButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
         mForgotPassword.setOnClickListener(this);
-
         //Google Sign in
         mSignInButtonGoogle = (SignInButton) findViewById(R.id.sign_in_button);
         mSignInButtonGoogle.setOnClickListener(this);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -72,30 +68,37 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
         // Check auth on Activity start
         if (mFirebaseAuth.getCurrentUser() != null) {
             onAuthSuccess(mFirebaseAuth.getCurrentUser());
         }
     }
 
-    //Start google scripts
-
+    /**
+     * This  method is called when the goole button
+     * is pushed
+     */
     private void signInGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    /**
+     * This method get the activity result and invoke
+     * firebaseAuthWithGoogle method id successful
+     *
+     * @param requestCode - int
+     * @param resultCode  - int
+     * @param data        - Intent
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -134,7 +137,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         } else {
                             UserDirector director = new UserDirector();
                             UserBuilder builder = director.buildUser(account.getEmail(), account.getGivenName(), "Student");
-                            builder.setSurname(account.getFamilyName()).setUserId(getUid());
+                            builder.setSurname(account.getFamilyName()).setUserId(getFirebaseUserId());
                             User user = builder.getMyUser();
                             //TODO we should use the same id used from google to write up on the database
                             Log.d(TAG, "firebaseAuthWithGoogle() " + user.getEmail() + " " + user.getName() + " " + user.getSurname() + " " + user.getType());
@@ -283,6 +286,12 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         finish();
     }
 
+    /**
+     * This method is an event listener and redirect
+     * to another activity based on the button pushed
+     *
+     * @param v - View
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
