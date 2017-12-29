@@ -25,11 +25,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.walkap.x_android.R;
+import com.walkap.x_android.dao.user.UserDao;
 import com.walkap.x_android.dao.user.UserDaoImpl;
 import com.walkap.x_android.model.user.User;
 import com.walkap.x_android.model.user.concreteBuilder.UserBuilder;
 import com.walkap.x_android.model.user.concreteBuilder.UserDirector;
-import com.walkap.x_android.dao.user.UserDao;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener {
 
@@ -114,6 +114,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     /**
      * This method is used to perform the google SignIn
+     *
      * @param account - GoogleSignInAccount
      */
     private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
@@ -220,6 +221,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     /**
      * This method validate the form, based on simple email pattern
+     *
      * @return - boolean
      */
     private boolean validateForm() {
@@ -241,9 +243,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!email.matches(emailPattern)){
+                if (!email.matches(emailPattern)) {
                     mEmailField.setError(getResources().getString(R.string.invalid_email));
-                }else{
+                } else {
                     mEmailField.setError(null);
                 }
             }
@@ -263,7 +265,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             mPasswordField.setError(null);
         }
 
-        if(mPasswordField.getText().length() < 6){
+        if (mPasswordField.getText().length() < 6) {
             mPasswordField.setError(getResources().getString(R.string.at_least_6_chars));
             result = false;
         }
@@ -273,6 +275,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     /**
      * This method insert new user in the firestore database if he doesn't exists
+     *
      * @param user - User
      */
     private void writeNewUser(User user) {
