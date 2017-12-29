@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -20,26 +21,87 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
     private static final String TAG = "UserDaoImpl";
     private static final String COLLECTION = "users";
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference ref = db.collection(COLLECTION);
+    private String university;
+    private String faculty;
+    private String degreeCourse;
+    boolean bool;
 
+    //Firestore instance
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //Users collections
+    private CollectionReference ref = db.collection(COLLECTION);
+
+    /**
+     * This method runs a custom query
+     * over the users collection
+     *
+     * @param key   - String
+     * @param value - Object
+     */
     @Override
     public void customQuery(String key, Object value) {
         Query query = ref.whereEqualTo(key, value);
         // this could be chained with another where() e.g. whereLessThan whereEqualTo whereGreaterThanOrEqualTo
     }
 
+    /**
+     * This method get a uses passing
+     * a User object as parameter and use the id
+     * to find it
+     *
+     * @param id - String
+     */
     @Override
-    public void getUser(String userId) {
-        ref.document(userId)
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    public void getUser(String id) {
+        DocumentReference docRef = ref.document(id);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User user = documentSnapshot.toObject(User.class);
+                Log.d(TAG, "getUser(): " + user.getUserId());
             }
         });
     }
 
+    /**
+     * This method is used to check if the current user
+     * has the basic informations to continue to use the
+     * application
+     *
+     * @param id - String
+     * @return boolean
+     */
+    public boolean hasBasicInfo(String id) {
+        DocumentReference docRef = db.collection("users").document(id);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                university = user.getUniversity();
+                faculty = user.getFaculty();
+                degreeCourse = user.getDegreeCourse();
+                bool = false;
+                if (university != null && faculty != null && degreeCourse != null) {
+                    if (university.equals("") || faculty.isEmpty() || degreeCourse.isEmpty()) {
+                        bool = false;
+                        Log.d(TAG, "hasBasicInfo(): the current user " + user.getEmail() + " has NOT basic info!");
+                    } else {
+                        bool = true;
+                        Log.d(TAG, "hasBasicInfo(): the current user " + user.getEmail() + " already has basic info!");
+                    }
+                } else {
+                    bool = false;
+                    Log.d(TAG, "hasBasicInfo(): the current user " + user.getEmail() + " has NOT basic info!");
+                }
+                Log.d(TAG, "getUser(): " + user.getUserId());
+            }
+        });
+        return bool;
+    }
+
+    /**
+     * This method get all users present in the database
+     */
     @Override
     public void getAllUsers() {
 
@@ -57,6 +119,14 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
         });
     }
 
+    /**
+     * This method check if an email user corresponds
+     * to the email of the current user who wants to login
+     * or sign up, if the email is not present then add it to the database
+     * otherwise just let him to login
+     *
+     * @param user - User
+     */
     @Override
     public void addUserIfNotPresent(User user) {
         final User newUser = user;
@@ -87,12 +157,29 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
         });
     }
 
+    /**
+     * This method just add a new user to the database
+     * setting the id of the document, we set it manually
+     * to have consistency between the firestore database
+     * and the firebase user id
+     *
+     * @param user - User
+     */
     @Override
     public void addUser(User user) {
         // Add a new document with a generated ID
         ref.document(user.getUserId()).set(user);
     }
 
+    /**
+     * This method is used to update a user's document
+     * Find the user by his id and then update the update
+     * just the key passed as parameter
+     *
+     * @param userId - String
+     * @param key    - String
+     * @param value  - Object
+     */
     @Override
     public void updateUser(String userId, String key, Object value) {
         ref.document(userId)
@@ -111,6 +198,12 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
                 });
     }
 
+    /**
+     * This method is used to delete en entire document
+     * of a user
+     *
+     * @param user - User
+     */
     @Override
     public void deleteUser(User user) {
         ref.document(user.getUserId())

@@ -18,4 +18,6 @@ public interface UserDao {
 
     public void addUserIfNotPresent(User user);
 
+    public boolean hasBasicInfo(String id);
+
 }
