@@ -1,4 +1,4 @@
-package com.walkap.x_android.dao.user;
+package com.walkap.x_android.dao.userDao;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -24,16 +23,14 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection(COLLECTION);
 
-
     @Override
-    public void customQuery(String key, Object value){
+    public void customQuery(String key, Object value) {
         Query query = ref.whereEqualTo(key, value);
         // this could be chained with another where() e.g. whereLessThan whereEqualTo whereGreaterThanOrEqualTo
     }
 
     @Override
     public void getUser(String userId) {
-        User user;
         ref.document(userId)
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -60,10 +57,9 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
         });
     }
 
-
     @Override
-    public void addUserIfNotPresent(User user){
-        final User checkUser = user;
+    public void addUserIfNotPresent(User user) {
+        final User newUser = user;
         Log.d(TAG, "addUserIfNotPresent(): " + user.getEmail());
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -71,17 +67,17 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
                 if (task.isSuccessful()) {
                     Boolean found = false;
                     for (DocumentSnapshot document : task.getResult()) {
-                        User user = document.toObject(User.class);
-                        Log.d(TAG, "addUserIfNotPresent(): " + user.getEmail());
-                        if(user.getEmail().equals(checkUser.getEmail())){
+                        User currentUser = document.toObject(User.class);
+                        if (currentUser.getEmail().equals(newUser.getEmail())) {
+                            Log.d(TAG, "addUserIfNotPresent(): The user already exists!");
                             found = true;
                             break;
                         }
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
-                    if(!found){
-                        Log.d(TAG, "addUserIfNotPresent(): The user email doesn't match, so we can add new user!" );
-                        addUser(checkUser);
+                    if (!found) {
+                        Log.d(TAG, "addUserIfNotPresent(): The user email " + newUser.getEmail() + " doesn't match, so we can add new user!");
+                        addUser(newUser);
                     }
 
                 } else {
@@ -94,24 +90,11 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
     @Override
     public void addUser(User user) {
         // Add a new document with a generated ID
-        ref.add(user) //add generate a unique id for the document id
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+        ref.document(user.getUserId()).set(user);
     }
 
     @Override
     public void updateUser(String userId, String key, Object value) {
-
         ref.document(userId)
                 .update(key, value)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -126,12 +109,10 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
                         Log.w(TAG, "Error updating document", e);
                     }
                 });
-
     }
 
     @Override
     public void deleteUser(User user) {
-
         ref.document(user.getUserId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -146,6 +127,5 @@ public class UserDaoImpl extends AppCompatActivity implements UserDao {
                         Log.w(TAG, "Error deleting document", e);
                     }
                 });
-
     }
 }
